@@ -1,4 +1,4 @@
-Name: Build release
+name: Build release
 
 on:
     push:
@@ -7,7 +7,7 @@ on:
             - '*'
         tags:
             - '*.*.*'
-        branch:
+        branches:
             - main
             
 jobs:
@@ -34,12 +34,12 @@ jobs:
             fi
           done
       - name: Extract Version from Tag
-          id: extract_version
-          run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
+        id: extract_version
+        run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
     
       - name: Generate Release Name
-          id: generate_release_name
-          run: |
+        id: generate_release_name
+        run: |
             echo "RELEASE_NAME=v${{ env.VERSION }}" >> $GITHUB_ENV
       - name: Build Unity Artifact
         uses: game-ci/unity-builder@v4
