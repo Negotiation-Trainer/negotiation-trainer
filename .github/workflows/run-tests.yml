@@ -32,6 +32,6 @@ jobs:
       - name: Run tests
         uses: game-ci/unity-test-runner@v4
         with:
-          packageMode: true
+          # packageMode: true # Needs to be enabled when packages are used
           unityVersion: 2022.3.20f1
           githubToken: ${{ secrets.GITHUB_TOKEN }}
