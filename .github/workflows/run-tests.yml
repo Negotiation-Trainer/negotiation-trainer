@@ -1,0 +1,37 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+            - "main"
+            - "develop"
+    push:
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+jobs:
+  build:
+    name: Test project
+    runs-on: ubuntu-latest
+    steps:
+
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+    
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
+
+      # Test
+      - name: Run tests
+        uses: game-ci/unity-test-runner@v4
+        with:
+          packageMode: true
+          unityVersion: 2022.3.20f1
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
