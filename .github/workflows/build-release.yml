@@ -1,0 +1,51 @@
+Name: Build release
+
+on:
+    push:
+        # Work flow only runs when tags are created and follow the correct format.
+        tags-ignore:
+            - '*'
+        tags:
+            - '*.*.*'
+            
+            
+            
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Validate Tag Format # Validates if the tag is only numerical 
+        id: validate_tag
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          if [[ ! $TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid tag format: $TAG"
+            exit 1
+          fi
+
+          IFS='.' read -ra TAG_SEGMENTS <<< "$TAG"
+          for SEGMENT in "${TAG_SEGMENTS[@]}"; do
+            if ! [[ "$SEGMENT" =~ ^[0-9]+$ ]]; then
+              echo "Invalid tag format: $TAG"
+              exit 1
+            fi
+          done
+      - name: Extract Version from Tag
+          id: extract_version
+          run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
+    
+      - name: Generate Release Name
+          id: generate_release_name
+          run: |
+            echo "RELEASE_NAME=v${{ env.VERSION }}" >> $GITHUB_ENV
+      - name: Build Unity Artifact
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
