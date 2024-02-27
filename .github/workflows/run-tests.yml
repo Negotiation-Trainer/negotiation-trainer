@@ -9,19 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-
       # Checkout
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           lfs: true
-    
       # Cache
       - uses: actions/cache@v2
         with:
           path: Library
           key: Library
-
       # Test
       - name: Run tests
         uses: game-ci/unity-test-runner@v4
