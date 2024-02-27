@@ -11,6 +11,7 @@ jobs:
   build:
     name: Test project
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
 
       # Checkout
