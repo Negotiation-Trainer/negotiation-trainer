@@ -2,13 +2,16 @@ name: Test
 
 on:
   push:
+    branches:
+      - "feature/**"
+      - "bugfix/**"
   pull_request:
     branches:
-      - main
-      - develop
+      - "main"
+      - "develop"
 
-jobs:
-  build:
+jobs: 
+  RunTests:
     name: Test project
     runs-on: ubuntu-latest
     permissions: write-all
