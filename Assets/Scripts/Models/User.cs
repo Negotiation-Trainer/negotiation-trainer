@@ -2,11 +2,11 @@ namespace Models
 {
     public class User
     {
-        private Inventory _inventory;
+        public readonly Inventory Inventory;
         
         public User()
         {
-            _inventory = new Inventory();
+            Inventory = new Inventory();
         }
     }
 }

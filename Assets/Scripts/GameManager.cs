@@ -1,25 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using Models;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private User _cpu1;
-    private User _cpu2;
-    
-    private User _player;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        _cpu1 = new User();
-        _cpu2 = new User();
-        _player = new User();
-    }
+    public static GameManager Instance { get; private set; }
+    public User Cpu1 { get; private set; }
+    public User Cpu2 { get; private set; }
+    public User Player { get; private set; }
 
-    public void ProposeTrade()
+    private void Awake()
     {
+        Instance = this;
         
+        Cpu1 = new User();
+        Cpu2 = new User();
+        Player = new User();
     }
 }

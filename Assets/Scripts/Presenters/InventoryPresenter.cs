@@ -1,21 +1,42 @@
 using System;
 using Enums;
-using Models;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Presenters
 {
     public class InventoryPresenter: MonoBehaviour
     {
-        private Inventory _inventory; 
-        
+        [SerializeField] private TMP_Text player;
+        [SerializeField] private TMP_Text cpu1;
+        [SerializeField] private TMP_Text cpu2;
+        private GameManager _gameManager;
+
         private void Start()
         {
-            _inventory = new Inventory();
+            _gameManager = GameManager.Instance;
+            player.text = _gameManager.Player.Inventory.ToString();
+            cpu1.text = _gameManager.Cpu1.Inventory.ToString();
+            cpu2.text = _gameManager.Cpu2.Inventory.ToString();
+            
+            _gameManager.Player.Inventory.InventoryUpdate += OnInventoryUpdate;
+            _gameManager.Cpu1.Inventory.InventoryUpdate += OnInventoryUpdate;
+            _gameManager.Cpu2.Inventory.InventoryUpdate += OnInventoryUpdate;
+            
+            FillInventory();
         }
-        
-        
+
+        private void FillInventory()
+        {
+            _gameManager.Player.Inventory.AddToInventory(InventoryItems.Stone, 4);
+            _gameManager.Cpu2.Inventory.AddToInventory(InventoryItems.Wood, 4);
+        }
+
+        private void OnInventoryUpdate(object sender, EventArgs eventArgs)
+        {
+            player.text = _gameManager.Player.Inventory.ToString();
+            cpu1.text = _gameManager.Cpu1.Inventory.ToString();
+            cpu2.text = _gameManager.Cpu2.Inventory.ToString();
+        }
     }
 }

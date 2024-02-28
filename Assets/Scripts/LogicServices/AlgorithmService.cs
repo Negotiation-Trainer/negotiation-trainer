@@ -1,4 +1,3 @@
-using System;
 using Models;
 
 /*
@@ -8,26 +7,25 @@ namespace LogicServices
 {
     public class AlgorithmService
     {
-        public bool Decide(Trade trade)
-        {
-            SetupAlgorithm();
-            
-            
+        private User _originator;
+        private User _target;
+        private Trade _trade;
 
-            return true;
+
+        public bool Decide(Trade trade, User targetCpu)
+        {
+            //setup
+            _originator = GameManager.Instance.Player;
+            _target = targetCpu;
+            _trade = trade;
+
+            return Algo_SelfBuild();
         }
 
-        private void SetupAlgorithm()
-        {
-            //set up inventory
-        }
-        
-        
         /* Decision Steps */
-        private bool Algo_SelfBuild(Trade trade)
+        private bool Algo_SelfBuild()
         {
-            return trade.RequestedItem == trade.OfferedItem;
+            return (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) <= 5);
         }
-        
     }
 }

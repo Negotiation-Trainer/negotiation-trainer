@@ -6,7 +6,8 @@ namespace Models
 {
     public class Inventory
     {
-        Dictionary<InventoryItems, int> _inventory = new();
+        public event EventHandler InventoryUpdate;
+        private Dictionary<InventoryItems, int> _inventory = new();
 
 
         public Inventory()
@@ -30,16 +31,23 @@ namespace Models
         public void AddToInventory(InventoryItems item, int amount)
         {
             _inventory[item] += amount;
+            InventoryUpdate?.Invoke(this, EventArgs.Empty);
         }
 
         public void RemoveFromInventory(InventoryItems item, int amount)
         {
             _inventory[item] -= amount;
+            InventoryUpdate?.Invoke(this, EventArgs.Empty);
         }
 
         public bool CanBuild(InventoryItems item)
         {
             return _inventory[item] >= 10;
+        }
+
+        public new string ToString()
+        {
+            return $"Wood: {_inventory[InventoryItems.Wood]} Stone: {_inventory[InventoryItems.Stone]} Gold: {_inventory[InventoryItems.Gold]}";
         }
     }
 }
