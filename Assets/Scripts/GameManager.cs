@@ -129,9 +129,9 @@ public class GameManager : MonoBehaviour
             [(InventoryItems.Stone, Cpu2)] = 10,
         };
         
-        Player.SetPointTable(pointTablePlayer);
-        Cpu1.SetPointTable(pointTableCpu1);
-        Cpu2.SetPointTable(pointTableCpu2);
+        Player.PointTable = pointTablePlayer;
+        Cpu1.PointTable = pointTableCpu1;
+        Cpu2.PointTable = pointTableCpu2;
     }
     
     private void FillInventory()
