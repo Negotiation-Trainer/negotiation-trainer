@@ -1,3 +1,4 @@
+using LogicServices.Algorithm;
 using Models;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ namespace LogicServices
         private User _target;
         private Trade _trade;
 
+        private readonly SelfBuild _selfBuild = new SelfBuild(5);
+        private readonly Randomness _randomness = new Randomness(0.2f);
 
         public bool Decide(Trade trade, User targetCpu)
         {
@@ -20,15 +23,8 @@ namespace LogicServices
             _target = targetCpu;
             _trade = trade;
             
-            if(Random.value < 0.2f) return !Algo_SelfBuild();
-            return Algo_SelfBuild();
-        }
-
-        /* Decision Steps */
-        private bool Algo_SelfBuild()
-        {
-            if (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) == 5) return (Random.value > 0.5f);
-            else return _target.Inventory.GetInventoryAmount(_trade.RequestedItem) < 5;
+            if (_randomness.Calculate()) return !_selfBuild.Calculate(trade,targetCpu);
+            return _selfBuild.Calculate(trade,targetCpu);
         }
     }
 }
