@@ -8,11 +8,10 @@ on:
   pull_request:
     branches:
       - "main"
-      - "develop"
 
 jobs: 
   RunTests:
-    name: Run unity tests
+    name: Run unit tests
     runs-on: ubuntu-latest
     permissions: write-all
     steps:

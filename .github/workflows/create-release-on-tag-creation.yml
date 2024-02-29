@@ -1,4 +1,4 @@
-name: Create a new release
+name: Create a new release and deploy the release to production
 
 on:
     push:
@@ -9,6 +9,7 @@ on:
             
 jobs:
   CreateNewRelease:
+    name: Create a new release
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -82,7 +83,7 @@ jobs:
 
   DeployReleaseToProd:
     runs-on: ubuntu-latest
-    name: Deploy new Release to production
+    name: Deploy the new Release to production
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
