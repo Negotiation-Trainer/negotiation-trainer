@@ -50,6 +50,12 @@ jobs:
         run: |
             echo "RELEASE_NAME=v${{ env.VERSION }}" >> $GITHUB_ENV
       
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
+
       # Build the project
       - name: Build Unity Artifact
         uses: game-ci/unity-builder@v4
