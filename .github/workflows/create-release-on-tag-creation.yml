@@ -4,7 +4,7 @@ on:
     push:
         # Work flow only runs when tags are created and follow the correct format.
         tags:
-            - '*.*.*'
+            - '*'
             
 jobs:
   create_release:
