@@ -1,4 +1,5 @@
 using Models;
+using UnityEngine;
 
 /*
  * This class is responsible for handling the algorithmic logic of the game.
@@ -18,14 +19,16 @@ namespace LogicServices
             _originator = GameManager.Instance.Player;
             _target = targetCpu;
             _trade = trade;
-
+            
             return Algo_SelfBuild();
         }
 
         /* Decision Steps */
         private bool Algo_SelfBuild()
         {
-            return (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) <= 5);
+            if (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) < 5) return true;
+            if (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) > 5) return false;
+            return (Random.value > 0.5f);
         }
     }
 }

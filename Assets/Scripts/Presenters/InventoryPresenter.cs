@@ -22,16 +22,8 @@ namespace Presenters
             _gameManager.Player.Inventory.InventoryUpdate += OnInventoryUpdate;
             _gameManager.Cpu1.Inventory.InventoryUpdate += OnInventoryUpdate;
             _gameManager.Cpu2.Inventory.InventoryUpdate += OnInventoryUpdate;
-            
-            FillInventory();
         }
-
-        private void FillInventory()
-        {
-            _gameManager.Player.Inventory.AddToInventory(InventoryItems.Stone, 4);
-            _gameManager.Cpu2.Inventory.AddToInventory(InventoryItems.Wood, 4);
-        }
-
+        
         private void OnInventoryUpdate(object sender, EventArgs eventArgs)
         {
             player.text = _gameManager.Player.Inventory.ToString();
