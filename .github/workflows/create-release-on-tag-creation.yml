@@ -82,6 +82,7 @@ jobs:
           name: ${{ env.RELEASE_NAME}}
 
   DeployReleaseToProd:
+    needs: CreateNewRelease
     runs-on: ubuntu-latest
     name: Deploy the new Release to production
     steps:
