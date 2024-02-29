@@ -85,6 +85,8 @@ jobs:
     needs: CreateNewRelease
     runs-on: ubuntu-latest
     name: Deploy the new Release to production
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
