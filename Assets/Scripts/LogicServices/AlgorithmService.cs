@@ -27,9 +27,8 @@ namespace LogicServices
         /* Decision Steps */
         private bool Algo_SelfBuild()
         {
-            if (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) < 5) return true;
-            if (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) > 5) return false;
-            return (Random.value > 0.5f);
+            if (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) == 5) return (Random.value > 0.5f);
+            else return _target.Inventory.GetInventoryAmount(_trade.RequestedItem) < 5;
         }
     }
 }
