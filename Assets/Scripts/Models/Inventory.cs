@@ -36,6 +36,7 @@ namespace Models
 
         public void RemoveFromInventory(InventoryItems item, int amount)
         {
+            if(_inventory[item] == 0) return;
             _inventory[item] -= amount;
             InventoryUpdate?.Invoke(this, EventArgs.Empty);
         }
