@@ -16,7 +16,7 @@ namespace Presenters
             var trade = new Trade(InventoryItems.Wood, 1, InventoryItems.Stone, 1);
             var target = GameManager.Instance.Cpu2;
             
-            if (!TradePossible(trade, originator)) return;
+            if (!TradePossible(trade, originator, target)) return;
             
             //Decision
             if (_algorithmService.Decide(trade, target))
@@ -34,9 +34,10 @@ namespace Presenters
             }
         }
 
-        private bool TradePossible(Trade trade, User originator)
+        private bool TradePossible(Trade trade, User originator, User target)
         {
-            return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount;
+            return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount && 
+                   target.Inventory.GetInventoryAmount(trade.RequestedItem) >= trade.RequestedAmount;
         }
     }
 }
