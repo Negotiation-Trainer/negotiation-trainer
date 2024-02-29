@@ -20,6 +20,7 @@ namespace LogicServices
             _target = targetCpu;
             _trade = trade;
             
+            if(Random.value < 0.2f) return !Algo_SelfBuild();
             return Algo_SelfBuild();
         }
 
