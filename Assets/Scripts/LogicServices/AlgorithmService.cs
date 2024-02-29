@@ -13,13 +13,19 @@ namespace LogicServices
         private User _target;
         private Trade _trade;
 
-        private readonly SelfBuild _selfBuild = new SelfBuild(5);
-        private readonly Randomness _randomness = new Randomness(0.2f);
+        private readonly SelfBuild _selfBuild;
+        private readonly Randomness _randomness;
 
-        public bool Decide(Trade trade, User targetCpu)
+        public AlgorithmService(int selfBuildBorder = 5, float randomChangeChance = 0.2f)
+        {
+            _selfBuild = new SelfBuild(selfBuildBorder);
+            _randomness = new Randomness(randomChangeChance);
+        }
+
+        public bool Decide(Trade trade,User originator, User targetCpu)
         {
             //setup
-            _originator = GameManager.Instance.Player;
+            _originator = originator;
             _target = targetCpu;
             _trade = trade;
             

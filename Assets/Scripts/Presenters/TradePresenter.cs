@@ -19,7 +19,7 @@ namespace Presenters
             if (!TradePossible(trade, originator, target)) return;
             
             //Decision
-            if (_algorithmService.Decide(trade, target))
+            if (_algorithmService.Decide(trade, originator, target))
             {
                 Debug.Log("Trade accepted");
                 originator.Inventory.RemoveFromInventory(trade.OfferedItem, trade.OfferedAmount);

@@ -60,5 +60,37 @@ namespace Tests
             //Then
             Assert.IsTrue(selfBuild.Calculate(trade,user));
         }
+        
+        [Test]
+        public void Decide_GoodDeal_ReturnsTrue()
+        {
+            //Given
+            AlgorithmService algorithmService = new AlgorithmService(5,0);
+            User originator = new User();
+            User target = new User();
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
+            
+            //When
+            target.Inventory.AddToInventory(InventoryItems.Wood,3);
+            
+            //Then
+            Assert.IsTrue(algorithmService.Decide(trade, originator, target));
+        }
+        
+        [Test]
+        public void Decide_BadDeal_ReturnsFalse()
+        {
+            //Given
+            AlgorithmService algorithmService = new AlgorithmService(5,0);
+            User originator = new User();
+            User target = new User();
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
+            
+            //When
+            target.Inventory.AddToInventory(InventoryItems.Wood,8);
+            
+            //Then
+            Assert.IsFalse(algorithmService.Decide(trade, originator, target));
+        }
     }
 }
