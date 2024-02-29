@@ -8,7 +8,7 @@ on:
     workflow_dispatch:
             
 jobs:
-  create_release:
+  CreateNewRelease:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -49,12 +49,6 @@ jobs:
         id: generate_release_name
         run: |
             echo "RELEASE_NAME=v${{ env.VERSION }}" >> $GITHUB_ENV
-      
-      # Cache
-      - uses: actions/cache@v2
-        with:
-          path: Library
-          key: Library
 
       # Build the project
       - name: Build Unity Artifact
@@ -85,3 +79,35 @@ jobs:
         with:
           files: Connors-Paradise-WebGL-Release-${{ env.RELEASE_NAME }}.zip
           name: ${{ env.RELEASE_NAME}}
+
+  DeployReleaseToProd:
+    runs-on: ubuntu-latest
+    name: Deploy new Release to production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+    
+          # - name: Exit if not on main branch # Exits if the branch is not main
+          #   if: endsWith(github.ref, 'main') == false
+          #   run: exit 0
+
+      # Download the WebGL build
+      - name: Download WebGL Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webGL-build
+          path: build
+      
+      # Deploy the webGL build to production
+      - name: Deploy to Production
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build/WebGL
+          commit-message: Deploy
+          single-commit: true
+          
+      # Cleanup to avoid storage limit
+      - name: Cleanup to avoid storage limit
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: webGL-build
