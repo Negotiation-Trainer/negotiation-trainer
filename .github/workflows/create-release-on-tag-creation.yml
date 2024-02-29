@@ -5,10 +5,13 @@ on:
         # Work flow only runs when tags are created and follow the correct format.
         tags:
             - '*'
+    workflow_dispatch:
             
 jobs:
   create_release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
