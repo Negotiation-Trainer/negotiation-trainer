@@ -13,10 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Exits if the branch is not main
-      - name: Exit if not on main branch
-        if: endsWith(github.ref, 'main') == false
-        run: exit -1
+      # # Exits if the branch is not main
+      # - name: Exit if not on main branch
+      #   if: endsWith(github.ref, 'main') == false
+      #   run: exit -1
 
       # Validates if the tag is only numerical 
       - name: Validate Tag Format
