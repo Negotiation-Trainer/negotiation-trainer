@@ -5,8 +5,6 @@ on:
         # Work flow only runs when tags are created and follow the correct format.
         tags:
             - '*.*.*'
-        branches:
-            - main
             
 jobs:
   create_release:
@@ -15,7 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Validate Tag Format # Validates if the tag is only numerical 
+      # Exits if the branch is not main
+      - name: Exit if not on main branch
+        if: endsWith(github.ref, 'main') == false
+        run: exit -1
+
+      # Validates if the tag is only numerical 
+      - name: Validate Tag Format
         id: validate_tag
         run: |
           TAG=${GITHUB_REF#refs/tags/}
@@ -31,14 +35,19 @@ jobs:
               exit 1
             fi
           done
+
+      # Extracts the version from the tag
       - name: Extract Version from Tag
         id: extract_version
         run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
     
+      # Generates the release name
       - name: Generate Release Name
         id: generate_release_name
         run: |
             echo "RELEASE_NAME=v${{ env.VERSION }}" >> $GITHUB_ENV
+      
+      # Build the project
       - name: Build Unity Artifact
         uses: game-ci/unity-builder@v4
         env:
@@ -47,3 +56,23 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
+
+      # Output 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: webGL-build
+          path: build
+
+      # Zip the build
+      - name: Zip build
+        run: |
+          pushd build/WebGL
+          zip -r ../../Connors-Paradise-WebGL-Release-${{ env.RELEASE_NAME }}.zip .
+          popd
+
+      # Release
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Connors-Paradise-WebGL-Release-${{ env.RELEASE_NAME }}.zip
+          name: ${{ env.RELEASE_NAME}}
