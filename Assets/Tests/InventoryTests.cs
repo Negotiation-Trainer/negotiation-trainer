@@ -74,4 +74,50 @@ public class InventoryTests
         inventory.AddToInventory(InventoryItems.Wood,10);
         Assert.IsTrue(inventory.CanBuild(InventoryItems.Wood));
     }
+    
+    [Test]
+    public void Event_InventoryUpdate_Add_Invoked()
+    {
+        //Given
+        Inventory inventory = new Inventory();
+        bool eventInvoked = false;
+        inventory.InventoryUpdate += (sender, args) => eventInvoked = true;
+        
+        //When
+        inventory.AddToInventory(InventoryItems.Wood,1);
+        
+        //Then
+        Assert.IsTrue(eventInvoked);
+    }
+    
+    [Test]
+    public void Event_InventoryUpdate_Remove_Invoked()
+    {
+        //Given
+        Inventory inventory = new Inventory();
+        inventory.AddToInventory(InventoryItems.Wood,1);
+        bool eventInvoked = false;
+        inventory.InventoryUpdate += (sender, args) => eventInvoked = true;
+        
+        //When
+        inventory.RemoveFromInventory(InventoryItems.Wood,1);
+        
+        //Then
+        Assert.IsTrue(eventInvoked);
+    }
+    
+    [Test]
+    public void Inventory_ToString_ReturnsCorrectString()
+    {
+        //Given
+        Inventory inventory = new Inventory();
+        inventory.AddToInventory(InventoryItems.Wood,1);
+        inventory.AddToInventory(InventoryItems.Stone,2);
+        
+        //When
+        string expected = "Wood: 1 Lenses: 0 Clay: 0 Gold: 0 Steel: 0 Insulation: 0 Fertilizer: 0 Stone: 2";
+        
+        //Then
+        Assert.AreEqual(expected,inventory.ToString());
+    }
 }
