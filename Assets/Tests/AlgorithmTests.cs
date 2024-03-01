@@ -62,15 +62,81 @@ namespace Tests
         }
         
         [Test]
+        public void CalculateBuildEffect_GoodEffect_ReturnsTrue()
+        {
+            //Given
+            BuildEffect buildEffect = new BuildEffect();
+            User originator = new User();
+            User target = new User();
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
+            
+            //When
+            target.PointTable = new Dictionary<(InventoryItems, User), int>
+            {
+                [(InventoryItems.Wood, target)] = 10,
+                [(InventoryItems.Wood, originator)] = 5
+            };
+            
+            //Then
+            Assert.IsTrue(buildEffect.Calculate(trade,target,originator));
+        }
+        
+        [Test]
+        public void CalculateBuildEffect_NoEffect_ReturnsTrue()
+        {
+            //Given
+            BuildEffect buildEffect = new BuildEffect();
+            User originator = new User();
+            User target = new User();
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
+            
+            //When
+            target.PointTable = new Dictionary<(InventoryItems, User), int>
+            {
+                [(InventoryItems.Wood, target)] = 10,
+                [(InventoryItems.Wood, originator)] = 0
+            };
+            
+            //Then
+            Assert.IsTrue(buildEffect.Calculate(trade,target,originator));
+        }
+        
+        [Test]
+        public void CalculateBuildEffect_BadEffect_ReturnsFalse()
+        {
+            //Given
+            BuildEffect buildEffect = new BuildEffect();
+            User originator = new User();
+            User target = new User();
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
+            
+            //When
+            target.PointTable = new Dictionary<(InventoryItems, User), int>
+            {
+                [(InventoryItems.Wood, target)] = 10,
+                [(InventoryItems.Wood, originator)] = -5
+            };
+            
+            //Then
+            Assert.IsFalse(buildEffect.Calculate(trade,target,originator));
+        }
+        
+        [Test]
         public void Decide_GoodDeal_ReturnsTrue()
         {
             //Given
             AlgorithmService algorithmService = new AlgorithmService(5,0);
             User originator = new User();
             User target = new User();
+            
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
             
             //When
+            target.PointTable = new Dictionary<(InventoryItems, User), int>
+            {
+                [(InventoryItems.Wood, target)] = 10,
+                [(InventoryItems.Wood, originator)] = 5
+            };
             target.Inventory.AddToInventory(InventoryItems.Wood,3);
             
             //Then
@@ -87,6 +153,11 @@ namespace Tests
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
             
             //When
+            target.PointTable = new Dictionary<(InventoryItems, User), int>
+            {
+                [(InventoryItems.Wood, target)] = 10,
+                [(InventoryItems.Wood, originator)] = -5
+            };
             target.Inventory.AddToInventory(InventoryItems.Wood,8);
             
             //Then
