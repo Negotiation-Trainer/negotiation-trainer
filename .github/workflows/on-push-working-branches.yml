@@ -1,13 +1,10 @@
-name: Run testing workflow
+name: Test Work In Progress
 
 on:
   push:
     branches:
       - "feature/**"
       - "bugfix/**"
-  pull_request:
-    branches:
-      - "main"
 
 jobs: 
   RunTests:
