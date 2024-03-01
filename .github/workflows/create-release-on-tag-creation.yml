@@ -106,7 +106,7 @@ jobs:
       - name: Deploy to Production
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build/WebGL
+          folder: build/WebGL/WebGL
           commit-message: Deploy
           single-commit: true
           
