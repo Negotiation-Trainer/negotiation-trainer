@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     private void SetPointTables()
     {
-        var pointTablePlayer = new Dictionary<(InventoryItems, User), int>
+        Player.PointTable = new Dictionary<(InventoryItems, User), int>
         {
             [(InventoryItems.Wood, Player)] = 10,
             [(InventoryItems.Wood, Cpu1)] = -5,
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
             [(InventoryItems.Stone, Cpu2)] = 5,
         };
 
-        var pointTableCpu1 = new Dictionary<(InventoryItems, User), int>
+        Cpu1.PointTable = new Dictionary<(InventoryItems, User), int>
         {
             [(InventoryItems.Wood, Player)] = 0,
             [(InventoryItems.Wood, Cpu1)] = 10,
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
             [(InventoryItems.Stone, Cpu2)] = 0,
         };
         
-        var pointTableCpu2 = new Dictionary<(InventoryItems, User), int>
+        Cpu2.PointTable = new Dictionary<(InventoryItems, User), int>
         {
             [(InventoryItems.Wood, Player)] = 0,
             [(InventoryItems.Wood, Cpu1)] = -5,
@@ -128,10 +128,6 @@ public class GameManager : MonoBehaviour
             [(InventoryItems.Stone, Cpu1)] = 5,
             [(InventoryItems.Stone, Cpu2)] = 10,
         };
-        
-        Player.PointTable = pointTablePlayer;
-        Cpu1.PointTable = pointTableCpu1;
-        Cpu2.PointTable = pointTableCpu2;
     }
     
     private void FillInventory()
