@@ -46,12 +46,11 @@ jobs:
           with:
             lfs: true
       
-        # Download the WebGL build
-        - name: Download WebGL Artifact
-          uses: actions/download-artifact@v4
+        # Cache
+        - uses: actions/cache@v2
           with:
-            name: webGL-build
-            path: build
+            path: Library
+            key: Library
       
         # Test
         - name: Run tests
@@ -66,7 +65,7 @@ jobs:
             githubToken: ${{ secrets.GITHUB_TOKEN }}
 
   DeployReleaseToDevelop:
-    needs: RunTests
+    needs: Build
     runs-on: ubuntu-latest
     name: Deploy
     permissions:

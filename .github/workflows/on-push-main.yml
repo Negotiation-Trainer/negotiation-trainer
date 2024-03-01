@@ -37,7 +37,7 @@ jobs:
           path: build
 
   RunTests:
-    name: Run unit tests
+    name: Test
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -68,7 +68,7 @@ jobs:
   DeployReleaseToAcceptance:
     needs: RunTests
     runs-on: ubuntu-latest
-    name: Deploy the new Release to staging
+    name: Deploy
     permissions:
       contents: write
     steps:
