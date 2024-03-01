@@ -1,9 +1,11 @@
 name: Test, Pre-Release & Deploy to staging
 
 on:
-    push:
-        tags:
-            - '*'
+  push:
+    branches:
+      - 'main'
+    tags:
+      - '*'
             
 jobs:
   Build:
