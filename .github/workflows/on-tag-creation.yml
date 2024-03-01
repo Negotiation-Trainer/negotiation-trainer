@@ -1,26 +1,82 @@
-name: Create a new release and deploy the release to production
+name: Test, Pre-Release & Deploy to staging
 
 on:
     push:
-        # Work flow only runs when tags are created and follow the correct format.
         tags:
             - '*'
-    workflow_dispatch:
             
 jobs:
+  Build:
+    if: endsWith(github.ref, 'main')
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
+
+      # Build the project
+      - name: Build Unity Artifact
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+
+      # Output 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: webGL-build
+          path: build
+
+  RunTests:
+    if: endsWith(github.ref, 'main')
+    name: Test
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+          with:
+            lfs: true
+      
+        # Download the WebGL build
+        - name: Download WebGL Artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: webGL-build
+            path: build
+      
+        # Test
+        - name: Run tests
+          uses: game-ci/unity-test-runner@v4
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+            UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+            UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          with:
+            # packageMode: true # Needs to be enabled when packages are used
+            unityVersion: 2022.3.20f1
+            githubToken: ${{ secrets.GITHUB_TOKEN }}
+
   CreateNewRelease:
-    name: Create a new release
+    if: endsWith(github.ref, 'main')
+    needs: RunTests
+    name: Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      # # Exits if the branch is not main
-      # - name: Exit if not on main branch
-      #   if: endsWith(github.ref, 'main') == false
-      #   run: exit -1
 
       # Validates if the tag is only numerical 
       - name: Validate Tag Format
@@ -51,22 +107,6 @@ jobs:
         run: |
             echo "RELEASE_NAME=v${{ env.VERSION }}" >> $GITHUB_ENV
 
-      # Build the project
-      - name: Build Unity Artifact
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          targetPlatform: WebGL
-
-      # Output 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: webGL-build
-          path: build
-
       # Zip the build
       - name: Zip build
         run: |
@@ -80,20 +120,19 @@ jobs:
         with:
           files: Connors-Paradise-WebGL-Release-${{ env.RELEASE_NAME }}.zip
           name: ${{ env.RELEASE_NAME}}
+          prerelease: true
 
-  DeployReleaseToProd:
+
+  DeployReleaseToStaging:
+    if: endsWith(github.ref, 'main')
     needs: CreateNewRelease
     runs-on: ubuntu-latest
-    name: Deploy the new Release to production
+    name: Deploy
     permissions:
       contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-    
-          # - name: Exit if not on main branch # Exits if the branch is not main
-          #   if: endsWith(github.ref, 'main') == false
-          #   run: exit 0
 
       # Download the WebGL build
       - name: Download WebGL Artifact
@@ -103,12 +142,13 @@ jobs:
           path: build
       
       # Deploy the webGL build to production
-      - name: Deploy to Production
+      - name: Deploy to Staging
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build/WebGL/WebGL
           commit-message: Deploy
           single-commit: true
+          target-folder: staging
           
       # Cleanup to avoid storage limit
       - name: Cleanup to avoid storage limit
