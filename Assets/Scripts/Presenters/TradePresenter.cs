@@ -22,10 +22,10 @@ namespace Presenters
             var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem, debugOfferedAmount);
             var target = GameManager.Instance.Cpu2;
             
-            if (!TradePossible(trade, originator)) return;
+            if (!TradePossible(trade, originator, target)) return;
             
             //Decision
-            if (_algorithmService.Decide(trade, target))
+            if (_algorithmService.Decide(trade, originator, target))
             {
                 Debug.Log("Trade accepted");
                 originator.Inventory.RemoveFromInventory(trade.OfferedItem, trade.OfferedAmount);
@@ -56,9 +56,10 @@ namespace Presenters
             }
         }
 
-        private bool TradePossible(Trade trade, User originator)
+        private bool TradePossible(Trade trade, User originator, User target)
         {
-            return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount;
+            return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount && 
+                   target.Inventory.GetInventoryAmount(trade.RequestedItem) >= trade.RequestedAmount;
         }
     }
 }

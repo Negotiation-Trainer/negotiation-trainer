@@ -1,3 +1,4 @@
+using LogicServices.Algorithm;
 using Models;
 using UnityEngine;
 
@@ -8,28 +9,19 @@ namespace LogicServices
 {
     public class AlgorithmService
     {
-        private User _originator;
-        private User _target;
-        private Trade _trade;
+        private readonly SelfBuild _selfBuild;
+        private readonly Randomness _randomness;
 
-
-        public bool Decide(Trade trade, User targetCpu)
+        public AlgorithmService(byte selfBuildThreshold = 5, float randomChangeChance = 0.2f)
         {
-            //setup
-            _originator = GameManager.Instance.Player;
-            _target = targetCpu;
-            _trade = trade;
-            
-            if(Random.value < 0.2f) return !Algo_SelfBuild();
-            return Algo_SelfBuild();
+            _selfBuild = new SelfBuild(selfBuildThreshold);
+            _randomness = new Randomness(randomChangeChance);
         }
 
-        /* Decision Steps */
-        private bool Algo_SelfBuild()
+        public bool Decide(Trade trade,User originator, User targetCpu)
         {
-            if (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) < 5) return true;
-            if (_target.Inventory.GetInventoryAmount(_trade.RequestedItem) > 5) return false;
-            return (Random.value > 0.5f);
+            if (_randomness.Calculate()) return !_selfBuild.Calculate(trade,targetCpu);
+            return _selfBuild.Calculate(trade,targetCpu);
         }
     }
 }
