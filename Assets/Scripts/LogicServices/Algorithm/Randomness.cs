@@ -4,7 +4,7 @@ namespace LogicServices.Algorithm
 {
     public class Randomness
     {
-        private float _changeChance;
+        private readonly float _changeChance;
 
         public Randomness(float changeChance)
         {
