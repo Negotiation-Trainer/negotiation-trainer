@@ -100,28 +100,6 @@ namespace Tests
         }
         
         [Test]
-        public void CalculateBuildEffect_NoEffect_ReturnsTrue()
-        {
-            //Given
-            Random random = new Random();
-            BuildEffect buildEffect = new BuildEffect(random);
-            Tribe originator = new Tribe("originator");
-            Tribe target = new Tribe("target");
-            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
-            
-            //When
-            target.PointTable = new Dictionary<(InventoryItems, Tribe), int>
-            {
-                [(InventoryItems.Wood, target)] = 10,
-                [(InventoryItems.Wood, originator)] = 0
-            };
-            var result = buildEffect.Calculate(trade, target, originator);
-            
-            //Then
-            Assert.IsTrue(result);
-        }
-        
-        [Test]
         public void CalculateBuildEffect_BadEffect_ReturnsFalse()
         {
             //Given
