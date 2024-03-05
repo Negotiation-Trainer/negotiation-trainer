@@ -7,7 +7,7 @@ namespace Models
     public class Inventory
     {
         public event EventHandler InventoryUpdate;
-        private Dictionary<InventoryItems, int> _inventory = new();
+        private readonly Dictionary<InventoryItems, int> _inventory = new();
 
 
         public Inventory()
@@ -18,11 +18,6 @@ namespace Models
             }
         }
         
-        public Dictionary<InventoryItems, int> GetInventory()
-        {
-            return _inventory;
-        }
-
         public int GetInventoryAmount(InventoryItems item)
         {
             return _inventory[item];
@@ -39,11 +34,6 @@ namespace Models
             if(_inventory[item] == 0) return;
             _inventory[item] -= amount;
             InventoryUpdate?.Invoke(this, EventArgs.Empty);
-        }
-
-        public bool CanBuild(InventoryItems item)
-        {
-            return _inventory[item] >= 10;
         }
 
         public new string ToString()

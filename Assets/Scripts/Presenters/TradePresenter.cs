@@ -56,7 +56,7 @@ namespace Presenters
             }
         }
 
-        private bool TradePossible(Trade trade, User originator, User target)
+        private bool TradePossible(Trade trade, Tribe originator, Tribe target)
         {
             return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount && 
                    target.Inventory.GetInventoryAmount(trade.RequestedItem) >= trade.RequestedAmount;
