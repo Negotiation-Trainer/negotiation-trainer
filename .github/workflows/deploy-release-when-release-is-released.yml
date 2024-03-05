@@ -1,0 +1,38 @@
+name: Deploy new Release
+
+on:
+    release:
+        types: [released]
+    
+    workflow_dispatch:
+        
+jobs:
+    DeployReleaseToProd:
+        runs-on: ubuntu-latest
+        name: Deploy new Release to production
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
+    
+          # - name: Exit if not on main branch # Exits if the branch is not main
+          #   if: endsWith(github.ref, 'main') == false
+          #   run: exit 0
+
+          - name: Download WebGL Artifact
+            uses: actions/download-artifact@v4
+            with:
+              name: webGL-build
+              path: build
+      
+          - name: Deploy to Production
+            uses: JamesIves/github-pages-deploy-action@v4
+            with:
+              folder: build/WebGL
+              commit-message: Deploy
+              single-commit: true
+          
+          - name: Cleanup to avoid storage limit
+            uses: geekyeggo/delete-artifact@v2
+            with:
+              name: webGL-build
+

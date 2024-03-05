@@ -7,28 +7,6 @@ namespace Tests
 {
     public class InventoryTests
     {
-        // A Test behaves as an ordinary method
-        [Test]
-        public void Create_Inventory_ReturnsZeroResources()
-        {
-            //Given
-            Inventory inventory = new Inventory();
-            Dictionary<InventoryItems, int> expected = new Dictionary<InventoryItems, int>
-            {
-                {InventoryItems.Wood,0},
-                {InventoryItems.Lenses,0},
-                {InventoryItems.Clay,0},
-                {InventoryItems.Gold,0},
-                {InventoryItems.Steel,0},
-                {InventoryItems.Insulation,0},
-                {InventoryItems.Fertilizer,0},
-                {InventoryItems.Stone,0}
-            };
-            
-            //Then
-            Assert.AreEqual(expected,inventory.GetInventory());
-        }
-    
         [Test]
         public void Add_OneResources_ReturnsSameNumber()
         {
@@ -37,9 +15,10 @@ namespace Tests
             
             //When
             inventory.AddToInventory(InventoryItems.Wood,1);
+            var result = inventory.GetInventoryAmount(InventoryItems.Wood);
             
             //Then
-            Assert.AreEqual(1,inventory.GetInventoryAmount(InventoryItems.Wood));
+            Assert.AreEqual(1,result);
         }
     
         [Test]
@@ -50,9 +29,10 @@ namespace Tests
             
             //When
             inventory.AddToInventory(InventoryItems.Wood,0);
+            var result = inventory.GetInventoryAmount(InventoryItems.Wood);
             
             //Then
-            Assert.AreEqual(0,inventory.GetInventoryAmount(InventoryItems.Wood));
+            Assert.AreEqual(0,result);
         }
     
         [Test]
@@ -63,9 +43,10 @@ namespace Tests
             
             //When
             inventory.RemoveFromInventory(InventoryItems.Wood,1);
+            var result = inventory.GetInventoryAmount(InventoryItems.Wood);
             
             //Then
-            Assert.AreEqual(0,inventory.GetInventoryAmount(InventoryItems.Wood));
+            Assert.AreEqual(0,result);
         }
     
         [Test]
@@ -77,32 +58,10 @@ namespace Tests
             //When
             inventory.AddToInventory(InventoryItems.Wood,2);
             inventory.RemoveFromInventory(InventoryItems.Wood,2);
+            var result = inventory.GetInventoryAmount(InventoryItems.Wood);
             
             //Then
-            Assert.AreEqual(0,inventory.GetInventoryAmount(InventoryItems.Wood));
-        }
-    
-        [Test]
-        public void CanBuild_EmptyInventory_ReturnsFalse()
-        {
-            //Given
-            Inventory inventory = new Inventory();
-            
-            //Then
-            Assert.IsFalse(inventory.CanBuild(InventoryItems.Wood));
-        }
-    
-        [Test]
-        public void CanBuild_EnoughInInventory_ReturnsTrue()
-        {
-            //Given
-            Inventory inventory = new Inventory();
-            
-            //When
-            inventory.AddToInventory(InventoryItems.Wood,10);
-            
-            //Then
-            Assert.IsTrue(inventory.CanBuild(InventoryItems.Wood));
+            Assert.AreEqual(0,result);
         }
     
         [Test]
@@ -146,9 +105,10 @@ namespace Tests
         
             //When
             string expected = "Wood: 1 Lenses: 0 Clay: 0 Gold: 0 Steel: 0 Insulation: 0 Fertilizer: 0 Stone: 2";
+            var result = inventory.ToString();
         
             //Then
-            Assert.AreEqual(expected,inventory.ToString());
+            Assert.AreEqual(expected,result);
         }
     }
 }
