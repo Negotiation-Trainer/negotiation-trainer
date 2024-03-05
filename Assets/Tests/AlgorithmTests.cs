@@ -19,8 +19,11 @@ namespace Tests
             Randomness randomness = new Randomness(random);
             randomness.ChangeChance = 1;
             
+            //when
+            var result = randomness.Calculate();
+            
             //Then
-            Assert.IsTrue(randomness.Calculate());
+            Assert.IsTrue(result);
         }
         
         [Test]
@@ -31,8 +34,11 @@ namespace Tests
             Randomness randomness = new Randomness(random);
             randomness.ChangeChance = 0;
             
+            //when
+            var result = randomness.Calculate();
+            
             //Then
-            Assert.IsFalse(randomness.Calculate());
+            Assert.IsFalse(result);
         }
         
         [Test]
@@ -47,9 +53,10 @@ namespace Tests
             
             //When
             user.Inventory.AddToInventory(InventoryItems.Wood,8);
+            var result = selfBuild.Calculate(trade, user);
             
             //Then
-            Assert.IsFalse(selfBuild.Calculate(trade,user));
+            Assert.IsFalse(result);
         }
         
         [Test]
@@ -64,9 +71,10 @@ namespace Tests
             
             //When
             user.Inventory.AddToInventory(InventoryItems.Wood,1);
+            var result = selfBuild.Calculate(trade, user);
             
             //Then
-            Assert.IsTrue(selfBuild.Calculate(trade,user));
+            Assert.IsTrue(result);
         }
     }
 }

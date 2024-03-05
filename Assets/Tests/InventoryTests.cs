@@ -15,9 +15,10 @@ namespace Tests
             
             //When
             inventory.AddToInventory(InventoryItems.Wood,1);
+            var result = inventory.GetInventoryAmount(InventoryItems.Wood);
             
             //Then
-            Assert.AreEqual(1,inventory.GetInventoryAmount(InventoryItems.Wood));
+            Assert.AreEqual(1,result);
         }
     
         [Test]
@@ -28,9 +29,10 @@ namespace Tests
             
             //When
             inventory.AddToInventory(InventoryItems.Wood,0);
+            var result = inventory.GetInventoryAmount(InventoryItems.Wood);
             
             //Then
-            Assert.AreEqual(0,inventory.GetInventoryAmount(InventoryItems.Wood));
+            Assert.AreEqual(0,result);
         }
     
         [Test]
@@ -41,9 +43,10 @@ namespace Tests
             
             //When
             inventory.RemoveFromInventory(InventoryItems.Wood,1);
+            var result = inventory.GetInventoryAmount(InventoryItems.Wood);
             
             //Then
-            Assert.AreEqual(0,inventory.GetInventoryAmount(InventoryItems.Wood));
+            Assert.AreEqual(0,result);
         }
     
         [Test]
@@ -55,9 +58,10 @@ namespace Tests
             //When
             inventory.AddToInventory(InventoryItems.Wood,2);
             inventory.RemoveFromInventory(InventoryItems.Wood,2);
+            var result = inventory.GetInventoryAmount(InventoryItems.Wood);
             
             //Then
-            Assert.AreEqual(0,inventory.GetInventoryAmount(InventoryItems.Wood));
+            Assert.AreEqual(0,result);
         }
     
         [Test]
@@ -101,9 +105,10 @@ namespace Tests
         
             //When
             string expected = "Wood: 1 Lenses: 0 Clay: 0 Gold: 0 Steel: 0 Insulation: 0 Fertilizer: 0 Stone: 2";
+            var result = inventory.ToString();
         
             //Then
-            Assert.AreEqual(expected,inventory.ToString());
+            Assert.AreEqual(expected,result);
         }
     }
 }
