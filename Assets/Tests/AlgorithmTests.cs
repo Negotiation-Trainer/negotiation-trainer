@@ -93,9 +93,10 @@ namespace Tests
                 [(InventoryItems.Wood, target)] = 10,
                 [(InventoryItems.Wood, originator)] = 5
             };
+            var result = buildEffect.Calculate(trade, target, originator);
             
             //Then
-            Assert.IsTrue(buildEffect.Calculate(trade,target,originator));
+            Assert.IsTrue(result);
         }
         
         [Test]
@@ -114,9 +115,10 @@ namespace Tests
                 [(InventoryItems.Wood, target)] = 10,
                 [(InventoryItems.Wood, originator)] = 0
             };
+            var result = buildEffect.Calculate(trade, target, originator);
             
             //Then
-            Assert.IsTrue(buildEffect.Calculate(trade,target,originator));
+            Assert.IsTrue(result);
         }
         
         [Test]
@@ -135,9 +137,10 @@ namespace Tests
                 [(InventoryItems.Wood, target)] = 10,
                 [(InventoryItems.Wood, originator)] = -5
             };
+            var result = buildEffect.Calculate(trade, target, originator);
             
             //Then
-            Assert.IsFalse(buildEffect.Calculate(trade,target,originator));
+            Assert.IsFalse(result);
         }
     }
 }
