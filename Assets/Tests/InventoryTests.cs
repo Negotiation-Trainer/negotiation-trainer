@@ -7,28 +7,6 @@ namespace Tests
 {
     public class InventoryTests
     {
-        // A Test behaves as an ordinary method
-        [Test]
-        public void Create_Inventory_ReturnsZeroResources()
-        {
-            //Given
-            Inventory inventory = new Inventory();
-            Dictionary<InventoryItems, int> expected = new Dictionary<InventoryItems, int>
-            {
-                {InventoryItems.Wood,0},
-                {InventoryItems.Lenses,0},
-                {InventoryItems.Clay,0},
-                {InventoryItems.Gold,0},
-                {InventoryItems.Steel,0},
-                {InventoryItems.Insulation,0},
-                {InventoryItems.Fertilizer,0},
-                {InventoryItems.Stone,0}
-            };
-            
-            //Then
-            Assert.AreEqual(expected,inventory.GetInventory());
-        }
-    
         [Test]
         public void Add_OneResources_ReturnsSameNumber()
         {

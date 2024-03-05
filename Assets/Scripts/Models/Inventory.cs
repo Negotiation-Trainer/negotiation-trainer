@@ -7,7 +7,7 @@ namespace Models
     public class Inventory
     {
         public event EventHandler InventoryUpdate;
-        private Dictionary<InventoryItems, int> _inventory = new();
+        private readonly Dictionary<InventoryItems, int> _inventory = new();
 
 
         public Inventory()
@@ -18,11 +18,6 @@ namespace Models
             }
         }
         
-        public Dictionary<InventoryItems, int> GetInventory()
-        {
-            return _inventory;
-        }
-
         public int GetInventoryAmount(InventoryItems item)
         {
             return _inventory[item];
