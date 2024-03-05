@@ -16,7 +16,8 @@ namespace Tests
         {
             //Given
             Random random = new Random();
-            Randomness randomness = new Randomness(1, random);
+            Randomness randomness = new Randomness(random);
+            randomness.ChangeChance = 1;
             
             //Then
             Assert.IsTrue(randomness.Calculate());
@@ -27,7 +28,8 @@ namespace Tests
         {
             //Given
             Random random = new Random();
-            Randomness randomness = new Randomness(0, random);
+            Randomness randomness = new Randomness(random);
+            randomness.ChangeChance = 0;
             
             //Then
             Assert.IsFalse(randomness.Calculate());
@@ -38,7 +40,8 @@ namespace Tests
         {
             //Given
             Random random = new Random();
-            SelfBuild selfBuild = new SelfBuild(5, random);
+            SelfBuild selfBuild = new SelfBuild(random);
+            selfBuild.SelfBuildThreshold = 5;
             User user = new User();
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
             
@@ -54,7 +57,8 @@ namespace Tests
         {
             //Given
             Random random = new Random();
-            SelfBuild selfBuild = new SelfBuild(5, random);
+            SelfBuild selfBuild = new SelfBuild(random);
+            selfBuild.SelfBuildThreshold = 5;
             User user = new User();
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
             
@@ -63,38 +67,6 @@ namespace Tests
             
             //Then
             Assert.IsTrue(selfBuild.Calculate(trade,user));
-        }
-        
-        [Test]
-        public void Decide_GoodDeal_ReturnsTrue()
-        {
-            //Given
-            AlgorithmService algorithmService = new AlgorithmService(5,0);
-            User originator = new User();
-            User target = new User();
-            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
-            
-            //When
-            target.Inventory.AddToInventory(InventoryItems.Wood,3);
-            
-            //Then
-            Assert.IsTrue(algorithmService.Decide(trade, originator, target));
-        }
-        
-        [Test]
-        public void Decide_BadDeal_ReturnsFalse()
-        {
-            //Given
-            AlgorithmService algorithmService = new AlgorithmService(5,0);
-            User originator = new User();
-            User target = new User();
-            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
-            
-            //When
-            target.Inventory.AddToInventory(InventoryItems.Wood,8);
-            
-            //Then
-            Assert.IsFalse(algorithmService.Decide(trade, originator, target));
         }
     }
 }

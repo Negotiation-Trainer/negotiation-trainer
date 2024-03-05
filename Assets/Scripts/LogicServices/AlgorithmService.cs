@@ -12,11 +12,11 @@ namespace LogicServices
         private readonly SelfBuild _selfBuild;
         private readonly Randomness _randomness;
 
-        public AlgorithmService(int selfBuildThreshold = 5, float randomChangeChance = 0.2f)
+        public AlgorithmService()
         {
             Random random = new Random();
-            _selfBuild = new SelfBuild(selfBuildThreshold, random);
-            _randomness = new Randomness(randomChangeChance, random);
+            _selfBuild = new SelfBuild(random);
+            _randomness = new Randomness(random);
         }
 
         public bool Decide(Trade trade,User originator, User targetCpu)

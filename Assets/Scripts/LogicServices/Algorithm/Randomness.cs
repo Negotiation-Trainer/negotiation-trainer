@@ -5,18 +5,18 @@ namespace LogicServices.Algorithm
 {
     public class Randomness
     {
-        private readonly float _changeChance;
+        public float ChangeChance { get; set; }
         private readonly Random _random;
 
-        public Randomness(float changeChance, Random random)
+        public Randomness(Random random)
         {
-            _changeChance = changeChance;
+            ChangeChance = 0.2f;
             _random = random;
         }
 
         public bool Calculate()
         {
-            return (_random.NextDouble() < _changeChance);
+            return (_random.NextDouble() < ChangeChance);
         }
     }
 }
