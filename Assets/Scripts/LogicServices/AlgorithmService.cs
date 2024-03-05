@@ -1,6 +1,6 @@
+using System;
 using LogicServices.Algorithm;
 using Models;
-using UnityEngine;
 
 /*
  * This class is responsible for handling the algorithmic logic of the game.
@@ -14,8 +14,9 @@ namespace LogicServices
 
         public AlgorithmService(byte selfBuildThreshold = 5, float randomChangeChance = 0.2f)
         {
-            _selfBuild = new SelfBuild(selfBuildThreshold);
-            _randomness = new Randomness(randomChangeChance);
+            Random random = new Random();
+            _selfBuild = new SelfBuild(selfBuildThreshold, random);
+            _randomness = new Randomness(randomChangeChance, random);
         }
 
         public bool Decide(Trade trade,User originator, User targetCpu)

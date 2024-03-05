@@ -15,7 +15,8 @@ namespace Tests
         public void CalculateRandomness_HighRandomness_ReturnsTrue()
         {
             //Given
-            Randomness randomness = new Randomness(1);
+            Random random = new Random();
+            Randomness randomness = new Randomness(1, random);
             
             //Then
             Assert.IsTrue(randomness.Calculate());
@@ -25,7 +26,8 @@ namespace Tests
         public void CalculateRandomness_LowRandomness_ReturnsFalse()
         {
             //Given
-            Randomness randomness = new Randomness(0);
+            Random random = new Random();
+            Randomness randomness = new Randomness(0, random);
             
             //Then
             Assert.IsFalse(randomness.Calculate());
@@ -35,7 +37,8 @@ namespace Tests
         public void CalculateSelfBuild_HigerThanBorder_ReturnsFalse()
         {
             //Given
-            SelfBuild selfBuild = new SelfBuild(5);
+            Random random = new Random();
+            SelfBuild selfBuild = new SelfBuild(5, random);
             User user = new User();
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
             
@@ -50,7 +53,8 @@ namespace Tests
         public void CalculateSelfBuild_LowerThanBorder_ReturnsTrue()
         {
             //Given
-            SelfBuild selfBuild = new SelfBuild(5);
+            Random random = new Random();
+            SelfBuild selfBuild = new SelfBuild(5, random);
             User user = new User();
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
             
