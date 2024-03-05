@@ -19,7 +19,7 @@ namespace LogicServices
             Random random = new Random();
             _selfBuild = new SelfBuild(random);
             _randomness = new Randomness(random);
-            _buildEffect = new BuildEffect();
+            _buildEffect = new BuildEffect(random);
         }
 
         public bool Decide(Trade trade,Tribe originator, Tribe targetCpu)

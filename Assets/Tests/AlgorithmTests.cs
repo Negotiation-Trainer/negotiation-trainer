@@ -81,7 +81,8 @@ namespace Tests
         public void CalculateBuildEffect_GoodEffect_ReturnsTrue()
         {
             //Given
-            BuildEffect buildEffect = new BuildEffect();
+            Random random = new Random();
+            BuildEffect buildEffect = new BuildEffect(random);
             Tribe originator = new Tribe("originator");
             Tribe target = new Tribe("target");
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
@@ -101,7 +102,8 @@ namespace Tests
         public void CalculateBuildEffect_NoEffect_ReturnsTrue()
         {
             //Given
-            BuildEffect buildEffect = new BuildEffect();
+            Random random = new Random();
+            BuildEffect buildEffect = new BuildEffect(random);
             Tribe originator = new Tribe("originator");
             Tribe target = new Tribe("target");
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
@@ -121,7 +123,8 @@ namespace Tests
         public void CalculateBuildEffect_BadEffect_ReturnsFalse()
         {
             //Given
-            BuildEffect buildEffect = new BuildEffect();
+            Random random = new Random();
+            BuildEffect buildEffect = new BuildEffect(random);
             Tribe originator = new Tribe("originator");
             Tribe target = new Tribe("target");
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
