@@ -12,7 +12,7 @@ namespace LogicServices.Algorithm
             SelfBuildThreshold = 5;
             _random = random;
         }
-        public bool Calculate(Trade trade, User target)
+        public bool Calculate(Trade trade, Tribe target)
         {
             if (target.Inventory.GetInventoryAmount(trade.RequestedItem) == SelfBuildThreshold) return (_random.NextDouble() > 0.5f);
             else return target.Inventory.GetInventoryAmount(trade.RequestedItem) < SelfBuildThreshold;

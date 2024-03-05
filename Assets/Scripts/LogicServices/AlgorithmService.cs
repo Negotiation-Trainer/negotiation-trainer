@@ -19,7 +19,7 @@ namespace LogicServices
             _randomness = new Randomness(random);
         }
 
-        public bool Decide(Trade trade,User originator, User targetCpu)
+        public bool Decide(Trade trade,Tribe originator, Tribe targetCpu)
         {
             if (_randomness.Calculate()) return !_selfBuild.Calculate(trade,targetCpu);
             return _selfBuild.Calculate(trade,targetCpu);

@@ -6,17 +6,17 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public User Cpu1 { get; private set; }
-    public User Cpu2 { get; private set; }
-    public User Player { get; private set; }
+    public Tribe Cpu1 { get; private set; }
+    public Tribe Cpu2 { get; private set; }
+    public Tribe Player { get; private set; }
 
     private void Awake()
     {
         Instance = this;
 
-        Cpu1 = new User();
-        Cpu2 = new User();
-        Player = new User();
+        Player = new Tribe("Azari");
+        Cpu1 = new Tribe("Beluga");
+        Cpu2 = new Tribe("Cinatu");
         
         SetPointTables();
         FillInventory();
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     private void SetPointTables()
     {
-        Player.PointTable = new Dictionary<(InventoryItems, User), int>
+        Player.PointTable = new Dictionary<(InventoryItems, Tribe), int>
         {
             [(InventoryItems.Wood, Player)] = 10,
             [(InventoryItems.Wood, Cpu1)] = -5,
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
             [(InventoryItems.Stone, Cpu2)] = 5,
         };
 
-        Cpu1.PointTable = new Dictionary<(InventoryItems, User), int>
+        Cpu1.PointTable = new Dictionary<(InventoryItems, Tribe), int>
         {
             [(InventoryItems.Wood, Player)] = 0,
             [(InventoryItems.Wood, Cpu1)] = 10,
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
             [(InventoryItems.Stone, Cpu2)] = 0,
         };
         
-        Cpu2.PointTable = new Dictionary<(InventoryItems, User), int>
+        Cpu2.PointTable = new Dictionary<(InventoryItems, Tribe), int>
         {
             [(InventoryItems.Wood, Player)] = 0,
             [(InventoryItems.Wood, Cpu1)] = -5,

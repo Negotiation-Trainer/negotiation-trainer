@@ -14,16 +14,16 @@ namespace Tests
         public void PointTable_GetPoints_ReturnsPoints()
         {
             //Given
-            User user = new User();
-            User user2 = new User();
-            user.PointTable = new Dictionary<(InventoryItems, User), int>
+            Tribe tribe = new Tribe("tribe");
+            Tribe tribe2 = new Tribe("tribe2");
+            tribe.PointTable = new Dictionary<(InventoryItems, Tribe), int>
             {
-                [(InventoryItems.Wood, user)] = 10,
-                [(InventoryItems.Wood, user2)] = -5
+                [(InventoryItems.Wood, tribe)] = 10,
+                [(InventoryItems.Wood, tribe2)] = -5
             };
             
             //Then
-            Assert.AreEqual(10,user.PointTable[(InventoryItems.Wood,user)]);
+            Assert.AreEqual(10,tribe.PointTable[(InventoryItems.Wood,tribe)]);
         }
     }
 }

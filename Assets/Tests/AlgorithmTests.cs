@@ -48,12 +48,12 @@ namespace Tests
             Random random = new Random();
             SelfBuild selfBuild = new SelfBuild(random);
             selfBuild.SelfBuildThreshold = 5;
-            User user = new User();
+            Tribe tribe = new Tribe("test");
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
             
             //When
-            user.Inventory.AddToInventory(InventoryItems.Wood,8);
-            var result = selfBuild.Calculate(trade, user);
+            tribe.Inventory.AddToInventory(InventoryItems.Wood,8);
+            var result = selfBuild.Calculate(trade, tribe);
             
             //Then
             Assert.IsFalse(result);
@@ -66,12 +66,12 @@ namespace Tests
             Random random = new Random();
             SelfBuild selfBuild = new SelfBuild(random);
             selfBuild.SelfBuildThreshold = 5;
-            User user = new User();
+            Tribe tribe = new Tribe("test");
             Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
             
             //When
-            user.Inventory.AddToInventory(InventoryItems.Wood,1);
-            var result = selfBuild.Calculate(trade, user);
+            tribe.Inventory.AddToInventory(InventoryItems.Wood,1);
+            var result = selfBuild.Calculate(trade, tribe);
             
             //Then
             Assert.IsTrue(result);
