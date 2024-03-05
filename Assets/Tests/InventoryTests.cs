@@ -61,29 +61,6 @@ namespace Tests
         }
     
         [Test]
-        public void CanBuild_EmptyInventory_ReturnsFalse()
-        {
-            //Given
-            Inventory inventory = new Inventory();
-            
-            //Then
-            Assert.IsFalse(inventory.CanBuild(InventoryItems.Wood));
-        }
-    
-        [Test]
-        public void CanBuild_EnoughInInventory_ReturnsTrue()
-        {
-            //Given
-            Inventory inventory = new Inventory();
-            
-            //When
-            inventory.AddToInventory(InventoryItems.Wood,10);
-            
-            //Then
-            Assert.IsTrue(inventory.CanBuild(InventoryItems.Wood));
-        }
-    
-        [Test]
         public void Event_InventoryUpdate_Add_Invoked()
         {
             //Given

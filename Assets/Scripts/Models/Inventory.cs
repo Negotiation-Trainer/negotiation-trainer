@@ -36,11 +36,6 @@ namespace Models
             InventoryUpdate?.Invoke(this, EventArgs.Empty);
         }
 
-        public bool CanBuild(InventoryItems item)
-        {
-            return _inventory[item] >= 10;
-        }
-
         public new string ToString()
         {
             return $"Wood: {_inventory[InventoryItems.Wood]} Lenses: {_inventory[InventoryItems.Lenses]} Clay: {_inventory[InventoryItems.Clay]} Gold: {_inventory[InventoryItems.Gold]} Steel: {_inventory[InventoryItems.Steel]} Insulation: {_inventory[InventoryItems.Insulation]} Fertilizer: {_inventory[InventoryItems.Fertilizer]} Stone: {_inventory[InventoryItems.Stone]}";
