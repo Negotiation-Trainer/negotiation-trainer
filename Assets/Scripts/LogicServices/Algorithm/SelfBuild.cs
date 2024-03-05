@@ -5,9 +5,9 @@ namespace LogicServices.Algorithm
 {
     public class SelfBuild
     {
-        private readonly byte _selfBuildThreshold;
+        private readonly int _selfBuildThreshold;
         private readonly Random _random;
-        public SelfBuild(byte selfBuildThreshold, Random random)
+        public SelfBuild(int selfBuildThreshold, Random random)
         {
             _selfBuildThreshold = selfBuildThreshold;
             _random = random;

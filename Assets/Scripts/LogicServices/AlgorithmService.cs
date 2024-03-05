@@ -12,7 +12,7 @@ namespace LogicServices
         private readonly SelfBuild _selfBuild;
         private readonly Randomness _randomness;
 
-        public AlgorithmService(byte selfBuildThreshold = 5, float randomChangeChance = 0.2f)
+        public AlgorithmService(int selfBuildThreshold = 5, float randomChangeChance = 0.2f)
         {
             Random random = new Random();
             _selfBuild = new SelfBuild(selfBuildThreshold, random);
