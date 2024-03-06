@@ -1,18 +1,14 @@
-name: Test
+name: Test Work In Progress
 
 on:
   push:
     branches:
       - "feature/**"
       - "bugfix/**"
-  pull_request:
-    branches:
-      - "main"
-      - "develop"
 
 jobs: 
   RunTests:
-    name: Test project
+    name: Test
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
