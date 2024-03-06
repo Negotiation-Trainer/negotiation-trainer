@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour
     {
         Player.Inventory.AddToInventory(InventoryItems.Wood, 6);
         Player.Inventory.AddToInventory(InventoryItems.Lenses, 6);
-        Player.Inventory.AddToInventory(InventoryItems.Clay, 1);
+        Player.Inventory.AddToInventory(InventoryItems.Clay, 8);
         Player.Inventory.AddToInventory(InventoryItems.Gold, 6);
         Player.Inventory.AddToInventory(InventoryItems.Steel, 2);
         Player.Inventory.AddToInventory(InventoryItems.Insulation, 0);
@@ -152,7 +152,7 @@ public class GameManager : MonoBehaviour
         
         Cpu2.Inventory.AddToInventory(InventoryItems.Wood, 1);
         Cpu2.Inventory.AddToInventory(InventoryItems.Lenses, 2);
-        Cpu2.Inventory.AddToInventory(InventoryItems.Clay, 6);
+        Cpu2.Inventory.AddToInventory(InventoryItems.Clay, 4);
         Cpu2.Inventory.AddToInventory(InventoryItems.Gold, 1);
         Cpu2.Inventory.AddToInventory(InventoryItems.Steel, 4);
         Cpu2.Inventory.AddToInventory(InventoryItems.Insulation, 7);
