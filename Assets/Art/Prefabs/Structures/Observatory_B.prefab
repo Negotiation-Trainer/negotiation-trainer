@@ -58,15 +58,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7722319500248149752, guid: 34eee7b06a00b6942ba614e5039a2704,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -3133498875991405556, guid: 34eee7b06a00b6942ba614e5039a2704,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -2859109400176981367, guid: 34eee7b06a00b6942ba614e5039a2704,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b0e70eabebc43c74f8b52ef5eac871c6, type: 2}
+    - target: {fileID: -1760714182489039777, guid: 34eee7b06a00b6942ba614e5039a2704,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 34eee7b06a00b6942ba614e5039a2704,
         type: 3}
       propertyPath: m_Name
       value: Observatory_B
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 34eee7b06a00b6942ba614e5039a2704,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2960047301898681391, guid: 34eee7b06a00b6942ba614e5039a2704,
         type: 3}

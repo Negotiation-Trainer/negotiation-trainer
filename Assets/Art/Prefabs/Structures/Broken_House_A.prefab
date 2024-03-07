@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8878526775349043759
 Transform:
@@ -4888,15 +4888,40 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7017783043810946056, guid: 75b43f3cbce868048ac9acc6feb89399,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -4781869684489815667, guid: 75b43f3cbce868048ac9acc6feb89399,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -3584497630037689987, guid: 75b43f3cbce868048ac9acc6feb89399,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 264449386a82b3245bf3c871b10533cb, type: 2}
+    - target: {fileID: -1760714182489039777, guid: 75b43f3cbce868048ac9acc6feb89399,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 75b43f3cbce868048ac9acc6feb89399,
         type: 3}
       propertyPath: m_Name
       value: Broken_House_A
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 75b43f3cbce868048ac9acc6feb89399,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3594243245622329198, guid: 75b43f3cbce868048ac9acc6feb89399,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4370951913967234905, guid: 75b43f3cbce868048ac9acc6feb89399,
         type: 3}

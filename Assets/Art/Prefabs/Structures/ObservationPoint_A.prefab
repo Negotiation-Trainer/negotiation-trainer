@@ -63,15 +63,35 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7dba3d09f6601ec4682ad0af24179541, type: 2}
+    - target: {fileID: -3133498875991405556, guid: a924b386b9b0823488a371ccbdd08210,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -2859109400176981367, guid: a924b386b9b0823488a371ccbdd08210,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9808bf5713b4cf94a8b602c796f41679, type: 2}
+    - target: {fileID: -1760714182489039777, guid: a924b386b9b0823488a371ccbdd08210,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a924b386b9b0823488a371ccbdd08210,
         type: 3}
       propertyPath: m_Name
       value: ObservationPoint_A
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a924b386b9b0823488a371ccbdd08210,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3374759562101256004, guid: a924b386b9b0823488a371ccbdd08210,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4370951913967234905, guid: a924b386b9b0823488a371ccbdd08210,
         type: 3}
