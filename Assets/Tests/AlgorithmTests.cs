@@ -17,10 +17,9 @@ namespace Tests
             //Given
             Random random = new Random();
             Randomness randomness = new Randomness(random);
-            randomness.ChangeChance = 1;
-            
+
             //when
-            var result = randomness.Calculate();
+            var result = randomness.Calculate(1f);
             
             //Then
             Assert.IsTrue(result);
@@ -32,10 +31,9 @@ namespace Tests
             //Given
             Random random = new Random();
             Randomness randomness = new Randomness(random);
-            randomness.ChangeChance = 0;
-            
+
             //when
-            var result = randomness.Calculate();
+            var result = randomness.Calculate(0f);
             
             //Then
             Assert.IsFalse(result);
@@ -75,6 +73,50 @@ namespace Tests
             
             //Then
             Assert.IsTrue(result);
+        }
+        
+        [Test]
+        public void CalculateBuildEffect_GoodEffect_ReturnsTrue()
+        {
+            //Given
+            Random random = new Random();
+            BuildEffect buildEffect = new BuildEffect(random);
+            Tribe originator = new Tribe("originator");
+            Tribe target = new Tribe("target");
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
+            
+            //When
+            target.PointTable = new Dictionary<(InventoryItems, Tribe), int>
+            {
+                [(InventoryItems.Wood, target)] = 10,
+                [(InventoryItems.Wood, originator)] = 5
+            };
+            var result = buildEffect.Calculate(trade, target, originator);
+            
+            //Then
+            Assert.IsTrue(result);
+        }
+        
+        [Test]
+        public void CalculateBuildEffect_BadEffect_ReturnsFalse()
+        {
+            //Given
+            Random random = new Random();
+            BuildEffect buildEffect = new BuildEffect(random);
+            Tribe originator = new Tribe("originator");
+            Tribe target = new Tribe("target");
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
+            
+            //When
+            target.PointTable = new Dictionary<(InventoryItems, Tribe), int>
+            {
+                [(InventoryItems.Wood, target)] = 10,
+                [(InventoryItems.Wood, originator)] = -5
+            };
+            var result = buildEffect.Calculate(trade, target, originator);
+            
+            //Then
+            Assert.IsFalse(result);
         }
     }
 }
