@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Enums;
+using LogicServices;
 using Models;
 using UnityEngine;
 
@@ -36,9 +37,11 @@ namespace Presenters
         [SerializeField] private GameObject cWarehouse;
         [SerializeField] private GameObject cWaveBreaker;
 
+        private readonly BuildingService _buildingService = new BuildingService();
         private GameManager _gameManager;
         private Dictionary<(Tribe, InventoryItems), List<GameObject>> _buildableStructures;
         private Dictionary<Tribe, List<GameObject>> _buildStructures;
+        private Tribe[] _tribes;
 
         private void Start()
         {
@@ -81,29 +84,22 @@ namespace Presenters
             _gameManager.Player.Inventory.InventoryUpdate += InventoryUpdateEventHandler;
             _gameManager.Cpu1.Inventory.InventoryUpdate += InventoryUpdateEventHandler;
             _gameManager.Cpu2.Inventory.InventoryUpdate += InventoryUpdateEventHandler;
+            
+            _tribes = new[] {_gameManager.Player, _gameManager.Cpu1, _gameManager.Cpu2};
         }
     
         private void InventoryUpdateEventHandler(object sender, EventArgs eventArgs)
         {
-            CheckIfBuildingPossible(_gameManager.Player);
-            CheckIfBuildingPossible(_gameManager.Cpu1);
-            CheckIfBuildingPossible(_gameManager.Cpu2);
-        }
-
-        private void CheckIfBuildingPossible(Tribe tribe)
-        {
-            var resources = Enum.GetValues(typeof(InventoryItems));
-            foreach (InventoryItems resource in resources)
+            foreach (var tribe in _tribes)
             {
-                if (tribe.Inventory.GetInventoryAmount(resource) >= 10)
-                {
-                    PlaceBuilding(tribe, resource);
-                    AddBuildingPoints(tribe, resource);
-                    tribe.Inventory.RemoveFromInventory(resource, 10);
-                }
+                var resource = _buildingService?.CheckIfBuildingPossible(tribe);
+                if (resource == null) continue;
+                PlaceBuilding(tribe, (InventoryItems) resource);
+                _buildingService.AddBuildingPoints(_tribes, (InventoryItems) resource, tribe);
+                _buildingService.RemoveBuildingResourcesFromInventory(tribe,(InventoryItems) resource);
             }
         }
-
+        
         private void PlaceBuilding(Tribe tribe, InventoryItems resource)
         {
             var modelList = _buildableStructures[(tribe, resource)];
@@ -121,12 +117,6 @@ namespace Presenters
                 modelList[1].SetActive(true);
             }
         }
-
-        private void AddBuildingPoints(Tribe tribe, InventoryItems resource)
-        {
-            _gameManager.Player.Points += _gameManager.Player.PointTable[(resource, tribe)];
-            _gameManager.Cpu1.Points += _gameManager.Cpu1.PointTable[(resource, tribe)];
-            _gameManager.Cpu2.Points += _gameManager.Cpu2.PointTable[(resource, tribe)];
-        }
+        
     }
 }
