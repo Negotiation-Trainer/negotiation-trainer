@@ -9,6 +9,9 @@ namespace LogicServices
 {
     public class AlgorithmService
     {
+        private float _selfBuildRandomChance = 0.1f;
+        private float _buildEffectRandomChance = 0.1f;
+        
         private readonly SelfBuild _selfBuild;
         private readonly Randomness _randomness;
         private readonly BuildEffect _buildEffect;
@@ -28,8 +31,8 @@ namespace LogicServices
             bool buildEffectDecision = _buildEffect.Calculate(trade, targetCpu, originator);
             
             //Randomise Decisions
-            selfBuildDecision = _randomness.Calculate(0.2f) ? selfBuildDecision : !selfBuildDecision;
-            buildEffectDecision = _randomness.Calculate(0.1f) ? buildEffectDecision : !buildEffectDecision;
+            selfBuildDecision = _randomness.Calculate(_selfBuildRandomChance) ? selfBuildDecision : !selfBuildDecision;
+            buildEffectDecision = _randomness.Calculate(_buildEffectRandomChance) ? buildEffectDecision : !buildEffectDecision;
             
             return selfBuildDecision && buildEffectDecision;
         }
