@@ -33,22 +33,6 @@ namespace Presenters
                 
                 originator.Inventory.AddToInventory(trade.RequestedItem, trade.RequestedAmount);
                 target.Inventory.RemoveFromInventory(trade.RequestedItem, trade.RequestedAmount);
-                
-                //check if any of the players can build a building
-                //if so, call the building presenter
-                
-                var itemsToCheck = new[] {trade.OfferedItem, trade.RequestedItem};
-                foreach (var item in itemsToCheck)
-                {
-                    if (originator.Inventory.GetInventoryAmount(item) >= 10)
-                    {
-                        Debug.Log("Player can build a building");
-                    }
-                    if (target.Inventory.GetInventoryAmount(item) >= 10)
-                    {
-                        Debug.Log("CPU can build a building");
-                    }
-                }
             }
             else
             {

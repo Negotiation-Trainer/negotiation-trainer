@@ -54,26 +54,29 @@ namespace Presenters
                 {(_gameManager.Player, InventoryItems.Insulation), new List<GameObject> {aWarehouse}},
                 {(_gameManager.Player, InventoryItems.Stone), new List<GameObject> {aWaveBreaker}},
 
-                {(_gameManager.Player, InventoryItems.Wood), new List<GameObject>() {bObservationPoint}},
-                {(_gameManager.Player, InventoryItems.Lenses), new List<GameObject>() {bObservatory}},
-                {(_gameManager.Player, InventoryItems.Clay), new List<GameObject>() {bBrokenHomes, bRepairedHomes}},
-                {(_gameManager.Player, InventoryItems.Gold), new List<GameObject>() {bTemple}},
-                {(_gameManager.Player, InventoryItems.Steel), new List<GameObject>() {bShelter}},
-                {(_gameManager.Player, InventoryItems.Insulation), new List<GameObject> {bWarehouse}},
-                {(_gameManager.Player, InventoryItems.Stone), new List<GameObject> {bWaveBreaker}},
+                {(_gameManager.Cpu1, InventoryItems.Wood), new List<GameObject>() {bObservationPoint}},
+                {(_gameManager.Cpu1, InventoryItems.Lenses), new List<GameObject>() {bObservatory}},
+                {(_gameManager.Cpu1, InventoryItems.Clay), new List<GameObject>() {bBrokenHomes, bRepairedHomes}},
+                {(_gameManager.Cpu1, InventoryItems.Gold), new List<GameObject>() {bTemple}},
+                {(_gameManager.Cpu1, InventoryItems.Steel), new List<GameObject>() {bShelter}},
+                {(_gameManager.Cpu1, InventoryItems.Insulation), new List<GameObject> {bWarehouse}},
+                {(_gameManager.Cpu1, InventoryItems.Stone), new List<GameObject> {bWaveBreaker}},
 
-                {(_gameManager.Player, InventoryItems.Wood), new List<GameObject>() {cObservationPoint}},
-                {(_gameManager.Player, InventoryItems.Lenses), new List<GameObject>() {cObservatory}},
-                {(_gameManager.Player, InventoryItems.Clay), new List<GameObject>() {cBrokenHomes, cRepairedHomes}},
-                {(_gameManager.Player, InventoryItems.Gold), new List<GameObject>() {cTemple}},
-                {(_gameManager.Player, InventoryItems.Steel), new List<GameObject>() {cShelter}},
-                {(_gameManager.Player, InventoryItems.Insulation), new List<GameObject> {cWarehouse}},
-                {(_gameManager.Player, InventoryItems.Stone), new List<GameObject> {cWaveBreaker}},
+                {(_gameManager.Cpu2, InventoryItems.Wood), new List<GameObject>() {cObservationPoint}},
+                {(_gameManager.Cpu2, InventoryItems.Lenses), new List<GameObject>() {cObservatory}},
+                {(_gameManager.Cpu2, InventoryItems.Clay), new List<GameObject>() {cBrokenHomes, cRepairedHomes}},
+                {(_gameManager.Cpu2, InventoryItems.Gold), new List<GameObject>() {cTemple}},
+                {(_gameManager.Cpu2, InventoryItems.Steel), new List<GameObject>() {cShelter}},
+                {(_gameManager.Cpu2, InventoryItems.Insulation), new List<GameObject> {cWarehouse}},
+                {(_gameManager.Cpu2, InventoryItems.Stone), new List<GameObject> {cWaveBreaker}},
             };
 
-            _buildStructures[_gameManager.Player] = new List<GameObject>();
-            _buildStructures[_gameManager.Cpu1] = new List<GameObject>();
-            _buildStructures[_gameManager.Cpu2] = new List<GameObject>();
+            _buildStructures = new Dictionary<Tribe, List<GameObject>>
+            {
+                [_gameManager.Player] = new List<GameObject>(),
+                [_gameManager.Cpu1] = new List<GameObject>(),
+                [_gameManager.Cpu2] = new List<GameObject>()
+            };
 
             _gameManager.Player.Inventory.InventoryUpdate += InventoryUpdateEventHandler;
             _gameManager.Cpu1.Inventory.InventoryUpdate += InventoryUpdateEventHandler;
@@ -96,6 +99,7 @@ namespace Presenters
                 {
                     PlaceBuilding(tribe, resource);
                     AddBuildingPoints(tribe, resource);
+                    tribe.Inventory.RemoveFromInventory(resource, 10);
                 }
             }
         }
@@ -103,17 +107,16 @@ namespace Presenters
         private void PlaceBuilding(Tribe tribe, InventoryItems resource)
         {
             var modelList = _buildableStructures[(tribe, resource)];
-        
 
             if (modelList.Count == 1)
             {
-                _buildStructures[_gameManager.Cpu2].Add(modelList[0]);
+                _buildStructures[tribe].Add(modelList[0]);
                 modelList[0].SetActive(true);
             }
 
             if (modelList.Count == 2)
             {
-                _buildStructures[_gameManager.Cpu2].Add(modelList[1]);
+                _buildStructures[tribe].Add(modelList[1]);
                 modelList[0].SetActive(false);
                 modelList[1].SetActive(true);
             }
