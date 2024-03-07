@@ -17,10 +17,9 @@ namespace Tests
             //Given
             Random random = new Random();
             Randomness randomness = new Randomness(random);
-            randomness.ChangeChance = 1;
-            
+
             //when
-            var result = randomness.Calculate();
+            var result = randomness.Calculate(1f);
             
             //Then
             Assert.IsTrue(result);
@@ -32,10 +31,9 @@ namespace Tests
             //Given
             Random random = new Random();
             Randomness randomness = new Randomness(random);
-            randomness.ChangeChance = 0;
-            
+
             //when
-            var result = randomness.Calculate();
+            var result = randomness.Calculate(0f);
             
             //Then
             Assert.IsFalse(result);
