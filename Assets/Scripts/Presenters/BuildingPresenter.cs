@@ -100,6 +100,9 @@ namespace Presenters
             }
         }
         
+        // Get model(s) for the specific resource. if 1 model found, its a new building so just make active.
+        // if 2 models are found, its the old and new state so make old inactive and new active.
+        // adds the activated model to the build structures list of the tribe.
         private void PlaceBuilding(Tribe tribe, InventoryItems resource)
         {
             var modelList = _buildableStructures[(tribe, resource)];
