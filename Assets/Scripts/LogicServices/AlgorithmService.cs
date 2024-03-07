@@ -1,7 +1,6 @@
 using LogicServices.Algorithm;
 using Models;
-using UnityEngine;
-using Random = System.Random;
+using System;
 
 /*
  * This class is responsible for handling the algorithmic logic of the game.
@@ -31,8 +30,6 @@ namespace LogicServices
             //Randomise Decisions
             selfBuildDecision = _randomness.Calculate(0.2f) ? selfBuildDecision : !selfBuildDecision;
             buildEffectDecision = _randomness.Calculate(0.1f) ? buildEffectDecision : !buildEffectDecision;
-            
-            Debug.Log($"SelfBuild: {selfBuildDecision} BuildEffect: {buildEffectDecision}");
             
             return selfBuildDecision && buildEffectDecision;
         }
