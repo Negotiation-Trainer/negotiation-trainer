@@ -29,8 +29,8 @@ namespace LogicServices
             bool buildEffectDecision = _buildEffect.Calculate(trade, targetCpu, originator);
             
             //Randomise Decisions
-            selfBuildDecision = _randomness.Calculate() ? selfBuildDecision : !selfBuildDecision;
-            buildEffectDecision = _randomness.Calculate() ? buildEffectDecision : !buildEffectDecision;
+            selfBuildDecision = _randomness.Calculate(0.2f) ? selfBuildDecision : !selfBuildDecision;
+            buildEffectDecision = _randomness.Calculate(0.1f) ? buildEffectDecision : !buildEffectDecision;
             
             Debug.Log($"SelfBuild: {selfBuildDecision} BuildEffect: {buildEffectDecision}");
             
