@@ -2,18 +2,24 @@ using Enums;
 using LogicServices;
 using Models;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Presenters
 {
     public class TradePresenter: MonoBehaviour
     {
         private readonly AlgorithmService _algorithmService = new AlgorithmService();
+        
+        [SerializeField] private InventoryItems debugRequestedItem = InventoryItems.Wood;
+        [SerializeField] private int debugRequestedAmount = 2;
+        [SerializeField] private InventoryItems debugOfferedItem = InventoryItems.Steel;
+        [SerializeField] private int debugOfferedAmount = 2;
         public void PresentTrade()
         {
             var originator = GameManager.Instance.Player;
 
             // get from llm
-            var trade = new Trade(InventoryItems.Wood, 1, InventoryItems.Stone, 1);
+            var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem, debugOfferedAmount);
             var target = GameManager.Instance.Cpu2;
             
             if (!TradePossible(trade, originator, target)) return;
