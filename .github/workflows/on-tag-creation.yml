@@ -1,0 +1,157 @@
+name: Test, Pre-Release & Deploy to staging
+
+on:
+  push:
+    tags:
+      - '*'
+            
+jobs:
+  Build:
+    if: endsWith(github.ref, 'main')
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
+
+      # Build the project
+      - name: Build Unity Artifact
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+
+      # Output 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: webGL-build
+          path: build
+
+  RunTests:
+    if: endsWith(github.ref, 'main')
+    name: Test
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+          with:
+            lfs: true
+      
+        # Download the WebGL build
+        - name: Download WebGL Artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: webGL-build
+            path: build
+      
+        # Test
+        - name: Run tests
+          uses: game-ci/unity-test-runner@v4
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+            UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+            UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          with:
+            # packageMode: true # Needs to be enabled when packages are used
+            unityVersion: 2022.3.20f1
+            githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  CreateNewRelease:
+    if: endsWith(github.ref, 'main')
+    needs: Build
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Validates if the tag is only numerical 
+      - name: Validate Tag Format
+        id: validate_tag
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          if [[ ! $TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid tag format: $TAG"
+            exit 1
+          fi
+
+          IFS='.' read -ra TAG_SEGMENTS <<< "$TAG"
+          for SEGMENT in "${TAG_SEGMENTS[@]}"; do
+            if ! [[ "$SEGMENT" =~ ^[0-9]+$ ]]; then
+              echo "Invalid tag format: $TAG"
+              exit 1
+            fi
+          done
+
+      # Extracts the version from the tag
+      - name: Extract Version from Tag
+        id: extract_version
+        run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
+    
+      # Generates the release name
+      - name: Generate Release Name
+        id: generate_release_name
+        run: |
+            echo "RELEASE_NAME=v${{ env.VERSION }}" >> $GITHUB_ENV
+
+      # Zip the build
+      - name: Zip build
+        run: |
+          pushd build/WebGL
+          zip -r ../../Connors-Paradise-WebGL-Release-${{ env.RELEASE_NAME }}.zip .
+          popd
+
+      # Release
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Connors-Paradise-WebGL-Release-${{ env.RELEASE_NAME }}.zip
+          name: ${{ env.RELEASE_NAME}}
+          prerelease: true
+
+
+  DeployReleaseToStaging:
+    if: endsWith(github.ref, 'main')
+    needs: CreateNewRelease
+    runs-on: ubuntu-latest
+    name: Deploy
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Download the WebGL build
+      - name: Download WebGL Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webGL-build
+          path: build
+      
+      # Deploy the webGL build to production
+      - name: Deploy to Staging
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build/WebGL/WebGL
+          commit-message: Deploy
+          single-commit: true
+          target-folder: staging
+          
+      # Cleanup to avoid storage limit
+      - name: Cleanup to avoid storage limit
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: webGL-build
