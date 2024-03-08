@@ -7,7 +7,6 @@ on:
             
 jobs:
   Build:
-    if: endsWith(github.ref, 'main')
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -38,7 +37,6 @@ jobs:
           path: build
 
   RunTests:
-    if: endsWith(github.ref, 'main')
     name: Test
     runs-on: ubuntu-latest
     permissions: write-all
@@ -68,7 +66,6 @@ jobs:
             githubToken: ${{ secrets.GITHUB_TOKEN }}
 
   CreateNewRelease:
-    if: endsWith(github.ref, 'main')
     needs: Build
     name: Release
     runs-on: ubuntu-latest
@@ -124,7 +121,6 @@ jobs:
 
 
   DeployReleaseToStaging:
-    if: endsWith(github.ref, 'main')
     needs: CreateNewRelease
     runs-on: ubuntu-latest
     name: Deploy
