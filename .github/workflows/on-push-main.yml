@@ -7,7 +7,7 @@ on:
 
 jobs:
   Build:
-    name: Build the project
+    name: Build
     runs-on: ubuntu-latest
     steps:
       # Checkout
@@ -41,32 +41,30 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
-          with:
-            lfs: true
-      
-        # Download the WebGL build
-        - name: Download WebGL Artifact
-          uses: actions/download-artifact@v4
-          with:
-            name: webGL-build
-            path: build
-      
-        # Test
-        - name: Run tests
-          uses: game-ci/unity-test-runner@v4
-          env:
-            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-            UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-            UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          with:
-            # packageMode: true # Needs to be enabled when packages are used
-            unityVersion: 2022.3.20f1
-            githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-  DeployReleaseToAcceptance:
-    needs: RunTests
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
+      # Test
+      - name: Run tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          # packageMode: true # Needs to be enabled when packages are used
+          unityVersion: 2022.3.20f1
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          
+  DeployToAcceptance:
+    needs: Build
     runs-on: ubuntu-latest
     name: Deploy
     permissions:
