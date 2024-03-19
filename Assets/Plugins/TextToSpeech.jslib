@@ -4,8 +4,12 @@ mergeInto(LibraryManager.library, {
     finalResultCallback: "",
     recognition: "",
 
+    CheckBrowserSupported: function(){
+        if ('webkitSpeechRecognition' in window) return true;
+        return false;
+    },
+
     SetupSpeechRecognition: function(gameObjectName, liveTranscribeCallbackName, finalResultCallbackName) {
-        if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = true;
@@ -20,17 +24,10 @@ mergeInto(LibraryManager.library, {
                     SendMessage(gameObject, finalResultCallback, event.results[0][0].transcript);
                 }
             };
-
-        } else {
-            console.error('Speech recognition is not supported in this browser.');
-        }
     },
 
     StartSpeechRecognition: function() {
-        if ('webkitSpeechRecognition' in window) {
             recognition.start();
-        } else {
-            console.error('Speech recognition is not supported in this browser.');
-        }
     }
+
 });

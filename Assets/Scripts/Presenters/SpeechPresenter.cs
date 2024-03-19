@@ -9,6 +9,9 @@ namespace Presenters
         [SerializeField]private TMP_Text debugText;
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern bool CheckBrowserSupported();
+        
+        [System.Runtime.InteropServices.DllImport("__Internal")]
         private static extern void SetupSpeechRecognition(string gameObjectName ,string liveTranscribeCallbackName, string finalResultCallbackName);
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
@@ -39,7 +42,7 @@ namespace Presenters
     
         void Start()
         {
-            if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor)
+            if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor && CheckBrowserSupported())
             {
                 //setup javascript code to recognize speech.
                 //given are the game object and functions on that object, that should be called when speech is recognized
@@ -47,7 +50,7 @@ namespace Presenters
             }
             else
             {
-                Debug.LogWarning("Speech recognition is only supported in WebGL builds.");
+                Debug.LogWarning("Speech recognition not supported on your platform or browser");
             }
         }
     }
