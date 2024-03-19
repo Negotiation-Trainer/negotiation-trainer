@@ -9,18 +9,18 @@ namespace Presenters
         #region Sand
 
         /* Top Sand */
-        public Transform sandTop;
+        [SerializeField] private Transform sandTop;
         private float _sandTopStartY;
         private const float SandTopTargetY = -745;
 
         /* Bottom Sand */
-        public Transform sandBottom;
+        [SerializeField] private Transform sandBottom;
         private float _sandBottomStartY;
         private const float SandBottomTargetY = -1050;
 
 
         /* Falling Sand */
-        public Transform fallingSand;
+        [SerializeField] private Transform fallingSand;
         private Vector3 _sandStartPos;
         private const float FallingSandEndTarget = -2000;
         private const float FallingSandSpeed = 6f;
