@@ -453,7 +453,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1073022518142818647}
-  - {fileID: 727079152923657687}
   m_Father: {fileID: 2180048876702023572}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2030,16 +2029,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4739833255321056299}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7443863783186102066}
+  m_Father: {fileID: 1073022518142818647}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 154}
+  m_AnchoredPosition: {x: 0, y: -836.00024}
   m_SizeDelta: {x: 1342.2856, y: 2081}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5948748518553393876
@@ -2703,13 +2702,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e8d59c5e1a076d468870ab2cf29a761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  object1: {fileID: 671465637463070387}
-  object2: {fileID: 7491540435436173485}
-  startYLocalPosition1: -40
-  targetYLocalPosition1: -745
-  startYLocalPosition2: -1860
-  targetYLocalPosition2: -1130
-  duration: 120
+  sandTop: {fileID: 8902377023434268552}
+  sandBottom: {fileID: 5707309836574002713}
+  fallingSand: {fileID: 727079152923657687}
+  duration: 20
 --- !u!1 &6953605131281193720
 GameObject:
   m_ObjectHideFlags: 0
@@ -3369,7 +3365,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 727079152923657687}
   m_Father: {fileID: 7443863783186102066}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
