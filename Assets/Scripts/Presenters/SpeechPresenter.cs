@@ -1,36 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class SpeechPresenter : MonoBehaviour
+namespace Presenters
 {
-    [SerializeField] private bool debugMode = false;
-    [SerializeField]private TMP_Text debugText;
-    
-    [System.Runtime.InteropServices.DllImport("__Internal")]
-    private static extern void StartSpeechRecognition(string gameObjectName ,string callbackName);
-    
-    public void OnSpeechRecognized(string result)
+    public class SpeechPresenter : MonoBehaviour
     {
-        if (debugMode)
-        {
-            debugText.text = result;
-            Debug.Log(result);
-        }
-    }
+        [SerializeField] private bool debugMode = false;
+        [SerializeField]private TMP_Text debugText;
     
-    void Start()
-    {
-        if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor)
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern void StartSpeechRecognition(string gameObjectName ,string callbackName);
+    
+        public void OnSpeechRecognized(string result)
         {
-            //start javascript code to recognize speech.
-            //given are the game object and function on that object, that should be called when speech is recognized
-            StartSpeechRecognition("GameManager", "OnSpeechRecognized");
+            if (debugMode)
+            {
+                debugText.text = result;
+                Debug.Log(result);
+            }
         }
-        else
+    
+        void Start()
         {
-            Debug.LogWarning("Speech recognition is only supported in WebGL builds.");
+            if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor)
+            {
+                //start javascript code to recognize speech.
+                //given are the game object and function on that object, that should be called when speech is recognized
+                StartSpeechRecognition("GameManager", "OnSpeechRecognized");
+            }
+            else
+            {
+                Debug.LogWarning("Speech recognition is only supported in WebGL builds.");
+            }
         }
     }
 }
