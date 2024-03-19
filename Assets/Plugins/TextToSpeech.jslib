@@ -1,17 +1,17 @@
 mergeInto(LibraryManager.library, {
-    // Function to start speech recognition
+    gameObject: "",
+    callback: "",
+
     StartSpeechRecognition: function(gameObjectName, callbackName) {
         if ('webkitSpeechRecognition' in window) {
             var recognition = new webkitSpeechRecognition();
             recognition.continuous = true;
-            recognition.interimResults = false;
+            recognition.interimResults = true;
+            gameObject = UTF8ToString(gameObjectName);
+            callback = UTF8ToString(callbackName);
 
-            var gameObj = gameObjectName;
-            var callbackNM = callbackName;
-
-            // Start recognition
             recognition.onresult = function(event) {
-                SendMessage (UTF8ToString(gameObj), UTF8ToString(callbackNM), event.results[event.results.length - 1][0].transcript);
+                SendMessage(gameObject, callback, event.results[event.results.length - 1][0].transcript);
             };
 
             recognition.start();
