@@ -144,7 +144,7 @@ jobs:
           folder: build/WebGL/WebGL
           commit-message: Deploy
           single-commit: true
-          target-folder: staging
+          target-folder: acceptance
           
       # Cleanup to avoid storage limit
       - name: Cleanup to avoid storage limit
