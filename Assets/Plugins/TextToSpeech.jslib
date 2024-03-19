@@ -1,19 +1,33 @@
 mergeInto(LibraryManager.library, {
     gameObject: "",
-    callback: "",
+    liveTranscribeCallback: "",
+    finalResultCallback: "",
+    recognition: "",
 
-    StartSpeechRecognition: function(gameObjectName, callbackName) {
+    SetupSpeechRecognition: function(gameObjectName, liveTranscribeCallbackName, finalResultCallbackName) {
         if ('webkitSpeechRecognition' in window) {
-            var recognition = new webkitSpeechRecognition();
-            recognition.continuous = true;
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
             recognition.interimResults = true;
             gameObject = UTF8ToString(gameObjectName);
-            callback = UTF8ToString(callbackName);
+            liveTranscribeCallback = UTF8ToString(liveTranscribeCallbackName);
+            finalResultCallback = UTF8ToString(finalResultCallbackName);
 
             recognition.onresult = function(event) {
-                SendMessage(gameObject, callback, event.results[event.results.length - 1][0].transcript);
+                if(!event.results[0].isFinal){
+                    SendMessage(gameObject, liveTranscribeCallback, event.results[0][0].transcript);
+                } else{
+                    SendMessage(gameObject, finalResultCallback, event.results[0][0].transcript);
+                }
             };
 
+        } else {
+            console.error('Speech recognition is not supported in this browser.');
+        }
+    },
+
+    StartSpeechRecognition: function() {
+        if ('webkitSpeechRecognition' in window) {
             recognition.start();
         } else {
             console.error('Speech recognition is not supported in this browser.');
