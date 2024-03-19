@@ -102,6 +102,13 @@ jobs:
         run: |
             echo "RELEASE_NAME=v${{ env.VERSION }}" >> $GITHUB_ENV
 
+      # Download the WebGL build
+      - name: Download WebGL Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webGL-build
+          path: build
+      
       # Zip the build
       - name: Zip build
         run: |
