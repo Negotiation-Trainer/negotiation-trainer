@@ -22,7 +22,7 @@ public class SpeechPresenter : MonoBehaviour
     
     void Start()
     {
-        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor)
         {
             //start javascript code to recognize speech.
             //given are the game object and function on that object, that should be called when speech is recognized
