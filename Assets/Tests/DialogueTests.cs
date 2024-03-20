@@ -39,5 +39,34 @@ namespace Tests
             //Then
             Assert.AreEqual(3,result.Length);
         }
+        
+        [Test]
+        public void SplitTextToInstructionMessages_OneSentence_ReturnsInstructionMessage()
+        {
+            //Given
+            string testText = "This is a sentence";
+            DialogueGenerationService dialogueGenerationService = new DialogueGenerationService();
+            
+            //When
+            var result= dialogueGenerationService.SplitTextToInstructionMessages(testText);
+            
+            //Then
+            Assert.AreEqual(1,result.Length);
+            Assert.AreEqual(testText,result[0].Message);
+        }
+        
+        [Test]
+        public void SplitTextToInstructionMessages_MultipleSentence_ReturnsInstructionMessages()
+        {
+            //Given
+            string testText = "This is one sentence {nm} This is second sentence {nm} and a third sentence";
+            DialogueGenerationService dialogueGenerationService = new DialogueGenerationService();
+            
+            //When
+            var result= dialogueGenerationService.SplitTextToInstructionMessages(testText);
+            
+            //Then
+            Assert.AreEqual(3,result.Length);
+        }
     }
 }
