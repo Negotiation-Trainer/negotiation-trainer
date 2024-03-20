@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LogicServices;
 using Models;
 using TMPro;
 using UnityEngine;
@@ -44,12 +45,16 @@ namespace Presenters
         
         private void DebugStartDialogue()
         {
+            DialogueGenerationService dgs = new DialogueGenerationService();
+            var testMessages = dgs.SplitTextToMessages(
+                "hello this is the first message {nm} this is second {nm} and this is the third message", 1);
+            
             IMessage[] messages = {
                 new InstructionMessage("Hello this is the first message of the dialogue service"),
                 new InstructionMessage("This is the second message"),
                 new InstructionMessage("The third message is the last of the que")
             };
-            QueMessages(messages);
+            QueMessages(testMessages);
             ShowNextMessage();
         }
 
