@@ -5,7 +5,7 @@ namespace LogicServices
 {
     public class DialogueGenerationService
     {
-        public DialogueMessage[] SplitTextToMessages(string text, int tribeId)
+        public DialogueMessage[] SplitTextToDialogueMessages(string text, int tribeId)
         {
             string[] messages = text.Split("{nm}");
             DialogueMessage[] dialogueMessages = new DialogueMessage[messages.Length];

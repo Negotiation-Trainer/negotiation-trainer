@@ -46,7 +46,7 @@ namespace Presenters
         private void DebugStartDialogue()
         {
             DialogueGenerationService dgs = new DialogueGenerationService();
-            var testMessages = dgs.SplitTextToMessages(
+            var testMessages = dgs.SplitTextToDialogueMessages(
                 "hello this is the first message {nm} this is second {nm} and this is the third message", 1);
             
             IMessage[] messages = {
