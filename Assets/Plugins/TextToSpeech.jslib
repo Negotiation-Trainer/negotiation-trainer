@@ -3,6 +3,7 @@ mergeInto(LibraryManager.library, {
     liveTranscribeCallback: "",
     finalResultCallback: "",
     recognition: "",
+    isListening: false,
 
     CheckBrowserSupported: function(){
         if ('webkitSpeechRecognition' in window) return true;
@@ -24,10 +25,44 @@ mergeInto(LibraryManager.library, {
                     SendMessage(gameObject, finalResultCallback, event.results[0][0].transcript);
                 }
             };
+
+            recognition.onstart = function () {
+                console.log(this);
+                this.isListening = true;
+                console.log("true" + this.isListening);
+            };
+
+            recognition.onaudiostart = function () {
+                console.log(this);
+                this.isListening = true;
+                console.log("true" + this.isListening);
+            };
+
+            recognition.onend = function () {
+                console.log(this);
+                this.isListening  = false;
+                console.log("false" + this.isListening);
+            };
+            
+            recognition.onerror = function (event) {
+                console.log(this);
+                this.isListening  = false;
+                console.log("false" + this.isListening);
+            };
+
     },
 
     StartSpeechRecognition: function() {
-            recognition.start();
+            console.log(this)
+            if(!this.isListening){
+                this.recognition.start();
+            }
+    },
+
+    IsListening: function() {
+        console.log("isListening: " + this.isListening)
+        if(this.isListening) return true;
+        return false;
     }
 
 });

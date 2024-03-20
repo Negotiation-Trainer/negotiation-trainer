@@ -12,6 +12,9 @@ namespace Presenters
         private static extern bool CheckBrowserSupported();
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern bool IsListening();
+        
+        [System.Runtime.InteropServices.DllImport("__Internal")]
         private static extern void SetupSpeechRecognition(string gameObjectName ,string liveTranscribeCallbackName, string finalResultCallbackName);
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
@@ -37,7 +40,10 @@ namespace Presenters
 
         public void StartRecognition()
         {
-            StartSpeechRecognition();
+            if (CheckBrowserSupported() && !IsListening())
+            {
+                StartSpeechRecognition();
+            }
         }
     
         void Start()
