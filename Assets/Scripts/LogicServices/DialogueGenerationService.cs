@@ -16,5 +16,17 @@ namespace LogicServices
 
             return dialogueMessages;
         }
+
+        public InstructionMessage[] SplitTextToInstructionMessages(string text)
+        {
+            string[] messages = text.Split("{nm}");
+            InstructionMessage[] instructionMessages = new InstructionMessage[messages.Length];
+            for (int i = 0; i < messages.Length; i++)
+            {
+                instructionMessages[i] = new InstructionMessage(messages[i]);
+            }
+
+            return instructionMessages;
+        }
     }
 }
