@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Enums;
 using Models;
@@ -9,11 +10,13 @@ public class GameManager : MonoBehaviour
     public Tribe Cpu1 { get; private set; }
     public Tribe Cpu2 { get; private set; }
     public Tribe Player { get; private set; }
+    private AbstractHttpClient client = new AbstractHttpClient();
 
     private void Awake()
     {
+        Debug.Log(client.TestGetMethod());
+        Console.WriteLine(client.TestGetMethod());
         Instance = this;
-
         Player = new Tribe("Azari");
         Cpu1 = new Tribe("Beluga");
         Cpu2 = new Tribe("Cinatu");
