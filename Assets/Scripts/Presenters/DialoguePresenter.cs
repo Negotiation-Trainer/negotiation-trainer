@@ -13,7 +13,7 @@ namespace Presenters
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text dialogueText;
         [SerializeField] private Button nextDialogueButton;
-        [SerializeField] private Button DebugDialogueButton;
+        //[SerializeField] private Button DebugDialogueButton;
 
         private Queue<IMessage> _dialogueQue = new Queue<IMessage>();
         private DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
@@ -64,10 +64,16 @@ namespace Presenters
         private void Start()
         {
             nextDialogueButton.onClick.AddListener(ShowNextMessage);
-            DebugDialogueButton.onClick.AddListener(DebugStartDialogue);
+            //DebugDialogueButton.onClick.AddListener(DebugStartDialogue);
         }
 
-        //Debug UI
+        public void StartGeneralInstruction()
+        {
+            QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
+            ShowNextMessage();
+        }
+        
+        /*//Debug UI
         void OnGUI()
         {
             if (GUILayout.Button("Tribe A"))
@@ -90,7 +96,7 @@ namespace Presenters
                 QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
                 ShowNextMessage();
             }
-        }
+        }*/
 
         #region Temporary instruction service
 

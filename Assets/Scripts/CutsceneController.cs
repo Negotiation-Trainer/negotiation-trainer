@@ -5,12 +5,12 @@ using UnityEngine.Playables;
 
 public class CutsceneController : MonoBehaviour
 {
-    PlayableDirector director;
+    PlayableDirector _director;
 
     // Start is called before the first frame update
     void Start()
     {
-        director=GetComponent<PlayableDirector>();
+        _director=GetComponent<PlayableDirector>();
     }
 
     // Update is called once per frame
@@ -18,7 +18,7 @@ public class CutsceneController : MonoBehaviour
     {
         if(Input.GetButtonDown("Jump"))
         {
-            director.Play();
+            _director.Play();
         }
     }
 }
