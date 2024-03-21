@@ -14,31 +14,31 @@ namespace Presenters
         [SerializeField] private Button nextDialogueButton;
         [SerializeField] private Button DebugDialogueButton;
 
-        private Queue<IMessage> _dialogueQue = new Queue<IMessage>();
+        private Queue<IMessage> _dialogueQueue = new Queue<IMessage>();
 
-        public void QueMessages(IMessage[] messages)
+        public void QueueMessages(IMessage[] messages)
         {
             foreach (var message in messages)
             {
-                _dialogueQue.Enqueue(message);
+                _dialogueQueue.Enqueue(message);
             }
         }
         
         public void ShowNextMessage()
         {
-            if (_dialogueQue.Count == 0)
+            if (_dialogueQueue.Count == 0)
             {
                 dialogueBox.SetActive(false);
                 return;
             }
             if(!dialogueBox.activeSelf) dialogueBox.SetActive(true);
-            IMessage message = _dialogueQue.Dequeue();
+            IMessage message = _dialogueQueue.Dequeue();
             dialogueText.text = message.Message;
         }
 
         public void StopDialogue()
         {
-            _dialogueQue = new Queue<IMessage>();
+            _dialogueQueue = new Queue<IMessage>();
             dialogueBox.SetActive(false);
         }
         
