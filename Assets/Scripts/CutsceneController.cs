@@ -5,7 +5,7 @@ using UnityEngine.Playables;
 
 public class CutsceneController : MonoBehaviour
 {
-    PlayableDirector _director;
+    [SerializeField] PlayableDirector _director;
 
     // Start is called before the first frame update
     void Start()

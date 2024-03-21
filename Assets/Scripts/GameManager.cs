@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Cinemachine;
 using Enums;
 using Models;
 using Presenters;
@@ -186,6 +187,10 @@ public class GameManager : MonoBehaviour
     private GameState _gameState = GameState.Start;
 
     [SerializeField] private PlayableDirector playableDirector;
+    [SerializeField] private GameObject startCamera;
+    [SerializeField] private CinemachineVirtualCamera rotCam;
+    [SerializeField] private CinemachineTrackedDolly rotCamDolly;
+    private bool _dollyTrackActive = false;
     
     private enum GameState
     {
@@ -211,6 +216,13 @@ public class GameManager : MonoBehaviour
         _dialoguePresenter.StartGeneralInstruction();
         softClouds.SetActive(true);
     }
+
+    /*private void OnCutSceneEnd(PlayableDirector director)
+    {
+        GameObject mainCamera = Camera.main.gameObject;
+        mainCamera.GetComponent<AudioListener>().enabled = false;
+        mainCamera.SetActive(false);
+    }*/
     
     void FixedUpdate()
     {
@@ -219,13 +231,17 @@ public class GameManager : MonoBehaviour
             island.transform.position = Vector3.MoveTowards(island.transform.position, endMarker.position, speed);
             if (island.transform.position == endMarker.position && _stormParticleSystem.isStopped)
             {
+                startCamera.SetActive(false);
+                playableDirector.gameObject.SetActive(true);
                 playableDirector.Play();
+                //playableDirector.stopped += OnCutSceneEnd;
                 _gameState = GameState.GeneralInstruction;
                 board.SetActive(false);
                 storm.SetActive(false);
                 StartInstruction();
             }
         }
+        
     }
 
     #endregion
