@@ -49,7 +49,7 @@ namespace Presenters
                 new InstructionMessage("This is the second message"),
                 new InstructionMessage("The third message is the last of the que")
             };
-            QueMessages(messages);
+            QueueMessages(messages);
             ShowNextMessage();
         }
 
