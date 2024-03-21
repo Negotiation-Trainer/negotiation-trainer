@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Presenters
@@ -10,12 +11,12 @@ namespace Presenters
 
         /* Top Sand */
         [SerializeField] private Transform sandTop;
-        private float _sandTopStartY;
+        private const float SandTopStartY = 0;
         private const float SandTopTargetY = -745;
 
         /* Bottom Sand */
         [SerializeField] private Transform sandBottom;
-        private float _sandBottomStartY;
+        private const float SandBottomStartY = -1860;
         private const float SandBottomTargetY = -1050;
 
 
@@ -33,11 +34,27 @@ namespace Presenters
 
         private void Start()
         {
-            _elapsedTime = 0;
-            _sandTopStartY = sandTop.transform.localPosition.y;
-            _sandBottomStartY = sandBottom.transform.localPosition.y;
+            ResetHourglass();
+        }
 
+        private void ResetHourglass()
+        {
+            _elapsedTime = 0;
             _sandStartPos = new Vector3(0, -1000, 0);
+            
+            fallingSand.gameObject.SetActive(true);
+            fallingSand.localPosition = _sandStartPos;
+        }
+
+        private void OnEnable()
+        {
+            ResetHourglass();
+        }
+
+        private void OnDisable()
+        {
+            fallingSand.gameObject.SetActive(false);
+            Debug.Log("Hourglass disabled");
         }
 
         private void Update()
@@ -56,7 +73,6 @@ namespace Presenters
 
         private void TimerFinished()
         {
-            fallingSand.gameObject.SetActive(false);
             enabled = false;
         }
 
@@ -65,9 +81,9 @@ namespace Presenters
             // Calculate the percentage of time elapsed
             _lerpPercentage = Mathf.Clamp01(_elapsedTime / duration);
 
-            sandTop.localPosition = new Vector3(0, Mathf.Lerp(_sandTopStartY, SandTopTargetY, _lerpPercentage), 0);
+            sandTop.localPosition = new Vector3(0, Mathf.Lerp(SandTopStartY, SandTopTargetY, _lerpPercentage), 0);
             sandBottom.localPosition =
-                new Vector3(0, Mathf.Lerp(_sandBottomStartY, SandBottomTargetY, _lerpPercentage), 0);
+                new Vector3(0, Mathf.Lerp(SandBottomStartY, SandBottomTargetY, _lerpPercentage), 0);
         }
 
         private void MoveFallingSand()
