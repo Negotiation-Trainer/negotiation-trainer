@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LogicServices;
 using Models;
 using TMPro;
 using UnityEngine;
@@ -56,7 +57,61 @@ namespace Presenters
         private void Start()
         {
             nextDialogueButton.onClick.AddListener(ShowNextMessage);
-            DebugDialogueButton.onClick.AddListener(DebugStartDialogue);
         }
+
+        public void StartGeneralInstruction()
+        {
+            QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
+            ShowNextMessage();
+        }
+        
+        /*//Debug UI
+        void OnGUI()
+        {
+            if (GUILayout.Button("Tribe A"))
+            {
+                QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("a")));
+                ShowNextMessage();
+            }
+            if (GUILayout.Button("Tribe B"))
+            {
+                QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("b")));
+                ShowNextMessage();
+            }
+            if (GUILayout.Button("Tribe C"))
+            {
+                QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("c")));
+                ShowNextMessage();
+            }
+            if (GUILayout.Button("General"))
+            {
+                QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
+                ShowNextMessage();
+            }
+        }*/
+
+        #region Temporary instruction service
+
+        public string GetInstruction(string tribe)
+        {
+            switch (tribe)
+            {
+                case "a":
+                    return GetInstructionTextFromFile("TribeA");
+                case "b":
+                    return GetInstructionTextFromFile("TribeB");
+                case "c":
+                    return GetInstructionTextFromFile("TribeC");
+                default:
+                    return GetInstructionTextFromFile("general");
+            }
+        }
+        private string GetInstructionTextFromFile(string path)
+        {
+            string textFile = Resources.Load(path).ToString();
+            return textFile;
+        }
+        
+        #endregion
     }
 }
