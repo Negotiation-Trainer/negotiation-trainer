@@ -13,8 +13,7 @@ namespace Presenters
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text dialogueText;
         [SerializeField] private Button nextDialogueButton;
-        [SerializeField] private Button DebugDialogueButton;
-
+        private DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
         private Queue<IMessage> _dialogueQueue = new Queue<IMessage>();
 
         public void QueueMessages(IMessage[] messages)
@@ -61,7 +60,7 @@ namespace Presenters
 
         public void StartGeneralInstruction()
         {
-            QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
+            QueueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
             ShowNextMessage();
         }
         
