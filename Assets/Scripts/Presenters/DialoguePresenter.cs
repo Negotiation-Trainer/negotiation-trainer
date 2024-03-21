@@ -12,11 +12,9 @@ namespace Presenters
     {
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text dialogueText;
+        [SerializeField] private GameObject portraits;
         [SerializeField] private Button nextDialogueButton;
-        [SerializeField] private Button DebugDialogueButton;
-
         private Queue<IMessage> _dialogueQue = new Queue<IMessage>();
-        private DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
 
         public void QueMessages(IMessage[] messages)
         {
@@ -35,7 +33,34 @@ namespace Presenters
             }
             if(!dialogueBox.activeSelf) dialogueBox.SetActive(true);
             IMessage message = _dialogueQue.Dequeue();
+            if (message.GetType() == typeof(DialogueMessage))
+            {
+                ShowCharacter((DialogueMessage)message);
+            }
+            else
+            {
+                portraits.SetActive(false);
+            }
             dialogueText.text = message.Message;
+        }
+
+        private void ShowCharacter(DialogueMessage message)
+        {
+            switch (message.TribeId)
+            {
+                case 0:
+                    portraits.SetActive(true);
+                    //Tribe a portrait
+                    break;
+                case 1 :
+                    portraits.SetActive(true);
+                    //Tribe b portrait
+                    break;
+                case 3 :
+                    portraits.SetActive(true);
+                    //Tribe b portrait
+                    break;
+            }
         }
 
         public void StopDialogue()
@@ -44,54 +69,11 @@ namespace Presenters
             dialogueBox.SetActive(false);
         }
         
-        private void DebugStartDialogue()
-        {
-            DialogueGenerationService dgs = new DialogueGenerationService();
-            
-            var testMessages = dgs.SplitTextToDialogueMessages(
-                "hello this is the first message {nm} this is second {nm} and this is the third message", 1);
-            
-            IMessage[] messages = {
-                new InstructionMessage("Hello this is the first message of the dialogue service"),
-                new InstructionMessage("This is the second message"),
-                new InstructionMessage("The third message is the last of the que")
-            };
-            
-            QueMessages(testMessages);
-            ShowNextMessage();
-        }
-
         private void Start()
         {
             nextDialogueButton.onClick.AddListener(ShowNextMessage);
-            DebugDialogueButton.onClick.AddListener(DebugStartDialogue);
         }
-
-        //Debug UI
-        void OnGUI()
-        {
-            if (GUILayout.Button("Tribe A"))
-            {
-                QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("a")));
-                ShowNextMessage();
-            }
-            if (GUILayout.Button("Tribe B"))
-            {
-                QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("b")));
-                ShowNextMessage();
-            }
-            if (GUILayout.Button("Tribe C"))
-            {
-                QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("c")));
-                ShowNextMessage();
-            }
-            if (GUILayout.Button("General"))
-            {
-                QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
-                ShowNextMessage();
-            }
-        }
-
+        
         #region Temporary instruction service
 
         public string GetInstruction(string tribe)
