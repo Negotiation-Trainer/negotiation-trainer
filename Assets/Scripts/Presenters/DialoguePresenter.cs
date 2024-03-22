@@ -12,10 +12,11 @@ namespace Presenters
     {
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text dialogueText;
+        [SerializeField] private GameObject portraits;
         [SerializeField] private Button nextDialogueButton;
 
         private Queue<IMessage> _dialogueQue = new Queue<IMessage>();
-        private DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
+        private DialogueGenerationService _dialogueGenerationService = new();
 
         public void QueMessages(IMessage[] messages)
         {
@@ -34,7 +35,34 @@ namespace Presenters
             }
             if(!dialogueBox.activeSelf) dialogueBox.SetActive(true);
             IMessage message = _dialogueQue.Dequeue();
+            if (message.GetType() == typeof(DialogueMessage))
+            {
+                ShowCharacter((DialogueMessage)message);
+            }
+            else
+            {
+                portraits.SetActive(false);
+            }
             dialogueText.text = message.Message;
+        }
+
+        private void ShowCharacter(DialogueMessage message)
+        {
+            switch (message.TribeId)
+            {
+                case 0:
+                    portraits.SetActive(true);
+                    //Tribe a portrait
+                    break;
+                case 1 :
+                    portraits.SetActive(true);
+                    //Tribe b portrait
+                    break;
+                case 3 :
+                    portraits.SetActive(true);
+                    //Tribe b portrait
+                    break;
+            }
         }
 
         public void StopDialogue()
