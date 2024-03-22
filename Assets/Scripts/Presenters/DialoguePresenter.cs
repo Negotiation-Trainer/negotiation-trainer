@@ -14,27 +14,29 @@ namespace Presenters
         [SerializeField] private TMP_Text dialogueText;
         [SerializeField] private GameObject portraits;
         [SerializeField] private Button nextDialogueButton;
+        
+        private DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
+        private Queue<IMessage> _dialogueQueue = new Queue<IMessage>();
 
-        private Queue<IMessage> _dialogueQue = new Queue<IMessage>();
-        private DialogueGenerationService _dialogueGenerationService = new();
-
-        public void QueMessages(IMessage[] messages)
+        public void QueueMessages(IMessage[] messages)
         {
             foreach (var message in messages)
             {
-                _dialogueQue.Enqueue(message);
+                _dialogueQueue.Enqueue(message);
             }
         }
         
         public void ShowNextMessage()
         {
-            if (_dialogueQue.Count == 0)
+            if (_dialogueQueue.Count == 0)
             {
                 dialogueBox.SetActive(false);
                 return;
             }
             if(!dialogueBox.activeSelf) dialogueBox.SetActive(true);
-            IMessage message = _dialogueQue.Dequeue();
+            
+            IMessage message = _dialogueQueue.Dequeue();
+            
             if (message.GetType() == typeof(DialogueMessage))
             {
                 ShowCharacter((DialogueMessage)message);
@@ -43,6 +45,7 @@ namespace Presenters
             {
                 portraits.SetActive(false);
             }
+
             dialogueText.text = message.Message;
         }
 
@@ -67,10 +70,21 @@ namespace Presenters
 
         public void StopDialogue()
         {
-            _dialogueQue = new Queue<IMessage>();
+            _dialogueQueue = new Queue<IMessage>();
             dialogueBox.SetActive(false);
         }
         
+        private void DebugStartDialogue()
+        {
+            IMessage[] messages = {
+                new InstructionMessage("Hello this is the first message of the dialogue service"),
+                new InstructionMessage("This is the second message"),
+                new InstructionMessage("The third message is the last of the que")
+            };
+            QueueMessages(messages);
+            ShowNextMessage();
+        }
+
         private void Start()
         {
             nextDialogueButton.onClick.AddListener(ShowNextMessage);
@@ -78,7 +92,7 @@ namespace Presenters
 
         public void StartGeneralInstruction()
         {
-            QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
+            QueueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
             ShowNextMessage();
         }
 
