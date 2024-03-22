@@ -29,28 +29,28 @@ public class DebugPresenter : MonoBehaviour
             GUILayout.Label("Dialogue");
             if (GUILayout.Button("Tribe A"))
             {
-                _dialoguePresenter.QueMessages(
+                _dialoguePresenter.QueueMessages(
                     _dialogueGenerationService.SplitTextToInstructionMessages(_dialoguePresenter.GetInstruction("a")));
                 _dialoguePresenter.ShowNextMessage();
             }
 
             if (GUILayout.Button("Tribe B"))
             {
-                _dialoguePresenter.QueMessages(
+                _dialoguePresenter.QueueMessages(
                     _dialogueGenerationService.SplitTextToInstructionMessages(_dialoguePresenter.GetInstruction("b")));
                 _dialoguePresenter.ShowNextMessage();
             }
 
             if (GUILayout.Button("Tribe C"))
             {
-                _dialoguePresenter.QueMessages(
+                _dialoguePresenter.QueueMessages(
                     _dialogueGenerationService.SplitTextToInstructionMessages(_dialoguePresenter.GetInstruction("c")));
                 _dialoguePresenter.ShowNextMessage();
             }
 
             if (GUILayout.Button("General"))
             {
-                _dialoguePresenter.QueMessages(
+                _dialoguePresenter.QueueMessages(
                     _dialogueGenerationService.SplitTextToInstructionMessages(
                         _dialoguePresenter.GetInstruction("general")));
                 _dialoguePresenter.ShowNextMessage();
@@ -58,7 +58,7 @@ public class DebugPresenter : MonoBehaviour
 
             if (GUILayout.Button("Dialogue"))
             {
-                _dialoguePresenter.QueMessages(
+                _dialoguePresenter.QueueMessages(
                     _dialogueGenerationService.SplitTextToDialogueMessages(_dialoguePresenter.GetInstruction("general"),
                         1));
                 _dialoguePresenter.ShowNextMessage();
