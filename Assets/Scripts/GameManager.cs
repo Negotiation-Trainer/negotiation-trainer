@@ -188,10 +188,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private PlayableDirector playableDirector;
     [SerializeField] private GameObject startCamera;
-    [SerializeField] private CinemachineVirtualCamera rotCam;
-    [SerializeField] private CinemachineTrackedDolly rotCamDolly;
-    private bool _dollyTrackActive = false;
-    
+
     private enum GameState
     {
         Start,
@@ -216,13 +213,6 @@ public class GameManager : MonoBehaviour
         _dialoguePresenter.StartGeneralInstruction();
         softClouds.SetActive(true);
     }
-
-    /*private void OnCutSceneEnd(PlayableDirector director)
-    {
-        GameObject mainCamera = Camera.main.gameObject;
-        mainCamera.GetComponent<AudioListener>().enabled = false;
-        mainCamera.SetActive(false);
-    }*/
     
     void FixedUpdate()
     {
@@ -234,7 +224,6 @@ public class GameManager : MonoBehaviour
                 startCamera.SetActive(false);
                 playableDirector.gameObject.SetActive(true);
                 playableDirector.Play();
-                //playableDirector.stopped += OnCutSceneEnd;
                 _gameState = GameState.GeneralInstruction;
                 board.SetActive(false);
                 storm.SetActive(false);
