@@ -16,6 +16,7 @@ namespace Presenters
         [SerializeField] private Button nextDialogueButton;
 
         private Queue<IMessage> _dialogueQue = new Queue<IMessage>();
+        private DialogueGenerationService _dialogueGenerationService = new();
 
         public void QueMessages(IMessage[] messages)
         {
