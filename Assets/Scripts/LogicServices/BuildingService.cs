@@ -14,6 +14,7 @@ namespace LogicServices
             var resources = Enum.GetValues(typeof(InventoryItems));
             foreach (InventoryItems resource in resources)
             {
+                if(resource == InventoryItems.Fertilizer) continue;
                 if (tribe.Inventory.GetInventoryAmount(resource) >= BuildingResourceCost)
                 {
                     return resource;
