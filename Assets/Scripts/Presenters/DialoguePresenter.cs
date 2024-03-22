@@ -14,6 +14,7 @@ namespace Presenters
         [SerializeField] private TMP_Text dialogueText;
         [SerializeField] private GameObject portraits;
         [SerializeField] private Button nextDialogueButton;
+
         private Queue<IMessage> _dialogueQue = new Queue<IMessage>();
 
         public void QueMessages(IMessage[] messages)
@@ -73,7 +74,13 @@ namespace Presenters
         {
             nextDialogueButton.onClick.AddListener(ShowNextMessage);
         }
-        
+
+        public void StartGeneralInstruction()
+        {
+            QueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
+            ShowNextMessage();
+        }
+
         #region Temporary instruction service
 
         public string GetInstruction(string tribe)
