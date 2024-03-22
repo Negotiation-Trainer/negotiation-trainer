@@ -12,6 +12,7 @@ namespace Presenters
     {
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text dialogueText;
+        [SerializeField] private GameObject portraits;
         [SerializeField] private Button nextDialogueButton;
         
         private DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
@@ -33,8 +34,38 @@ namespace Presenters
                 return;
             }
             if(!dialogueBox.activeSelf) dialogueBox.SetActive(true);
+            
             IMessage message = _dialogueQueue.Dequeue();
+            
+            if (message.GetType() == typeof(DialogueMessage))
+            {
+                ShowCharacter((DialogueMessage)message);
+            }
+            else
+            {
+                portraits.SetActive(false);
+            }
+
             dialogueText.text = message.Message;
+        }
+
+        private void ShowCharacter(DialogueMessage message)
+        {
+            switch (message.TribeId)
+            {
+                case 0:
+                    portraits.SetActive(true);
+                    //Tribe a portrait
+                    break;
+                case 1 :
+                    portraits.SetActive(true);
+                    //Tribe b portrait
+                    break;
+                case 3 :
+                    portraits.SetActive(true);
+                    //Tribe b portrait
+                    break;
+            }
         }
 
         public void StopDialogue()
