@@ -14,7 +14,7 @@ namespace Presenters
         
         public void StartRecognition()
         {
-            _speechService.StartRecognition();
+            _speechService?.StartRecognition();
         }
 
         private void OnSpeechTranscribe(object sender, SpeechTranscribeEventArgs eventArgs)
