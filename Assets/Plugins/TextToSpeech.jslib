@@ -1,5 +1,5 @@
 mergeInto(LibraryManager.library, {
-    
+
     CheckBrowserSupported: function(){
         if ('webkitSpeechRecognition' in window) return true;
         return false;
@@ -23,33 +23,24 @@ mergeInto(LibraryManager.library, {
             };
 
             recognition.onstart = function () {
-                console.log(this);
                 isListening = true;
-                console.log("true" + isListening);
             };
 
             recognition.onaudiostart = function () {
-                console.log(this);
                 isListening = true;
-                console.log("true" + isListening);
             };
 
             recognition.onend = function () {
-                console.log(this);
                 isListening  = false;
-                console.log("false" + isListening);
             };
             
             recognition.onerror = function (event) {
-                console.log(this);
                 isListening  = false;
-                console.log("false" + sListening);
             };
 
     },
 
     StartSpeechRecognition: function() {
-            console.log(this);
             if(!isListening){
                 recognition.start();
             }
