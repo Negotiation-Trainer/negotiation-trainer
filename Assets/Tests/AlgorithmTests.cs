@@ -118,5 +118,41 @@ namespace Tests
             //Then
             Assert.IsFalse(result);
         }
+        
+        [Test]
+        public void CalculateUsefulness_IsUseful_ReturnsTrue()
+        {
+            //Given
+            Random random = new Random();
+            Usefulness usefulness = new Usefulness(random);
+            Tribe originator = new Tribe("originator");
+            Tribe target = new Tribe("target");
+            Trade trade = new Trade(InventoryItems.Wood,3,InventoryItems.Stone,3);
+            
+            //When
+            target.Inventory.AddToInventory(InventoryItems.Stone,3);
+            var result = usefulness.Calculate(trade, target);
+            
+            //Then
+            Assert.IsTrue(result);
+        }
+        
+        [Test]
+        public void CalculateUsefulness_IsNotUseful_ReturnsFalse()
+        {
+            //Given
+            Random random = new Random();
+            Usefulness usefulness = new Usefulness(random);
+            Tribe originator = new Tribe("originator");
+            Tribe target = new Tribe("target");
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
+            
+            //When
+            target.Inventory.AddToInventory(InventoryItems.Stone,3);
+            var result = usefulness.Calculate(trade, target);
+            
+            //Then
+            Assert.IsFalse(result);
+        }
     }
 }
