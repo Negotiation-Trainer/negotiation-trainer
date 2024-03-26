@@ -31,7 +31,11 @@ namespace Presenters
             if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor)
             {
                 _speechService = gameObject.AddComponent<WebGLSpeechService>();
-                if (!_speechService.CheckSupport()) return;
+                if (!_speechService.CheckSupport())
+                {
+                    Destroy(GetComponent<WebGLSpeechService>());
+                    return;
+                }
                 _speechService.SpeechTranscribe += OnSpeechTranscribe;
             }
             Debug.LogWarning("Speech recognition not supported on your platform or browser");
