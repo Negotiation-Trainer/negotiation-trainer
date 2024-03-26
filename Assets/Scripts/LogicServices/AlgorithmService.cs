@@ -11,6 +11,7 @@ namespace LogicServices
     {
         private float _selfBuildRandomChance = 0.1f;
         private float _buildEffectRandomChance = 0.1f;
+        private float _usefulnessRandomChance = 0.1f;
         
         private readonly SelfBuild _selfBuild;
         private readonly Randomness _randomness;
@@ -36,6 +37,7 @@ namespace LogicServices
             //Randomise Decisions
             selfBuildDecision = _randomness.Calculate(_selfBuildRandomChance) ? selfBuildDecision : !selfBuildDecision;
             buildEffectDecision = _randomness.Calculate(_buildEffectRandomChance) ? buildEffectDecision : !buildEffectDecision;
+            usefulnessDecision = _randomness.Calculate(_usefulnessRandomChance) ? usefulnessDecision : !usefulnessDecision;
             
             return selfBuildDecision && buildEffectDecision && usefulnessDecision;
         }
