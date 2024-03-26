@@ -23,7 +23,7 @@ namespace LogicServices
             _selfBuild = new SelfBuild(random);
             _randomness = new Randomness(random);
             _buildEffect = new BuildEffect(random);
-            _usefulness = new Usefulness();
+            _usefulness = new Usefulness(random);
         }
 
         public bool Decide(Trade trade,Tribe originator, Tribe targetCpu)
