@@ -77,3 +77,6 @@ crashlytics-build.properties
 # DS Store files
 .DS_Store
 **/.DS_Store
+
+# Untiy Files
+**/PackageCache
