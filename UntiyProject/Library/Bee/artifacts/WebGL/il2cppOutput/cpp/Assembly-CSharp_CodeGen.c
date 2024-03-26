@@ -1,0 +1,119 @@
+﻿#include "pch-c.h"
+#ifndef _MSC_VER
+# include <alloca.h>
+#else
+# include <malloc.h>
+#endif
+
+
+#include "codegen/il2cpp-codegen-metadata.h"
+
+
+
+
+
+extern void Readme__ctor_m69C325C4C171DCB0312B646A9034AA91EA8C39C6 (void);
+extern void Section__ctor_m5F732533E4DFC0167D965E5F5DB332E46055399B (void);
+extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mBEB95BEB954BB63E9710BBC7AD5E78C4CB0A0033 (void);
+extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_mE70FB23ACC1EA12ABC948AA22C2E78B2D0AA39B1 (void);
+extern void WaterVolumeBase_ensureReferences_m2C2CBF987CF8CEA0BBA5A61D9C2BD84AE7859E59 (void);
+extern void WaterVolumeBase_GetHeight_m6732C12B3C5873E417BB0E8E841279EEC26A4B59 (void);
+extern void WaterVolumeBase_Rebuild_mF944B8A2231D280A1D42BCFFDC2C8DE6EC94842E (void);
+extern void WaterVolumeBase_GenerateTiles_mB6FE93972318DEDB8B1D12D076346A8746AED736 (void);
+extern void WaterVolumeBase_Validate_m2FA59B307398164C09810C745E3D634BCD22C16D (void);
+extern void WaterVolumeBase_OnValidate_m9DAE52012BFA6FA50E5C43FC81B30C65F3581716 (void);
+extern void WaterVolumeBase_Update_m85321C19DD842AB11101ACAEF686F9F853E54DF9 (void);
+extern void WaterVolumeBase__ctor_m4EA44D8B49487A0DC0A1154D699B179B5DBFE915 (void);
+extern void WaterVolumeBox_GenerateTiles_m074D40C064C61E46004040ABE3689B8E2D6FFBB1 (void);
+extern void WaterVolumeBox_Validate_mC3F32714E2C1059EDDCA481D020A074809365FE7 (void);
+extern void WaterVolumeBox__ctor_mD39E604BB9B9B2E7D34FE47CF3C1D68ED21D8BBD (void);
+extern void WaterVolumeHelper_get_Instance_m8B85B308E4574EF46EA9D9A8676EAE6A4ECF05AE (void);
+extern void WaterVolumeHelper_GetHeight_m037199092C2D61DC903CD34E067674B02BF51627 (void);
+extern void WaterVolumeHelper_Awake_m11F77784983FBCEE43C87367E1642AB008076332 (void);
+extern void WaterVolumeHelper__ctor_mBF81C1968225A115AC3E2AB6728ACDC35E20E245 (void);
+extern void WaterVolumeTransforms_OnDrawGizmos_mFDE30A75090392BE161EB2F041AEDA2A96EBF23D (void);
+extern void WaterVolumeTransforms_OnTransformChildrenChanged_m521BE68A72E67A390140FB226A40B2F245AA6FDD (void);
+extern void WaterVolumeTransforms_GenerateTiles_m549365647A9EACBC5F8D2E0E42F965B1174C6486 (void);
+extern void WaterVolumeTransforms__ctor_mABD1022F242A568AA37D652EE6847B6C1C6F031A (void);
+extern void WateverVolumeFloater_Update_m3CF52F6DE972284C2AC03F87D69088FA1E1ED58E (void);
+extern void WateverVolumeFloater__ctor_m64819FB2FF09F3A3CBC655997F9DB45BCF9D8700 (void);
+extern void FlagEnumAttribute__ctor_m2B9C0354A1EBCD006DA08AC83C45F97B1F42BE2F (void);
+static Il2CppMethodPointer s_methodPointers[26] = 
+{
+	Readme__ctor_m69C325C4C171DCB0312B646A9034AA91EA8C39C6,
+	Section__ctor_m5F732533E4DFC0167D965E5F5DB332E46055399B,
+	UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mBEB95BEB954BB63E9710BBC7AD5E78C4CB0A0033,
+	UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_mE70FB23ACC1EA12ABC948AA22C2E78B2D0AA39B1,
+	WaterVolumeBase_ensureReferences_m2C2CBF987CF8CEA0BBA5A61D9C2BD84AE7859E59,
+	WaterVolumeBase_GetHeight_m6732C12B3C5873E417BB0E8E841279EEC26A4B59,
+	WaterVolumeBase_Rebuild_mF944B8A2231D280A1D42BCFFDC2C8DE6EC94842E,
+	WaterVolumeBase_GenerateTiles_mB6FE93972318DEDB8B1D12D076346A8746AED736,
+	WaterVolumeBase_Validate_m2FA59B307398164C09810C745E3D634BCD22C16D,
+	WaterVolumeBase_OnValidate_m9DAE52012BFA6FA50E5C43FC81B30C65F3581716,
+	WaterVolumeBase_Update_m85321C19DD842AB11101ACAEF686F9F853E54DF9,
+	WaterVolumeBase__ctor_m4EA44D8B49487A0DC0A1154D699B179B5DBFE915,
+	WaterVolumeBox_GenerateTiles_m074D40C064C61E46004040ABE3689B8E2D6FFBB1,
+	WaterVolumeBox_Validate_mC3F32714E2C1059EDDCA481D020A074809365FE7,
+	WaterVolumeBox__ctor_mD39E604BB9B9B2E7D34FE47CF3C1D68ED21D8BBD,
+	WaterVolumeHelper_get_Instance_m8B85B308E4574EF46EA9D9A8676EAE6A4ECF05AE,
+	WaterVolumeHelper_GetHeight_m037199092C2D61DC903CD34E067674B02BF51627,
+	WaterVolumeHelper_Awake_m11F77784983FBCEE43C87367E1642AB008076332,
+	WaterVolumeHelper__ctor_mBF81C1968225A115AC3E2AB6728ACDC35E20E245,
+	WaterVolumeTransforms_OnDrawGizmos_mFDE30A75090392BE161EB2F041AEDA2A96EBF23D,
+	WaterVolumeTransforms_OnTransformChildrenChanged_m521BE68A72E67A390140FB226A40B2F245AA6FDD,
+	WaterVolumeTransforms_GenerateTiles_m549365647A9EACBC5F8D2E0E42F965B1174C6486,
+	WaterVolumeTransforms__ctor_mABD1022F242A568AA37D652EE6847B6C1C6F031A,
+	WateverVolumeFloater_Update_m3CF52F6DE972284C2AC03F87D69088FA1E1ED58E,
+	WateverVolumeFloater__ctor_m64819FB2FF09F3A3CBC655997F9DB45BCF9D8700,
+	FlagEnumAttribute__ctor_m2B9C0354A1EBCD006DA08AC83C45F97B1F42BE2F,
+};
+static const int32_t s_InvokerIndices[26] = 
+{
+	6385,
+	6385,
+	9774,
+	6385,
+	6385,
+	3047,
+	6385,
+	4934,
+	6385,
+	6385,
+	6385,
+	6385,
+	4934,
+	6385,
+	6385,
+	9720,
+	3047,
+	6385,
+	6385,
+	6385,
+	6385,
+	4934,
+	6385,
+	6385,
+	6385,
+	6385,
+};
+IL2CPP_EXTERN_C const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule;
+const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule = 
+{
+	"Assembly-CSharp.dll",
+	26,
+	s_methodPointers,
+	0,
+	NULL,
+	s_InvokerIndices,
+	0,
+	NULL,
+	0,
+	NULL,
+	0,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+};

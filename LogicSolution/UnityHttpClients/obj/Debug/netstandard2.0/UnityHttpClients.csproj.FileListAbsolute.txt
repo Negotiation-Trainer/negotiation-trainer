@@ -1,0 +1,14 @@
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/obj/Debug/netstandard2.0/UnityHttpClients.csproj.AssemblyReference.cache
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/obj/Debug/netstandard2.0/UnityHttpClients.GeneratedMSBuildEditorConfig.editorconfig
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/obj/Debug/netstandard2.0/UnityHttpClients.AssemblyInfoInputs.cache
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/obj/Debug/netstandard2.0/UnityHttpClients.AssemblyInfo.cs
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/obj/Debug/netstandard2.0/UnityHttpClients.csproj.CoreCompileInputs.cache
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/bin/Debug/netstandard2.0/UnityHttpClients.deps.json
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/bin/Debug/netstandard2.0/UnityHttpClients.dll
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/bin/Debug/netstandard2.0/UnityHttpClients.pdb
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/bin/Debug/netstandard2.0/UnityEngine.dll
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/bin/Debug/netstandard2.0/UnityEngine.pdb
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/bin/Debug/netstandard2.0/UnityEngine.xml
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/obj/Debug/netstandard2.0/UnityHtt.99AA959B.Up2Date
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/obj/Debug/netstandard2.0/UnityHttpClients.dll
+/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/UnityHttpClients/obj/Debug/netstandard2.0/UnityHttpClients.pdb

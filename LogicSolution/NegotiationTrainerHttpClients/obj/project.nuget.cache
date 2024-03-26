@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "83V8wcaQVPEylOShi142guery2xJ1kABjPe5gyoNHarboRH+Lo8MQHvn8Wq+3KhV6mJCAzpic5rDj/OI9nISnQ==",
+  "success": true,
+  "projectFilePath": "/Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/NegotiationTrainerHttpClients/NegotiationTrainerHttpClients.csproj",
+  "expectedPackageFiles": [
+    "/Users/crajar/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "/Users/crajar/.nuget/packages/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

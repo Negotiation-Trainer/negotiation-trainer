@@ -1,0 +1,5 @@
+is_global = true
+build_property.RootNamespace = NegotiationTrainerHttpClients
+build_property.ProjectDir = /Users/crajar/school/negotiation-trainer-logic-solution/NegotiationTrainerLogicSolution/NegotiationTrainerHttpClients/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
