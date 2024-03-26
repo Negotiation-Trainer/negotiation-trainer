@@ -1,16 +1,12 @@
 mergeInto(LibraryManager.library, {
-    gameObject: "",
-    liveTranscribeCallback: "",
-    finalResultCallback: "",
-    recognition: "",
-    isListening: false,
-
+    
     CheckBrowserSupported: function(){
         if ('webkitSpeechRecognition' in window) return true;
         return false;
     },
 
     SetupSpeechRecognition: function(gameObjectName, liveTranscribeCallbackName, finalResultCallbackName) {
+            isListening = false;
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = true;
@@ -28,41 +24,39 @@ mergeInto(LibraryManager.library, {
 
             recognition.onstart = function () {
                 console.log(this);
-                this.isListening = true;
-                console.log("true" + this.isListening);
+                isListening = true;
+                console.log("true" + isListening);
             };
 
             recognition.onaudiostart = function () {
                 console.log(this);
-                this.isListening = true;
-                console.log("true" + this.isListening);
+                isListening = true;
+                console.log("true" + isListening);
             };
 
             recognition.onend = function () {
                 console.log(this);
-                this.isListening  = false;
-                console.log("false" + this.isListening);
+                isListening  = false;
+                console.log("false" + isListening);
             };
             
             recognition.onerror = function (event) {
                 console.log(this);
-                this.isListening  = false;
-                console.log("false" + this.isListening);
+                isListening  = false;
+                console.log("false" + sListening);
             };
 
     },
 
     StartSpeechRecognition: function() {
-            console.log(this)
-            if(!this.isListening){
-                this.recognition.start();
+            console.log(this);
+            if(!isListening){
+                recognition.start();
             }
     },
 
     IsListening: function() {
-        console.log("isListening: " + this.isListening)
-        if(this.isListening) return true;
+        if(isListening) return true;
         return false;
-    }
-
+    },
 });
