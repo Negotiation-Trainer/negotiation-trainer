@@ -9,7 +9,6 @@ namespace Presenters
 {
     public class InventoryPresenter: MonoBehaviour
     {
-        [SerializeField] private Button resourceCardButton;
         [SerializeField] private Transform resourceCard;
         [SerializeField] private Transform resourceCardTarget;
         [SerializeField] private float speed;
@@ -34,7 +33,6 @@ namespace Presenters
             _gameManager = GameManager.Instance;
             _player = _gameManager.Player;
             
-            resourceCardButton.onClick.AddListener(ToggleResourceCard);
             _originalPosition = resourceCard.position;
             _targetPosition = _originalPosition;
             
@@ -42,7 +40,7 @@ namespace Presenters
             _player.Inventory.UpdateInventory();
         }
 
-        private void ToggleResourceCard()
+        public void ToggleResourceCard()
         {
             if(_transitioning) return;
             if (_targetPosition == _originalPosition)
