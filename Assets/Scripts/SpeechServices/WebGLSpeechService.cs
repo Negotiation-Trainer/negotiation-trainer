@@ -16,6 +16,9 @@ namespace SpeechServices
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
         private static extern void StartSpeechRecognition();
+        
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern void Speak();
 
         private void Start()
         {
@@ -30,6 +33,7 @@ namespace SpeechServices
             {
                 StartSpeechRecognition();
             }
+            Speak();
         }
 
         public bool CheckSupport()
