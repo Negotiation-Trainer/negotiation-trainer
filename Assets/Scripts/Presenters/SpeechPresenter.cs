@@ -17,6 +17,11 @@ namespace Presenters
             _speechService?.StartRecognition();
         }
 
+        public void Speak(string text)
+        {
+            _speechService?.SpeakText(text);
+        }
+
         private void OnSpeechTranscribe(object sender, SpeechTranscribeEventArgs eventArgs)
         {
             if (debugMode)
@@ -37,6 +42,7 @@ namespace Presenters
                     return;
                 }
                 _speechService.SpeechTranscribe += OnSpeechTranscribe;
+                return;
             }
             Debug.LogWarning("Speech recognition not supported on your platform or browser");
         }

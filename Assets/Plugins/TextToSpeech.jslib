@@ -17,7 +17,7 @@ mergeInto(LibraryManager.library, {
         onEndCallback = UTF8ToString(onEndCallbackName);
 
         utterance.onend = function(){
-            SendMessage(gameObject, onEndCallbackName);
+            SendMessage(gameObject, onEndCallback);
         }
     },
 
@@ -26,7 +26,7 @@ mergeInto(LibraryManager.library, {
     },
 
     Speak: function(textToSpeak) {
-        utterance.text = textToSpeak;
+        utterance.text = UTF8ToString(textToSpeak);
         speechSynthesis.speak(utterance);
     }
 });

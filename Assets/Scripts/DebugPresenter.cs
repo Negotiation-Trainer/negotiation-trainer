@@ -8,12 +8,14 @@ using UnityEngine;
 public class DebugPresenter : MonoBehaviour
 {
     private DialoguePresenter _dialoguePresenter;
+    private SpeechPresenter _speechPresenter;
 
     private DialogueGenerationService _dialogueGenerationService;
     // Start is called before the first frame update
     void Start()
     {
         _dialoguePresenter = GetComponent<DialoguePresenter>();
+        _speechPresenter = GetComponent<SpeechPresenter>();
         StartServices();
     }
 
@@ -62,6 +64,15 @@ public class DebugPresenter : MonoBehaviour
                     _dialogueGenerationService.SplitTextToDialogueMessages(_dialoguePresenter.GetInstruction("general"),
                         1));
                 _dialoguePresenter.ShowNextMessage();
+            }
+        }
+
+        if (_speechPresenter)
+        {
+            GUILayout.Label("Speech");
+            if (GUILayout.Button("Speak"))
+            {
+                _speechPresenter.Speak("Hello this is ad debug text to test the speech to text capability of connor's paradise");
             }
         }
     }

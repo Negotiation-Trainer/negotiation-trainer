@@ -5,6 +5,7 @@ namespace SpeechServices
     public interface ISpeechService
     {
         public void StartRecognition();
+        public void SpeakText(string text);
         public bool CheckSupport(); 
         public event EventHandler<SpeechTranscribeEventArgs> SpeechTranscribe;
     }
