@@ -11,7 +11,7 @@ mergeInto(LibraryManager.library, {
         utterance.volume = soundVolume;
         utterance.rate = speakRate;
         utterance.pitch = speakPitch;
-
+        utterance.lang = 'en-US';
         
         gameObject = UTF8ToString(gameObjectName);
         onEndCallback = UTF8ToString(onEndCallbackName);

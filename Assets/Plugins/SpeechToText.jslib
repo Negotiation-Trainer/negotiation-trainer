@@ -1,6 +1,6 @@
 mergeInto(LibraryManager.library, {
     
-    CheckBrowserSupported: function(){
+    CheckSTTBrowserSupported: function(){
         if ('webkitSpeechRecognition' in window) return true;
         return false;
     },

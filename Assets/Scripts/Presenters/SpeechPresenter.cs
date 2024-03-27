@@ -1,3 +1,4 @@
+using System;
 using SpeechServices;
 using TMPro;
 using UnityEngine;
@@ -7,44 +8,63 @@ namespace Presenters
     public class SpeechPresenter : MonoBehaviour
     {
         [SerializeField] private bool debugMode = false;
-        [SerializeField]private TMP_Text debugText;
-        private ISpeechService _speechService;
-        
-        
+        private ISpeechToTextService _speechToTextService;
+        private ITextToSpeechService _textToSpeechService;
         
         public void StartRecognition()
         {
-            _speechService?.StartRecognition();
+            _speechToTextService?.StartRecognition();
         }
 
         public void Speak(string text)
         {
-            _speechService?.SpeakText(text);
+            _textToSpeechService?.SpeakText(text);
         }
 
-        private void OnSpeechTranscribe(object sender, SpeechTranscribeEventArgs eventArgs)
+        public void StopSpeaking()
+        {
+            _textToSpeechService?.StopSpeech();
+        }
+
+        private void OnSpeechToTextTranscribe(object sender, SpeechTranscribeEventArgs eventArgs)
         {
             if (debugMode)
             {
-                debugText.text = eventArgs.Text;
-                Debug.Log(eventArgs.IsFinal);
+                Debug.Log($"{eventArgs.Text} -isFinal:{eventArgs.IsFinal}");
             }
+        }
+
+        private void OnTextToSpeechFinished(object sender, EventArgs eventArgs)
+        {
+            Debug.Log("TTS has finished");
         }
     
         void Start()
         {
             if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor)
             {
-                _speechService = gameObject.AddComponent<WebGLSpeechService>();
-                if (!_speechService.CheckSupport())
+                _speechToTextService = gameObject.AddComponent<WebGLSpeechToTextService>();
+                if (!_speechToTextService.CheckSupport())
                 {
-                    Destroy(GetComponent<WebGLSpeechService>());
-                    return;
+                    Destroy(GetComponent<WebGLSpeechToTextService>());
+                    Debug.LogWarning("Speech recognition not supported on your platform or browser");
                 }
-                _speechService.SpeechTranscribe += OnSpeechTranscribe;
-                return;
+                else
+                {
+                    _speechToTextService.SpeechTranscribe += OnSpeechToTextTranscribe;   
+                }
+
+                _textToSpeechService = gameObject.AddComponent<WebGLTextToSpeechService>();
+                if (!_speechToTextService.CheckSupport())
+                {
+                    Destroy(GetComponent<WebGLTextToSpeechService>());
+                    Debug.LogWarning("Speech synthesis not supported on your platform or browser");
+                }
+                else
+                {
+                    _textToSpeechService.FinishedSpeaking += OnTextToSpeechFinished; 
+                }
             }
-            Debug.LogWarning("Speech recognition not supported on your platform or browser");
         }
     }
 }

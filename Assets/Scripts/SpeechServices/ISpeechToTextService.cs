@@ -2,12 +2,11 @@
 
 namespace SpeechServices
 {
-    public interface ISpeechService
+    public interface ISpeechToTextService
     {
-        public void StartRecognition();
-        public void SpeakText(string text);
-        public bool CheckSupport(); 
         public event EventHandler<SpeechTranscribeEventArgs> SpeechTranscribe;
+        public void StartRecognition();
+        public bool CheckSupport(); 
     }
     
     public class SpeechTranscribeEventArgs : EventArgs
