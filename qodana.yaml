@@ -9,12 +9,11 @@ ide: QDNET
 
 #Specify inspection profile for code analysis
 profile:
-  name: qodana.starter
+  path: profile.yaml
 
-inspections:
-  - group: ALL
-    ignore:
-      - "scope#!file:Assets/Scripts//*"
+#Enable inspections
+#include:
+#  - name: <SomeEnabledInspectionId>
 
 #Disable inspections
 #exclude:
@@ -29,7 +28,6 @@ inspections:
 #plugins:
 #  - id: <plugin.id> #(plugin id can be found at https://plugins.jetbrains.com)
 
-# Disabled for now, waiting on the results of the qodana usage during sprint 3
 # failureConditions:
 #   severityThresholds:
 #     critical: 0

@@ -1,0 +1,5 @@
+baseProfile: "qodana.recommended"
+inspections:
+  - group: ALL
+    ignore:
+- "scope#!file:Assets/Scripts//*"
