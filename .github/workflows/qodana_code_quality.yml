@@ -9,6 +9,8 @@ on:
 
 jobs:
   qodana:
+    permissions:
+      checks: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
