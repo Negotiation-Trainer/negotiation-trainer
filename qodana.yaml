@@ -18,9 +18,9 @@ profile:
 exclude:
   - name: All
     paths:
-      - "Assets/Art"
-      - "Assets/TextMesh Pro"
-      - "Assets/TutorialInfo"
+      - Assets/Art
+      - Assets/TextMesh Pro
+      - Assets/TutorialInfo 
 
 #Disable inspections
 #exclude:
