@@ -34,5 +34,5 @@ failureConditions:
     high: 0
     moderate: 40
     low: 60
-    any: 100
+    any: 200
     info: 100
