@@ -38,7 +38,6 @@ namespace Presenters
         private void OnTextToSpeechFinished(object sender, EventArgs eventArgs)
         {
             TTSFinished?.Invoke(this,EventArgs.Empty);
-            Debug.Log("TTS has finished");
         }
     
         void Start()

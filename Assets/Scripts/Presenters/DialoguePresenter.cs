@@ -75,17 +75,6 @@ namespace Presenters
             dialogueBox.SetActive(false);
         }
         
-        private void DebugStartDialogue()
-        {
-            IMessage[] messages = {
-                new InstructionMessage("Hello this is the first message of the dialogue service"),
-                new InstructionMessage("This is the second message"),
-                new InstructionMessage("The third message is the last of the que")
-            };
-            QueueMessages(messages);
-            ShowNextMessage();
-        }
-
         private void OnTTSFinished(object sender, EventArgs eventArgs)
         {
             ShowNextMessage();
