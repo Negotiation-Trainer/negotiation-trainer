@@ -21,11 +21,3 @@ profile:
 #Install IDE plugins before Qodana execution (Applied in CI/CD pipeline)
 #plugins:
 #  - id: <plugin.id> #(plugin id can be found at https://plugins.jetbrains.com)
-failureConditions:
-  severityThresholds:
-    critical: 0
-    high: 0
-    moderate: 40
-    low: 60
-    any: 100
-    info: 100
