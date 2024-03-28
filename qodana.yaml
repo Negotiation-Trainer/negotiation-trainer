@@ -9,18 +9,19 @@ ide: QDNET
 
 #Specify inspection profile for code analysis
 profile:
-  name: qodana.starter
+  name: qodana.recommended
 
 #Enable inspections
 #include:
 #  - name: <SomeEnabledInspectionId>
 
-exclude:
-  - name: All
-    paths:
-      - Assets/Art
-      - Assets/TextMesh Pro
-      - Assets/TutorialInfo 
+# exclude:
+#   - name: All
+#     paths:
+#       - "**"
+#   - name: None
+#     paths:
+#       - Assets/Scripts
 
 #Disable inspections
 #exclude:
