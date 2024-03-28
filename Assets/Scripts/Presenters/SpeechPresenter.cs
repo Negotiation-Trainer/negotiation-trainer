@@ -10,6 +10,7 @@ namespace Presenters
         [SerializeField] private bool debugMode = false;
         private ISpeechToTextService _speechToTextService;
         private ITextToSpeechService _textToSpeechService;
+        public event EventHandler TTSFinished;
         
         public void StartRecognition()
         {
@@ -36,6 +37,7 @@ namespace Presenters
 
         private void OnTextToSpeechFinished(object sender, EventArgs eventArgs)
         {
+            TTSFinished?.Invoke(this,EventArgs.Empty);
             Debug.Log("TTS has finished");
         }
     
