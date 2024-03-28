@@ -22,6 +22,6 @@ jobs:
         uses: JetBrains/qodana-action@v2023.3
         with:
           pr-mode: false
-          args: --print-problems, -d Assets/Scripts
+          args: --print-problems, -d Assets
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
