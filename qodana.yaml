@@ -30,7 +30,7 @@ profile:
 
 failureConditions:
   severityThresholds:
-    cirtical: 0
+    critical: 0
     high: 0
     moderate: 40
     low: 60
