@@ -11,9 +11,10 @@ ide: QDNET
 profile:
   name: qodana.starter
 
-#Enable inspections
-#include:
-#  - name: <SomeEnabledInspectionId>
+inspections:
+  - group: ALL
+    ignore:
+      - "scope#!file:Assets/Scripts//*"
 
 #Disable inspections
 #exclude:
