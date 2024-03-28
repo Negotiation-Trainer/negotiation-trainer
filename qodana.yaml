@@ -3,29 +3,44 @@
 #             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
 #-------------------------------------------------------------------------------#
 version: "1.0"
+
 #Specify IDE code to run analysis without container (Applied in CI/CD pipeline)
 ide: QDNET
+
 #Specify inspection profile for code analysis
 profile:
   name: qodana.starter
+
 #Enable inspections
 #include:
 #  - name: <SomeEnabledInspectionId>
+
+exclude:
+  - name: All
+    paths:
+      - "Assets/Art"
+      - "Assets/TextMesh Pro"
+      - "Assets/TutorialInfo"
+
 #Disable inspections
 #exclude:
 #  - name: <SomeDisabledInspectionId>
 #    paths:
 #      - <path/where/not/run/inspection>
+
 #Execute shell command before Qodana execution (Applied in CI/CD pipeline)
 #bootstrap: sh ./prepare-qodana.sh
+
 #Install IDE plugins before Qodana execution (Applied in CI/CD pipeline)
 #plugins:
 #  - id: <plugin.id> #(plugin id can be found at https://plugins.jetbrains.com)
-failureConditions:
-  severityThresholds:
-    critical: 0
-    high: 0
-    moderate: 40
-    low: 60
-    any: 100
-    info: 100
+
+# Disabled for now, waiting on the results of the qodana usage during sprint 3
+# failureConditions:
+#   severityThresholds:
+#     critical: 0
+#     high: 0
+#     moderate: 40
+#     low: 60
+#     any: 200
+#     info: 100
