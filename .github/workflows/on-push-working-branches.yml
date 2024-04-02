@@ -5,6 +5,7 @@ on:
     branches:
       - "feature/**"
       - "bugfix/**"
+      - "hotfix/**"
 
 jobs: 
   RunTests:
