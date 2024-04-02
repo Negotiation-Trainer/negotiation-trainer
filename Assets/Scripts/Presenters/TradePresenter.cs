@@ -1,6 +1,7 @@
 using Enums;
 using LogicServices;
 using Models;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,6 +15,32 @@ namespace Presenters
         [SerializeField] private int debugRequestedAmount = 2;
         [SerializeField] private InventoryItems debugOfferedItem = InventoryItems.Steel;
         [SerializeField] private int debugOfferedAmount = 2;
+
+        [SerializeField] private GameObject tradeOffer;
+        [SerializeField] private TMP_Text offerText;
+        [SerializeField] private TMP_Text offerAmount;
+        [SerializeField] private TMP_Text requestText;
+        [SerializeField] private TMP_Text requestAmount;
+
+        public void ShowTradeOffer(Trade trade, Tribe originator, Tribe target)
+        {
+            tradeOffer.SetActive(true);
+            offerText.text = $"We, The {originator.Name} tribe, are offering";
+            offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
+            requestText.text = $"to the {target.Name} tribe, in exchange for:";
+            requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
+        }
+
+        public void DiscardTradeOffer()
+        {
+            tradeOffer.SetActive(false);
+        }
+        
+         public void SignTradeOffer()
+         {
+             tradeOffer.SetActive(false);
+         }
+        
         public void PresentTrade()
         {
             var originator = GameManager.Instance.Player;
