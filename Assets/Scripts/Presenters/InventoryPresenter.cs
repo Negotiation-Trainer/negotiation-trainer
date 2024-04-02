@@ -43,7 +43,7 @@ namespace Presenters
         public void ToggleResourceCard()
         {
             if(_transitioning) return;
-            if (_targetPosition == _originalPosition)
+            if (_targetPosition.Compare(_originalPosition, 100))
             {
                 _targetPosition = resourceCardTarget.position;
                 _transitioning = true;
@@ -67,12 +67,12 @@ namespace Presenters
             steel.text = _player.Inventory.GetInventoryAmount(InventoryItems.Steel).ToString();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (_transitioning)
             {
                 resourceCard.position = Vector3.MoveTowards(resourceCard.position, _targetPosition, speed);
-                if (resourceCard.position == _targetPosition) _transitioning = false;
+                if (resourceCard.position.Compare(_targetPosition, 100)) _transitioning = false;
             }
         }
     }
