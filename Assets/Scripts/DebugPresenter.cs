@@ -9,13 +9,20 @@ using UnityEngine;
 
 public class DebugPresenter : MonoBehaviour
 {
+    private GameManager _gameManager;
     private DialoguePresenter _dialoguePresenter;
     private TradePresenter _tradePresenter;
+    
+    [SerializeField] private InventoryItems debugRequestedItem = InventoryItems.Wood;
+    [SerializeField] private int debugRequestedAmount = 2;
+    [SerializeField] private InventoryItems debugOfferedItem = InventoryItems.Steel;
+    [SerializeField] private int debugOfferedAmount = 2;
     
     private DialogueGenerationService _dialogueGenerationService;
     // Start is called before the first frame update
     void Start()
     {
+        _gameManager = GameManager.Instance;
         _dialoguePresenter = GetComponent<DialoguePresenter>();
         _tradePresenter = GetComponent<TradePresenter>();
         StartServices();
@@ -74,20 +81,14 @@ public class DebugPresenter : MonoBehaviour
             GUILayout.Label("Trade");
             if (GUILayout.Button("Show trade offer to player"))
             {
-                var trade = new Trade(InventoryItems.Wood, 2, InventoryItems.Stone, 2);
-                var tribeA = new Tribe("A");
-                var tribeB = new Tribe("B");
-                
-                _tradePresenter.ShowTradeOffer(trade,tribeB,tribeA);
+                var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem, debugOfferedAmount);
+                _tradePresenter.ShowTradeOffer(trade,_gameManager.Cpu1,_gameManager.Player);
             }
             
             if (GUILayout.Button("Show trade offer from player"))
             {
-                var trade = new Trade(InventoryItems.Wood, 2, InventoryItems.Stone, 2);
-                var tribeA = new Tribe("A");
-                var tribeB = new Tribe("B");
-                
-                _tradePresenter.ShowTradeOffer(trade,tribeA,tribeB);
+                var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem, debugOfferedAmount);
+                _tradePresenter.ShowTradeOffer(trade,_gameManager.Player,_gameManager.Cpu1);
             }
         }
     }
