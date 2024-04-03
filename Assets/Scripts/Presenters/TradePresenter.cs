@@ -28,12 +28,22 @@ namespace Presenters
             _currentTrade = trade;
             _originator = originator;
             _target = target;
-            
-            offerText.text = $"We, The {originator.Name} tribe, are offering";
-            offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
-            requestText.text = $"to the {target.Name} tribe, in exchange for:";
-            requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
-            
+
+            if (_originator == GameManager.Instance.Player)
+            {
+                offerText.text = $"We, The {originator.Name} tribe, are offering";
+                offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
+                requestText.text = $"to the {target.Name} tribe, in exchange for:";
+                requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
+            }
+            else
+            {
+                offerText.text = $"The {originator.Name} tribe, are offering";
+                offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
+                requestText.text = $"to us, the {target.Name} tribe, in exchange for:";
+                requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
+            }
+
             tradeOffer.SetActive(true);
         }
 
