@@ -36,6 +36,11 @@ namespace Models
             InventoryUpdate?.Invoke(this, EventArgs.Empty);
         }
 
+        public void UpdateInventory()
+        {
+            InventoryUpdate?.Invoke(this,EventArgs.Empty);
+        }
+
         public new string ToString()
         {
             return $"Wood: {_inventory[InventoryItems.Wood]} Lenses: {_inventory[InventoryItems.Lenses]} Clay: {_inventory[InventoryItems.Clay]} Gold: {_inventory[InventoryItems.Gold]} Steel: {_inventory[InventoryItems.Steel]} Insulation: {_inventory[InventoryItems.Insulation]} Fertilizer: {_inventory[InventoryItems.Fertilizer]} Stone: {_inventory[InventoryItems.Stone]}";
