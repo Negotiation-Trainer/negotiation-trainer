@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
         FillInventory();
         
         //intro scene start button
-        startButton.onClick.AddListener(StartGame);
+        //startButton.onClick.AddListener(StartGame);
         _stormParticleSystem = storm.GetComponent<ParticleSystem>();
         _dialoguePresenter = GetComponent<DialoguePresenter>();
     }
