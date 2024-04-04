@@ -154,5 +154,47 @@ namespace Tests
             //Then
             Assert.IsFalse(result);
         }
+        
+        [Test]
+        public void CalculateTradeBalance_IsFavorable_ReturnsTrue()
+        {
+            //Given
+            TradeBalance tradeBalance = new TradeBalance();
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,2);
+            
+            //When
+            var result = tradeBalance.Calculate(trade);
+            
+            //Then
+            Assert.IsTrue(result);
+        }
+        
+        [Test]
+        public void CalculateTradeBalance_IsEqual_ReturnsTrue()
+        {
+            //Given
+            TradeBalance tradeBalance = new TradeBalance();
+            Trade trade = new Trade(InventoryItems.Wood,1,InventoryItems.Stone,1);
+            
+            //When
+            var result = tradeBalance.Calculate(trade);
+            
+            //Then
+            Assert.IsTrue(result);
+        }
+        
+        [Test]
+        public void CalculateTradeBalance_IsUnfavorable_ReturnsFalse()
+        {
+            //Given
+            TradeBalance tradeBalance = new TradeBalance();
+            Trade trade = new Trade(InventoryItems.Wood,2,InventoryItems.Stone,1);
+            
+            //When
+            var result = tradeBalance.Calculate(trade);
+            
+            //Then
+            Assert.IsFalse(result);
+        }
     }
 }
