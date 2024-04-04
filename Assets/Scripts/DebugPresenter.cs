@@ -1,19 +1,30 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Enums;
 using LogicServices;
+using Models;
 using Presenters;
 using UnityEngine;
 
 public class DebugPresenter : MonoBehaviour
 {
+    private GameManager _gameManager;
     private DialoguePresenter _dialoguePresenter;
-
+    private TradePresenter _tradePresenter;
+    
+    [SerializeField] private InventoryItems debugRequestedItem = InventoryItems.Wood;
+    [SerializeField] private int debugRequestedAmount = 2;
+    [SerializeField] private InventoryItems debugOfferedItem = InventoryItems.Steel;
+    [SerializeField] private int debugOfferedAmount = 2;
+    
     private DialogueGenerationService _dialogueGenerationService;
     // Start is called before the first frame update
     void Start()
     {
+        _gameManager = GameManager.Instance;
         _dialoguePresenter = GetComponent<DialoguePresenter>();
+        _tradePresenter = GetComponent<TradePresenter>();
         StartServices();
     }
 
@@ -62,6 +73,22 @@ public class DebugPresenter : MonoBehaviour
                     _dialogueGenerationService.SplitTextToDialogueMessages(_dialoguePresenter.GetInstruction("general"),
                         1));
                 _dialoguePresenter.ShowNextMessage();
+            }
+        }
+
+        if (_tradePresenter)
+        {
+            GUILayout.Label("Trade");
+            if (GUILayout.Button("Show trade offer to player"))
+            {
+                var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem, debugOfferedAmount);
+                _tradePresenter.ShowTradeOffer(trade,_gameManager.Cpu1,_gameManager.Player);
+            }
+            
+            if (GUILayout.Button("Show trade offer from player"))
+            {
+                var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem, debugOfferedAmount);
+                _tradePresenter.ShowTradeOffer(trade,_gameManager.Player,_gameManager.Cpu1);
             }
         }
     }
