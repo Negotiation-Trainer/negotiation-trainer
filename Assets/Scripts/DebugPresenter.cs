@@ -13,13 +13,14 @@ public class DebugPresenter : MonoBehaviour
     private DialoguePresenter _dialoguePresenter;
     private SpeechPresenter _speechPresenter;
     private TradePresenter _tradePresenter;
-    
+
     [SerializeField] private InventoryItems debugRequestedItem = InventoryItems.Wood;
     [SerializeField] private int debugRequestedAmount = 2;
     [SerializeField] private InventoryItems debugOfferedItem = InventoryItems.Steel;
     [SerializeField] private int debugOfferedAmount = 2;
-    
+
     private DialogueGenerationService _dialogueGenerationService;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -84,24 +85,30 @@ public class DebugPresenter : MonoBehaviour
             GUILayout.Label("Speech");
             if (GUILayout.Button("Speak"))
             {
-                _speechPresenter.Speak("Hello this is a debug text to test the speech to text capability of connor's paradise");
+                _speechPresenter.Speak(
+                    "Hello this is a debug text to test the speech to text capability of connor's paradise");
             }
+
             if (GUILayout.Button("Stop speak"))
             {
                 _speechPresenter.StopSpeaking();
-        if (_tradePresenter)
-        {
-            GUILayout.Label("Trade");
-            if (GUILayout.Button("Show trade offer to player"))
-            {
-                var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem, debugOfferedAmount);
-                _tradePresenter.ShowTradeOffer(trade,_gameManager.Cpu1,_gameManager.Player);
-            }
-            
-            if (GUILayout.Button("Show trade offer from player"))
-            {
-                var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem, debugOfferedAmount);
-                _tradePresenter.ShowTradeOffer(trade,_gameManager.Player,_gameManager.Cpu1);
+                if (_tradePresenter)
+                {
+                    GUILayout.Label("Trade");
+                    if (GUILayout.Button("Show trade offer to player"))
+                    {
+                        var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem,
+                            debugOfferedAmount);
+                        _tradePresenter.ShowTradeOffer(trade, _gameManager.Cpu1, _gameManager.Player);
+                    }
+
+                    if (GUILayout.Button("Show trade offer from player"))
+                    {
+                        var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem,
+                            debugOfferedAmount);
+                        _tradePresenter.ShowTradeOffer(trade, _gameManager.Player, _gameManager.Cpu1);
+                    }
+                }
             }
         }
     }
