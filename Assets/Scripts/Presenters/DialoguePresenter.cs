@@ -14,7 +14,7 @@ namespace Presenters
         [SerializeField] private TMP_Text dialogueText;
         [SerializeField] private GameObject portraits;
         [SerializeField] private Button nextDialogueButton;
-        
+        private SpeechPresenter _speechPresenter;
         private DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
         private Queue<IMessage> _dialogueQueue = new Queue<IMessage>();
 
@@ -45,8 +45,9 @@ namespace Presenters
             {
                 portraits.SetActive(false);
             }
-
+            
             dialogueText.text = message.Message;
+            _speechPresenter.Speak(message.Message);
         }
 
         private void ShowCharacter(DialogueMessage message)
@@ -74,20 +75,22 @@ namespace Presenters
             dialogueBox.SetActive(false);
         }
         
-        private void DebugStartDialogue()
+        private void OnTTSFinished(object sender, EventArgs eventArgs)
         {
-            IMessage[] messages = {
-                new InstructionMessage("Hello this is the first message of the dialogue service"),
-                new InstructionMessage("This is the second message"),
-                new InstructionMessage("The third message is the last of the que")
-            };
-            QueueMessages(messages);
+            ShowNextMessage();
+        }
+
+        private void OnNextButtonClick()
+        {
+            _speechPresenter.StopSpeaking();
             ShowNextMessage();
         }
 
         private void Start()
         {
-            nextDialogueButton.onClick.AddListener(ShowNextMessage);
+            nextDialogueButton.onClick.AddListener(OnNextButtonClick);
+            _speechPresenter = GetComponent<SpeechPresenter>();
+            _speechPresenter.TTSFinished += OnTTSFinished;
         }
 
         public void StartGeneralInstruction()
