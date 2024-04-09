@@ -47,7 +47,10 @@ namespace Presenters
             }
             
             dialogueText.text = message.Message;
-            _speechPresenter.Speak(message.Message);
+            if (_speechPresenter)
+            {
+                _speechPresenter.Speak(message.Message);
+            }
         }
 
         private void ShowCharacter(DialogueMessage message)
@@ -82,7 +85,11 @@ namespace Presenters
 
         private void OnNextButtonClick()
         {
-            _speechPresenter.StopSpeaking();
+            if (_speechPresenter)
+            {
+                _speechPresenter.StopSpeaking();
+            }
+
             ShowNextMessage();
         }
 
@@ -90,7 +97,10 @@ namespace Presenters
         {
             nextDialogueButton.onClick.AddListener(OnNextButtonClick);
             _speechPresenter = GetComponent<SpeechPresenter>();
-            _speechPresenter.TTSFinished += OnTTSFinished;
+            if (_speechPresenter)
+            {
+                _speechPresenter.TTSFinished += OnTTSFinished;
+            }
         }
 
         public void StartGeneralInstruction()

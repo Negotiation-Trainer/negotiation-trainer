@@ -40,6 +40,11 @@ namespace Presenters
             _player.Inventory.UpdateInventory();
         }
 
+        public void ShowResourceCard(bool isActive)
+        {
+            resourceCard.gameObject.SetActive(isActive);
+        }
+
         public void ToggleResourceCard()
         {
             if(_transitioning) return;

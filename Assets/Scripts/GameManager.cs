@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Cinemachine;
@@ -14,6 +15,17 @@ public class GameManager : MonoBehaviour
     public Tribe Cpu1 { get; private set; }
     public Tribe Cpu2 { get; private set; }
     public Tribe Player { get; private set; }
+    public GameState State { get; private set; }
+
+    private InventoryPresenter _inventoryPresenter;
+    private ScorePresenter _scorePresenter;
+    
+    public enum GameState
+    {
+        Start,
+        Introduction,
+        Trade
+    }
 
     private void Awake()
     {
@@ -25,11 +37,14 @@ public class GameManager : MonoBehaviour
         
         SetPointTables();
         FillInventory();
+    }
+
+    private void Start()
+    {
+        _inventoryPresenter = GetComponent<InventoryPresenter>();
+        _scorePresenter = GetComponent<ScorePresenter>();
         
-        //intro scene start button
-        //startButton.onClick.AddListener(StartGame);
-        _stormParticleSystem = storm.GetComponent<ParticleSystem>();
-        _dialoguePresenter = GetComponent<DialoguePresenter>();
+        ChangeGameState(GameState.Start);
     }
 
     private void SetPointTables()
@@ -170,68 +185,54 @@ public class GameManager : MonoBehaviour
         Cpu2.Inventory.AddToInventory(InventoryItems.Stone, 5);
     }
 
-    #region IntroScene
-
-    [SerializeField] private GameObject island;
-    [SerializeField] private GameObject board;
-    [SerializeField] private Transform endMarker;
-    [SerializeField] private float speed = 0.5F;
-    [SerializeField] private float delay = 3.5F;
-
-    [SerializeField] private GameObject softClouds;
-    [SerializeField] private GameObject storm;
-    private ParticleSystem _stormParticleSystem;
-
-    [SerializeField] private Button startButton;
-    private DialoguePresenter _dialoguePresenter;
-    private GameState _gameState = GameState.Start;
-
-    [SerializeField] private PlayableDirector playableDirector;
-    [SerializeField] private GameObject startCamera;
-
-    private enum GameState
+    public void ChangeGameState(GameState newState)
     {
-        Start,
-        MovingIsland,
-        GeneralInstruction
-    }
-
-    private void StartGame()
-    {
-        storm.SetActive(true);
-        Invoke(nameof(MoveIsland), delay);
-        startButton.gameObject.SetActive(false);
-    }
-    
-    private void MoveIsland()
-    {
-        _gameState = GameState.MovingIsland;
-    }
-
-    private void StartInstruction()
-    {
-        _dialoguePresenter.StartGeneralInstruction();
-        softClouds.SetActive(true);
-    }
-    
-    void FixedUpdate()
-    {
-        if(_gameState == GameState.MovingIsland)
+        switch (newState)
         {
-            island.transform.position = Vector3.MoveTowards(island.transform.position, endMarker.position, speed);
-            if (island.transform.position == endMarker.position && _stormParticleSystem.isStopped)
-            {
-                startCamera.SetActive(false);
-                playableDirector.gameObject.SetActive(true);
-                playableDirector.Play();
-                _gameState = GameState.GeneralInstruction;
-                board.SetActive(false);
-                storm.SetActive(false);
-                StartInstruction();
-            }
+            case GameState.Start:
+                HandleGameStartState();
+                State = newState;
+                break;
+            case GameState.Introduction:
+                HandleIntroductionState();
+                State = newState;
+                break;
+            case GameState.Trade:
+                HandleTradeState();
+                State = newState;
+                break;
         }
-        
     }
 
-    #endregion
+    private void ToggleTradeUI(bool isActive)
+    {
+        _inventoryPresenter.ShowResourceCard(isActive);
+        _scorePresenter.ShowScoreCard(isActive);
+    }
+
+    /// <summary>
+    /// Show menu UI
+    /// </summary>
+    private void HandleGameStartState()
+    {
+        ToggleTradeUI(false);
+    }
+
+
+    /// <summary>
+    /// play introduction cutscene
+    /// </summary>
+    private void HandleIntroductionState()
+    {
+        ToggleTradeUI(false);
+    }
+
+    /// <summary>
+    /// Show trade UI
+    /// </summary>
+    private void HandleTradeState()
+    {
+        ToggleTradeUI(true);
+    }
+
 }
