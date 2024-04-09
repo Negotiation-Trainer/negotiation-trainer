@@ -50,6 +50,19 @@ public class DebugPresenter : MonoBehaviour
     {
         if (_enabeld)
         {
+            GUILayout.Label("Game Manger");
+            if (GUILayout.Button("Start state"))
+            {
+                _gameManager.ChangeGameState(GameManager.GameState.Start);
+            }
+            if (GUILayout.Button("Introduction state"))
+            {
+                _gameManager.ChangeGameState(GameManager.GameState.Introduction);
+            }
+            if (GUILayout.Button("Trade state"))
+            {
+               _gameManager.ChangeGameState(GameManager.GameState.Trade);
+            }
             if (_dialoguePresenter)
             {
                 GUILayout.Label("Dialogue");

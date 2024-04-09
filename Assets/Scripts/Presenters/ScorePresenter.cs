@@ -102,6 +102,11 @@ namespace Presenters
             steelC.text = _player.PointTable[(InventoryItems.Steel, tribeC)].ToString();
         }
         
+        public void ShowScoreCard(bool isActive)
+        {
+            scoreCard.gameObject.SetActive(isActive);
+        }
+        
         public void ToggleScoreCard()
         {
             if(_transitioning) return;
