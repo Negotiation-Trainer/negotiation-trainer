@@ -11,9 +11,6 @@ ide: QDNET
 profile:
   name: qodana.starter
 
-dotnet:
-  solution: negotiation-trainer.sln
-
 #Enable inspections
 #include:
 #  - name: <SomeEnabledInspectionId>
