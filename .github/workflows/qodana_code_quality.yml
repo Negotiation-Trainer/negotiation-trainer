@@ -23,6 +23,6 @@ jobs:
         uses: JetBrains/qodana-action@v2023.3
         with:
           pr-mode: false
-          args: --print-problems,--project-dir=Assets/Scripts;
+          args: --print-problems,--project-dir=./Assets/Scripts;
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
