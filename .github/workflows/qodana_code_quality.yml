@@ -25,3 +25,4 @@ jobs:
           args: --print-problems
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+        working-directory: Assets/Scripts
