@@ -11,6 +11,7 @@ public class DebugPresenter : MonoBehaviour
     private DialoguePresenter _dialoguePresenter;
     private SpeechPresenter _speechPresenter;
     private TradePresenter _tradePresenter;
+    private bool _testvar = true;
 
     [SerializeField] private InventoryItems debugRequestedItem = InventoryItems.Wood;
     [SerializeField] private int debugRequestedAmount = 2;
@@ -22,6 +23,11 @@ public class DebugPresenter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (_testvar == true)
+        {
+            // This should be flagged by qodana
+            Debug.Log("This is always true test for qodana");
+        }
         _gameManager = GameManager.Instance;
         _dialoguePresenter = GetComponent<DialoguePresenter>();
         _speechPresenter = GetComponent<SpeechPresenter>();
