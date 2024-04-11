@@ -16,8 +16,10 @@ mergeInto(LibraryManager.library, {
         gameObject = UTF8ToString(gameObjectName);
         onEndCallback = UTF8ToString(onEndCallbackName);
 
-        utterance.onend = function(){
-            SendMessage(gameObject, onEndCallback);
+        utterance.onend = function(event){
+            if(event.charIndex == this.text.length){
+                SendMessage(gameObject, onEndCallback);
+            }
         }
     },
 
