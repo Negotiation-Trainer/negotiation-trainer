@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace SpeechServices
 {
-    public class WebGLSpeechService : MonoBehaviour, ISpeechService
+    public class WebGLSpeechToTextService : MonoBehaviour, ISpeechToTextService
     {
         [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern bool CheckBrowserSupported();
+        private static extern bool CheckSTTBrowserSupported();
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
         private static extern bool IsListening();
@@ -16,12 +16,17 @@ namespace SpeechServices
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
         private static extern void StartSpeechRecognition();
+        
+        public bool CheckSupport()
+        {
+            return CheckSTTBrowserSupported();
+        }
 
         private void Start()
         {
             //setup javascript code to recognize speech.
             //given are the game object and functions on that object, that should be called when speech is recognized
-            SetupSpeechRecognition("GameManager", "OnLiveSpeechTranscribe", "OnFinalSpeechRecognized");
+            SetupSpeechRecognition(gameObject.name, nameof(OnLiveSpeechTranscribe), nameof(OnFinalSpeechRecognized));
         }
 
         public void StartRecognition()
@@ -31,12 +36,7 @@ namespace SpeechServices
                 StartSpeechRecognition();
             }
         }
-
-        public bool CheckSupport()
-        {
-            return CheckBrowserSupported();
-        }
-
+        
         public event EventHandler<SpeechTranscribeEventArgs> SpeechTranscribe;
         
         public void OnLiveSpeechTranscribe(string text)

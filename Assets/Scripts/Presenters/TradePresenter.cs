@@ -1,6 +1,7 @@
 using Enums;
-using LogicServices;
 using Models;
+using ServiceLibrary;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,34 +11,78 @@ namespace Presenters
     {
         private readonly AlgorithmService _algorithmService = new AlgorithmService();
         
-        [SerializeField] private InventoryItems debugRequestedItem = InventoryItems.Wood;
-        [SerializeField] private int debugRequestedAmount = 2;
-        [SerializeField] private InventoryItems debugOfferedItem = InventoryItems.Steel;
-        [SerializeField] private int debugOfferedAmount = 2;
-        public void PresentTrade()
-        {
-            var originator = GameManager.Instance.Player;
+        private Trade _currentTrade;
+        private Tribe _originator;
+        private Tribe _target;
 
-            // get from llm
-            var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem, debugOfferedAmount);
-            var target = GameManager.Instance.Cpu2;
-            
-            if (!TradePossible(trade, originator, target)) return;
-            
-            //Decision
-            if (_algorithmService.Decide(trade, originator, target))
+        [SerializeField] private GameObject tradeOffer;
+        [SerializeField] private TMP_Text offerText;
+        [SerializeField] private TMP_Text offerAmount;
+        [SerializeField] private TMP_Text requestText;
+        [SerializeField] private TMP_Text requestAmount;
+
+        public void ShowTradeOffer(Trade trade, Tribe originator, Tribe target)
+        {
+            if(!TradePossible(trade,originator,target)) return;
+
+            _currentTrade = trade;
+            _originator = originator;
+            _target = target;
+
+            if (_originator == GameManager.Instance.Player)
+            {
+                offerText.text = $"We, The {originator.Name} tribe, are offering";
+                offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
+                requestText.text = $"to the {target.Name} tribe, in exchange for:";
+                requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
+            }
+            else
+            {
+                offerText.text = $"The {originator.Name} tribe, are offering";
+                offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
+                requestText.text = $"to us, the {target.Name} tribe, in exchange for:";
+                requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
+            }
+
+            tradeOffer.SetActive(true);
+        }
+
+        public void DiscardTradeOffer()
+        {
+            tradeOffer.SetActive(false);
+            ClearOffer();
+        }
+        
+         public void SignTradeOffer()
+         {
+             tradeOffer.SetActive(false);
+             MakeTrade();
+         }
+
+         private void ClearOffer()
+         {
+             _currentTrade = null;
+             _originator = null;
+             _target = null;
+         }
+        
+        private void MakeTrade()
+        {
+            if (_currentTrade == null || _originator == null || _target == null) return;
+            if (_algorithmService.Decide(_currentTrade, _originator, _target))
             {
                 Debug.Log("Trade accepted");
-                originator.Inventory.RemoveFromInventory(trade.OfferedItem, trade.OfferedAmount);
-                target.Inventory.AddToInventory(trade.OfferedItem, trade.OfferedAmount);
+                _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
+                _target.Inventory.AddToInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
                 
-                originator.Inventory.AddToInventory(trade.RequestedItem, trade.RequestedAmount);
-                target.Inventory.RemoveFromInventory(trade.RequestedItem, trade.RequestedAmount);
+                _originator.Inventory.AddToInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
+                _target.Inventory.RemoveFromInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
             }
             else
             {
                 Debug.Log("Trade Refused");
             }
+            ClearOffer();
         }
 
         private bool TradePossible(Trade trade, Tribe originator, Tribe target)
