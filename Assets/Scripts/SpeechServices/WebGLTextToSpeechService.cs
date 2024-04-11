@@ -21,14 +21,15 @@ namespace SpeechServices
         
         public bool CheckSupport()
         {
-            return CheckTTSBrowserSupported();
+            if (CheckTTSBrowserSupported())
+            {
+                SetupTextToSpeech(1,1,1,1, gameObject.name, nameof(OnSpeechEnded));
+                return true;
+            }
+
+            return false;
         }
 
-        private void Start()
-        {
-            SetupTextToSpeech(1,1,1,1, gameObject.name, nameof(OnSpeechEnded) );
-        }
-        
         public void SpeakText(string text)
         {
             if(text == null) return;
