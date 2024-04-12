@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     private InventoryPresenter _inventoryPresenter;
     private ScorePresenter _scorePresenter;
+    private InputPresenter _inputPresenter;
     
     public enum GameState
     {
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
     {
         _inventoryPresenter = GetComponent<InventoryPresenter>();
         _scorePresenter = GetComponent<ScorePresenter>();
+        _inputPresenter = GetComponent<InputPresenter>();
         
         ChangeGameState(GameState.Start);
     }
@@ -208,6 +210,7 @@ public class GameManager : MonoBehaviour
     {
         _inventoryPresenter.ShowResourceCard(isActive);
         _scorePresenter.ShowScoreCard(isActive);
+        _inputPresenter.ToggleNewOfferButton(isActive);
     }
 
     /// <summary>
