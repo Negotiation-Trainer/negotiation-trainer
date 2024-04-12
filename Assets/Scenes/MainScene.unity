@@ -976,6 +976,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7194255295907790898}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &680627840 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9157960611450799760, guid: f3a62f26a1771df4d976dcd566a6365f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2574284203544505455}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &686494541 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6440533754392806652, guid: f3a62f26a1771df4d976dcd566a6365f,
@@ -1575,6 +1581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cc3facd1f78f4840ae14117ec48cd4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  newOfferButton: {fileID: 680627840}
   inputFallback: {fileID: 347220724}
   offeringResourceType: {fileID: 2082043888}
   offeringResourceAmount: {fileID: 1472437218}
