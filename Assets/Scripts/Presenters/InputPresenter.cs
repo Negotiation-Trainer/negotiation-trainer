@@ -43,6 +43,29 @@ namespace Presenters
             errorText.gameObject.SetActive(false);
         }
 
+        private bool CheckForInputErrors(Trade trade, Tribe originator, Tribe target)
+        {
+            if (trade.OfferedAmount == 0 || trade.RequestedAmount == 0)
+            {
+                ShowError("you can not offer or request 0 resources");
+                return false;
+            }
+            
+            if (originator.Inventory.GetInventoryAmount(trade.OfferedItem) < trade.OfferedAmount)
+            {
+                ShowError("you don't have enough resources to offer");
+                return false;
+            }
+            
+            if (trade.OfferedItem == trade.RequestedItem)
+            {
+                ShowError("Offered resource can not be the same as the requested resource");
+                return false;
+            }
+            
+            return true;
+        }
+        
         public void ProposeDeal()
         {
             Tribe originator = GameManager.Instance.Player;
@@ -51,22 +74,12 @@ namespace Presenters
             int requestedAmount = Convert.ToInt32(requestingResourceAmount.text);
             InventoryItems offeredItem = GetInventoryItemFromDropdown(offeringResourceType);
             InventoryItems requestedItem = GetInventoryItemFromDropdown(requestingResourceType);
-            
-            if (offeredAmount == 0 || requestedAmount == 0)
-            {
-                ShowError("you cant offer or request 0 resources");
-                return;
-            }
-
-            if (originator.Inventory.GetInventoryAmount(offeredItem) < offeredAmount)
-            {
-                ShowError("you don't have enough resources to offer");
-                return;
-            }
-            
             Trade trade = new Trade(requestedItem, requestedAmount, offeredItem, offeredAmount);
-            _tradePresenter.ShowTradeOffer(trade,originator,target);
+            
+            if (!CheckForInputErrors(trade, originator, target)) return;
             HideError();
+            
+            _tradePresenter.ShowTradeOffer(trade,originator,target);
             ToggleInputFallBack();
         }
 
