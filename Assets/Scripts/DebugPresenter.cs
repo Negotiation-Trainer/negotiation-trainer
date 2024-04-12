@@ -120,6 +120,11 @@ public class DebugPresenter : MonoBehaviour
                 {
                     _speechPresenter.StopSpeaking();
                 }
+                
+                if (GUILayout.Button("Start STT"))
+                {
+                    _speechPresenter.StartRecognition();
+                }
             }
 
             if (_tradePresenter)
