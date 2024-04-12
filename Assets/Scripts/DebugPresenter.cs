@@ -11,6 +11,7 @@ public class DebugPresenter : MonoBehaviour
     private DialoguePresenter _dialoguePresenter;
     private SpeechPresenter _speechPresenter;
     private TradePresenter _tradePresenter;
+    private InputPresenter _inputPresenter;
 
     [SerializeField] private InventoryItems debugRequestedItem = InventoryItems.Wood;
     [SerializeField] private int debugRequestedAmount = 2;
@@ -26,6 +27,7 @@ public class DebugPresenter : MonoBehaviour
         _dialoguePresenter = GetComponent<DialoguePresenter>();
         _speechPresenter = GetComponent<SpeechPresenter>();
         _tradePresenter = GetComponent<TradePresenter>();
+        _inputPresenter = GetComponent<InputPresenter>();
 
         StartServices();
     }
@@ -135,6 +137,15 @@ public class DebugPresenter : MonoBehaviour
                     var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem,
                         debugOfferedAmount);
                     _tradePresenter.ShowTradeOffer(trade, _gameManager.Player, _gameManager.Cpu1);
+                }
+            }
+
+            if (_inputPresenter)
+            {
+                GUILayout.Label("Fallback");
+                if (GUILayout.Button("Toggle Fallback"))
+                {
+                    _inputPresenter.ToggleInputFallBack();
                 }
             }
         }
