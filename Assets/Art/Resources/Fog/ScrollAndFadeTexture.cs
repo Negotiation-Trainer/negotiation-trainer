@@ -54,6 +54,16 @@ public class ScrollAndFadeTexture : MonoBehaviour
         }
     }
 
+    public void StartFade()
+    {
+        StartFade(true);
+    }
+
+    public void StopFade()
+    {
+        StartFade(false);
+    }
+
     private void StartFade(bool fadeIn)
     {
         fadeTimer = 0f;
