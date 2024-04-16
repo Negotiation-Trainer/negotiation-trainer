@@ -211,6 +211,7 @@ public class GameManager : MonoBehaviour
         _inventoryPresenter.ShowResourceCard(isActive);
         _scorePresenter.ShowScoreCard(isActive);
         _inputPresenter.ToggleNewOfferButton(isActive);
+        _inputPresenter.ToggleTalkButton(isActive);
     }
 
     /// <summary>

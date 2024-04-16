@@ -31,6 +31,7 @@ namespace Presenters
         public void ShowTradeOffer(Trade trade, Tribe originator, Tribe target)
         {
             _inputPresenter.ToggleNewOfferButton(false);
+            _inputPresenter.ToggleTalkButton(false);
             if(!TradePossible(trade,originator,target)) return;
 
             _currentTrade = trade;
@@ -59,6 +60,7 @@ namespace Presenters
         {
             tradeOffer.SetActive(false);
             ClearOffer();
+            _inputPresenter.ToggleTalkButton(true);
             _inputPresenter.ToggleNewOfferButton(true);
         }
         
@@ -66,7 +68,8 @@ namespace Presenters
          {
              tradeOffer.SetActive(false);
              MakeTrade();
-             _inputPresenter.ToggleNewOfferButton(true);
+             _inputPresenter.ToggleNewOfferButton(true); 
+             _inputPresenter.ToggleTalkButton(true);
          }
 
          private void ClearOffer()
