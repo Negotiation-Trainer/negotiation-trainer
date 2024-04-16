@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
         _scorePresenter = GetComponent<ScorePresenter>();
         _inputPresenter = GetComponent<InputPresenter>();
         
-        ChangeGameState(GameState.Start);
+        ChangeGameState(GameState.Trade);
     }
 
     private void SetPointTables()
