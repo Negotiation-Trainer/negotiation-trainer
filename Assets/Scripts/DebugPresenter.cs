@@ -150,7 +150,7 @@ public class DebugPresenter : MonoBehaviour
                 GUILayout.Label("Fallback");
                 if (GUILayout.Button("Toggle Fallback"))
                 {
-                    _inputPresenter.ToggleInputFallBack();
+                    _inputPresenter.ToggleInputFallBack(true);
                 }
             }
         }

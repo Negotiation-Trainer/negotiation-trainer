@@ -31,10 +31,9 @@ namespace Presenters
         {
             newOfferButton.SetActive(isActive);
         }
-        public void ToggleInputFallBack()
+        public void ToggleInputFallBack(bool isActive)
         {
-            inputFallback.SetActive(!inputFallback.activeSelf);
-            newOfferButton.SetActive(!inputFallback.activeSelf);
+            inputFallback.SetActive(isActive);
         }
 
         private void ShowError(string error)
@@ -70,6 +69,18 @@ namespace Presenters
             
             return true;
         }
+
+        public void ShowProposal()
+        {
+            ToggleNewOfferButton(false);
+            ToggleInputFallBack(true);
+        }
+
+        public void DiscardDeal()
+        {
+            ToggleInputFallBack(false);
+            ToggleNewOfferButton(true);
+        }
         
         public void ProposeDeal()
         {
@@ -85,7 +96,7 @@ namespace Presenters
             HideError();
             
             _tradePresenter.ShowTradeOffer(trade,originator,target);
-            ToggleInputFallBack();
+            ToggleInputFallBack(false);
         }
 
         InventoryItems GetInventoryItemFromDropdown(TMP_Dropdown dropdown)
