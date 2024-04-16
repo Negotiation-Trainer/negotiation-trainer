@@ -22,6 +22,9 @@ namespace Presenters
         [SerializeField] private TMP_Text offerAmount;
         [SerializeField] private TMP_Text requestText;
         [SerializeField] private TMP_Text requestAmount;
+        [SerializeField] private GameObject accepted;
+        [SerializeField] private GameObject rejected;
+        
 
         private void Start()
         {
@@ -66,10 +69,7 @@ namespace Presenters
         
          public void SignTradeOffer()
          {
-             tradeOffer.SetActive(false);
              MakeTrade();
-             _inputPresenter.ToggleNewOfferButton(true); 
-             _inputPresenter.ToggleTalkButton(true);
          }
 
          private void ClearOffer()
@@ -77,13 +77,19 @@ namespace Presenters
              _currentTrade = null;
              _originator = null;
              _target = null;
+             tradeOffer.SetActive(false);
+             accepted.SetActive(false);
+             rejected.SetActive(false);
+             _inputPresenter.ToggleNewOfferButton(true); 
+             _inputPresenter.ToggleTalkButton(true);
          }
-        
+         
         private void MakeTrade()
         {
             if (_currentTrade == null || _originator == null || _target == null) return;
             if (_algorithmService.Decide(_currentTrade, _originator, _target))
             {
+                accepted.SetActive(true);
                 Debug.Log("Trade accepted");
                 _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
                 _target.Inventory.AddToInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
@@ -93,9 +99,10 @@ namespace Presenters
             }
             else
             {
+                rejected.SetActive(true);
                 Debug.Log("Trade Refused");
             }
-            ClearOffer();
+            Invoke(nameof(ClearOffer), 2);
         }
 
         private bool TradePossible(Trade trade, Tribe originator, Tribe target)

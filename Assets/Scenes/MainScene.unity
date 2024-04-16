@@ -1207,6 +1207,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 728331610}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &745649954 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8626030030561570777, guid: f3a62f26a1771df4d976dcd566a6365f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2574284203544505455}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &775158769 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1036338159395072767, guid: f3a62f26a1771df4d976dcd566a6365f,
@@ -1512,6 +1518,8 @@ MonoBehaviour:
   offerAmount: {fileID: 158535949}
   requestText: {fileID: 499209856}
   requestAmount: {fileID: 1493344157}
+  accepted: {fileID: 1341737135}
+  rejected: {fileID: 745649954}
 --- !u!114 &969265025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2065,6 +2073,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1341737135 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1977581406805014396, guid: f3a62f26a1771df4d976dcd566a6365f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2574284203544505455}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1375115311
 GameObject:
   m_ObjectHideFlags: 0
@@ -3660,6 +3674,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Presenters.InputPresenter, NegotiationTrainer
+      objectReference: {fileID: 0}
+    - target: {fileID: 9019067505555348869, guid: f3a62f26a1771df4d976dcd566a6365f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
