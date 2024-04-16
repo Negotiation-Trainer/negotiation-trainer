@@ -5,6 +5,7 @@ using Cinemachine;
 using Enums;
 using Models;
 using Presenters;
+using ServiceLibrary;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     private InventoryPresenter _inventoryPresenter;
     private ScorePresenter _scorePresenter;
     private InputPresenter _inputPresenter;
+    public AIService AIService;
     
     public enum GameState
     {
@@ -258,7 +260,7 @@ public class GameManager : MonoBehaviour
     {
         var baseUrl = aiBaseURL.text;
         var sessionPassword = aiSessionPassword.text;
-        Debug.Log($"{baseUrl}, {sessionPassword}");
+        AIService = new AIService(baseUrl,sessionPassword);
         ChangeGameState(GameState.Introduction);
     }
     

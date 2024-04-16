@@ -41,6 +41,11 @@ namespace Presenters
             {
                 Debug.Log($"{eventArgs.Text} -isFinal:{eventArgs.IsFinal}");
             }
+
+            if (eventArgs.IsFinal)
+            {
+                Debug.Log(GameManager.Instance.AIService.ConvertToTrade(eventArgs.Text));
+            }
         }
 
         private void OnTextToSpeechFinished(object sender, EventArgs eventArgs)
