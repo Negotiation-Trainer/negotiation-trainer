@@ -5,6 +5,7 @@ using Cinemachine;
 using Enums;
 using Models;
 using Presenters;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
@@ -220,6 +221,7 @@ public class GameManager : MonoBehaviour
     private void HandleGameStartState()
     {
         ToggleTradeUI(false);
+        ToggleAIOptions(true);
     }
 
 
@@ -229,6 +231,7 @@ public class GameManager : MonoBehaviour
     private void HandleIntroductionState()
     {
         ToggleTradeUI(false);
+        ToggleAIOptions(false);
     }
 
     /// <summary>
@@ -238,5 +241,28 @@ public class GameManager : MonoBehaviour
     {
         ToggleTradeUI(true);
     }
+
+    #region tempSetting
+
+    [SerializeField] private GameObject aiOptions;
+    [SerializeField] private TMP_InputField aiBaseURL;
+    [SerializeField] private TMP_InputField aiSessionPassword;
+    
+
+    private void ToggleAIOptions(bool isActive)
+    {
+        aiOptions.SetActive(isActive);
+    }
+
+    public void OnAIOkButton()
+    {
+        var baseUrl = aiBaseURL.text;
+        var sessionPassword = aiSessionPassword.text;
+        Debug.Log($"{baseUrl}, {sessionPassword}");
+        ChangeGameState(GameState.Introduction);
+    }
+    
+
+    #endregion
 
 }
