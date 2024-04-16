@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Cinemachine;
-using Enums;
-using Models;
+using ModelLibrary;
 using Presenters;
 using ServiceLibrary;
 using TMPro;
@@ -22,7 +21,7 @@ public class GameManager : MonoBehaviour
     private InventoryPresenter _inventoryPresenter;
     private ScorePresenter _scorePresenter;
     private InputPresenter _inputPresenter;
-    public AIService AIService;
+    //public AIService AIService;
     
     public enum GameState
     {
@@ -38,6 +37,19 @@ public class GameManager : MonoBehaviour
         Player = new Tribe("Azari");
         Cpu1 = new Tribe("Beluga");
         Cpu2 = new Tribe("Cinatu");
+
+        Player.GoodWill = new Dictionary<Tribe, int>();
+        Cpu1.GoodWill = new Dictionary<Tribe, int>();
+        Cpu2.GoodWill = new Dictionary<Tribe, int>();
+        
+        Player.GoodWill[Cpu1] = 0;
+        Player.GoodWill[Cpu2] = 0;
+
+        Cpu1.GoodWill[Player] = 0;
+        Cpu1.GoodWill[Cpu2] = 0;
+
+        Cpu2.GoodWill[Player] = 0;
+        Cpu2.GoodWill[Cpu1] = 0;
         
         SetPointTables();
         FillInventory();
@@ -260,7 +272,7 @@ public class GameManager : MonoBehaviour
     {
         var baseUrl = aiBaseURL.text;
         var sessionPassword = aiSessionPassword.text;
-        AIService = new AIService(baseUrl,sessionPassword);
+        //AIService = new AIService(baseUrl,sessionPassword);
         ChangeGameState(GameState.Introduction);
     }
     

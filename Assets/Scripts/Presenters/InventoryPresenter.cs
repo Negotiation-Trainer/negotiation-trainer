@@ -1,6 +1,5 @@
 using System;
-using Enums;
-using Models;
+using ModelLibrary;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Enums;
-using Models;
+using ModelLibrary;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

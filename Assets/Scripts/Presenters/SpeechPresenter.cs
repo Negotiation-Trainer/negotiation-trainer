@@ -44,7 +44,7 @@ namespace Presenters
 
             if (eventArgs.IsFinal)
             {
-                Debug.Log(GameManager.Instance.AIService.ConvertToTrade(eventArgs.Text));
+                //Debug.Log(GameManager.Instance.AIService.ConvertToTrade(eventArgs.Text));
             }
         }
 
