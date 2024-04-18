@@ -1577,7 +1577,7 @@ GameObject:
   - component: {fileID: 196737412}
   - component: {fileID: 196737413}
   m_Layer: 0
-  m_Name: Virtual Camera (Intro CloseUp)
+  m_Name: Virtual Camera (Intro)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1591,8 +1591,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 196737411}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.07524881, y: 0.9042712, z: -0.1789342, w: -0.3802813}
-  m_LocalPosition: {x: 25.123672, y: 27.979065, z: 24.588058}
+  m_LocalRotation: {x: 0.007896862, y: 0.96560645, z: -0.25819975, w: 0.029578604}
+  m_LocalPosition: {x: -13.208134, y: 42.853703, z: 122.2753}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4172,7 +4172,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2562445738788182057, guid: 433208bdae48b5e44a67c872a232ada0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1670854939}
   m_SourcePrefab: {fileID: 100100000, guid: 433208bdae48b5e44a67c872a232ada0, type: 3}
 --- !u!4 &1194139485 stripped
 Transform:
@@ -5321,6 +5325,28 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1774331029}
+--- !u!1 &1670854935 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2562445738788182057, guid: 433208bdae48b5e44a67c872a232ada0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1194139484}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1670854939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670854935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86b7c9f3e9e129d488707bac2aa85ce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 0
+  inactiveSpeed: 0
+  activeSpeed: 500
+  maxSpeed: 1500
 --- !u!1 &1680688287
 GameObject:
   m_ObjectHideFlags: 3

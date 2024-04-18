@@ -1,20 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class RotationScript : MonoBehaviour
+public class FanController : MonoBehaviour
 {
-    [SerializeField] private float speed = 1;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public bool isActive = false;
+    public float inactiveSpeed = 0f; // Speed when inactive
+    public float activeSpeed = 500f; // Speed when active
+    public float maxSpeed = 1000f; // Maximum speed allowed in editor
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private float currentSpeed; // Current speed of rotation
+
+    void Update()
     {
-        transform.Rotate(new Vector3(0,1 * speed * Time.deltaTime,0), Space.Self);
+        // Calculate the target speed based on the isActive boolean
+        float targetSpeed = isActive ? activeSpeed : inactiveSpeed;
+        
+        // Clamp the target speed to the maximum speed
+        targetSpeed = Mathf.Clamp(targetSpeed, 0f, maxSpeed);
+
+        // Lerping the current speed towards the target speed
+        currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 5f);
+
+        // Rotate the fan on the Z-axis
+        transform.Rotate(Vector3.forward * currentSpeed * Time.deltaTime);
     }
 }
