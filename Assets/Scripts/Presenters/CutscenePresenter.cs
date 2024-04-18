@@ -1,10 +1,23 @@
+using System;
 using Cinemachine;
+using ServiceLibrary;
+using TMPro;
 using UnityEngine;
 
 namespace Presenters
 {
     public class CutscenePresenter : MonoBehaviour
     {
+        [SerializeField] private GameObject island;
+        [SerializeField] private Vector3 targetPosition;
+        [SerializeField] private GameObject board;
+        [SerializeField] private float speed = 1f;
+        private bool _transitioning = false;
+
+        [SerializeField] private ScrollAndFadeTexture fogScript;
+        [SerializeField] private FanController fanScript;
+        
+        
         [SerializeField] private CinemachineVirtualCamera[] virtualCameras;
         [SerializeField] private int[] switchMoment;
         [SerializeField] private bool switchCamera = false;
@@ -14,6 +27,8 @@ namespace Presenters
         private float _max;
         private float _min;
         private DialoguePresenter _dialoguePresenter;
+        private readonly DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
+        
 
         private int index = 0;
         // Start is called before the first frame update
@@ -38,7 +53,36 @@ namespace Presenters
             _darken = true;
         }
 
-        // Update is called once per frame
+        public void StartMoveIsland()
+        {
+            Invoke(nameof(MoveIsland), 1f);
+        }
+
+        private void MoveIsland()
+        {
+            _transitioning = true;
+        }
+
+        private void FixedUpdate()
+        {
+            if (_transitioning)
+            {
+                island.transform.position = Vector3.MoveTowards(island.transform.position, targetPosition, speed);
+                if (island.transform.position.Compare(targetPosition, 100))
+                {
+                    _dialoguePresenter.QueueMessages(
+                        _dialogueGenerationService.SplitTextToInstructionMessages(
+                            _dialoguePresenter.GetInstruction("general")));
+                    _dialoguePresenter.ShowNextMessage();
+                    UnDarken();
+                    fogScript.StopFade();
+                    fanScript.isActive = true;
+                    board.SetActive(false);
+                    _transitioning = false;
+                }
+            }
+        }
+        
         void Update()
         {
             if (_darken)

@@ -3,8 +3,8 @@ using UnityEngine;
 public class ScrollAndFadeTexture : MonoBehaviour
 {
     public float scrollSpeed = 0.5f;
-    public float fadeInTime = 1f;
-    public float fadeOutTime = 1f;
+    public float fadeInTime = 3f;
+    public float fadeOutTime = 3f;
     private Renderer rend;
     private float currentAlpha = 0f;
     private float targetAlpha = 0f;
