@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private InventoryPresenter _inventoryPresenter;
     private ScorePresenter _scorePresenter;
     private InputPresenter _inputPresenter;
-    //public AIService AIService;
+    public AIService AIService;
     
     public enum GameState
     {
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         _scorePresenter = GetComponent<ScorePresenter>();
         _inputPresenter = GetComponent<InputPresenter>();
         
-        ChangeGameState(GameState.Trade);
+        ChangeGameState(GameState.Start);
     }
 
     private void SetPointTables()
@@ -254,6 +254,7 @@ public class GameManager : MonoBehaviour
     private void HandleTradeState()
     {
         ToggleTradeUI(true);
+        ToggleAIOptions(false);
     }
 
     #region tempSetting
@@ -272,8 +273,8 @@ public class GameManager : MonoBehaviour
     {
         var baseUrl = aiBaseURL.text;
         var sessionPassword = aiSessionPassword.text;
-        //AIService = new AIService(baseUrl,sessionPassword);
-        ChangeGameState(GameState.Introduction);
+        AIService = new AIService(baseUrl,sessionPassword);
+        ChangeGameState(GameState.Trade);
     }
     
 

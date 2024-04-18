@@ -10700,6 +10700,7 @@ GameObject:
   - component: {fileID: 3175395048865588673}
   - component: {fileID: 3093180978400971610}
   - component: {fileID: 361824390708694225}
+  - component: {fileID: 5245278843673126999}
   m_Layer: 5
   m_Name: Base_URL
   m_TagString: Untagged
@@ -10863,6 +10864,19 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
+--- !u!114 &5245278843673126999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5046553397049837084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc33a39070010f94fb1c2dd721c1286d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showHtmlElement: 0
 --- !u!1 &5056135841403902042
 GameObject:
   m_ObjectHideFlags: 0
@@ -20331,6 +20345,7 @@ GameObject:
   - component: {fileID: 1230535655543973956}
   - component: {fileID: 3836575832092663608}
   - component: {fileID: 7334482916885438767}
+  - component: {fileID: 7472533420952739159}
   m_Layer: 5
   m_Name: Session_Password
   m_TagString: Untagged
@@ -20494,6 +20509,19 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
+--- !u!114 &7472533420952739159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9052816968306303813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc33a39070010f94fb1c2dd721c1286d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showHtmlElement: 0
 --- !u!1 &9122322941681306858
 GameObject:
   m_ObjectHideFlags: 0

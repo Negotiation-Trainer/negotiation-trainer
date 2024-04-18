@@ -29,7 +29,7 @@ namespace Presenters
 
         public void ToggleTalkButton(bool isActive)
         {
-            talkButton.SetActive(false);
+            talkButton.SetActive(isActive);
         }
         public void ToggleNewOfferButton(bool isActive)
         {
