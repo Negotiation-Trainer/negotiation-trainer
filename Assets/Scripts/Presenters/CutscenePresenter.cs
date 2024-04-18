@@ -25,14 +25,14 @@ namespace Presenters
         public void Darken()
         {
             _min = 0;
-            _max = 1;
+            _max = 2.5f;
             _t = 0;
             _darken = true;
         }
 
         public void UnDarken()
         {
-            _min = 1;
+            _min = 2.5f;
             _max = 0;
             _t = 0;
             _darken = true;
