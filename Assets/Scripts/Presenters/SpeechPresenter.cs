@@ -1,4 +1,5 @@
 using System;
+using ModelLibrary;
 using ServiceLibrary;
 using SpeechServices;
 using TMPro;
@@ -16,6 +17,8 @@ namespace Presenters
         public bool speechToTextEnabled = false;
         public bool textToSpeechEnabled = false;
         public event EventHandler TTSFinished;
+
+        private TradePresenter _tradePresenter;
         
         public void StartRecognition()
         {
@@ -44,7 +47,16 @@ namespace Presenters
 
             if (eventArgs.IsFinal)
             {
-                Debug.Log(GameManager.Instance.AIService.ConvertToTrade(eventArgs.Text));
+                try
+                {
+                    Trade trade = GameManager.Instance.AIService.ConvertToTrade(eventArgs.Text);
+                    Debug.Log($"trade: {trade}");
+                    _tradePresenter.ShowTradeOffer(trade, GameManager.Instance.Player, GameManager.Instance.Cpu1);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                }
             }
         }
 
@@ -76,6 +88,8 @@ namespace Presenters
     
         void Start()
         {
+            _tradePresenter = GetComponent<TradePresenter>();
+            
             if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor)
             {
                 _speechToTextService = gameObject.AddComponent<WebGLSpeechToTextService>();
