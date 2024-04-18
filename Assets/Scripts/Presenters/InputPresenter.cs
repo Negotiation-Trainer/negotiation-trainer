@@ -96,7 +96,7 @@ namespace Presenters
             int requestedAmount = Convert.ToInt32(requestingResourceAmount.text);
             InventoryItems offeredItem = GetInventoryItemFromDropdown(offeringResourceType);
             InventoryItems requestedItem = GetInventoryItemFromDropdown(requestingResourceType);
-            Trade trade = new Trade(requestedItem, requestedAmount, offeredItem, offeredAmount);
+            Trade trade = new Trade(requestedItem, requestedAmount, offeredItem, offeredAmount, targetTribe.name, originator.Name);
             
             if (!CheckForInputErrors(trade, originator, target)) return;
             HideError();
