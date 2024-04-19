@@ -62,18 +62,80 @@ public class GameManager : MonoBehaviour
         _inventoryPresenter = GetComponent<InventoryPresenter>();
         _scorePresenter = GetComponent<ScorePresenter>();
         _inputPresenter = GetComponent<InputPresenter>();
-        StartCoroutine(Post("authenticate/", new Dictionary<string, string>(), new SessionPassword("1G6Y")));
+        Debug.Log("Starting");
+        Debug.Log(webResponse);
+        StartCoroutine(
+            Post("https://negotiation-game.azurewebsites.net/api/v1/authenticate", new Dictionary<string, string>(), new SessionPassword("1G6Y")
+            , (response) => { Debug.Log("callbackResponse: " + response); }));
+        Debug.Log("Done");
+        Debug.Log(webResponse);
         ChangeGameState(GameState.Start);
     }
+
+
+    IEnumerator GetSessionToken()
+    {
+        string jsonBody = JsonUtility.ToJson(new SessionPassword("1G6Y"));
+        using (UnityWebRequest www = UnityWebRequest.Post("https://negotiation-game.azurewebsites.net/api/v1/authenticate", jsonBody, "application/json"))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(www.error);
+                Debug.Log(www.downloadHandler.text);
+            }
+            else
+            {
+                Debug.Log(www.downloadHandler.text);
+            }
+        }
+    }
     
-    protected string Post<T>(string pathUrl, Dictionary<string, string> headers, T body)
+    
+
+    public string webResponse = "not set yet";
+
+    IEnumerator Post<T>(string pathUrl, Dictionary<string, string> headers, T body, Action<string> callback = null)
+    {
+        string jsonBody = JsonUtility.ToJson(body) ?? "{}";
+        
+        using (UnityWebRequest wr = UnityWebRequest.Post($"{pathUrl}", jsonBody, "application/json"))
+        {
+            foreach (KeyValuePair<string, string> header in headers)
+            {
+                wr.SetRequestHeader(header.Key, header.Value);
+            }
+            
+            yield return wr.SendWebRequest();
+            
+            if (wr.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(wr.error);
+                Debug.Log(wr.downloadHandler.text);
+            }
+            else
+            {
+                Debug.Log(wr.downloadHandler.text);
+            }
+            
+            webResponse = wr.downloadHandler.text;
+            callback?.Invoke(wr.downloadHandler.text);
+        }
+    }
+    
+    protected string Post<T>(string pathUrl, string bla, Dictionary<string, string> headers, T body)
     {
         // Add the body to the request when it is not null
-        string bodyJson = body != null ? JsonUtility.ToJson(body) : "";
+        string bodyJson = body != null ? JsonUtility.ToJson(body) : "{}";
+        
+        Debug.Log(bodyJson);
 
 
-        using UnityWebRequest request = UnityWebRequest.PostWwwForm($"https://negotiation-game.azurewebsites.net/api/v1/{pathUrl}", bodyJson);
-            
+        using UnityWebRequest request = UnityWebRequest.Post($"https://negotiation-game.azurewebsites.net/api/v1/{pathUrl}", bodyJson, "application/json");
+        
+        
+        
         foreach (KeyValuePair<string, string> header in headers)
         {
             request.SetRequestHeader(header.Key, header.Value);
@@ -83,7 +145,16 @@ public class GameManager : MonoBehaviour
 
         // Wait for the request to complete
         while (!operation.isDone) {Debug.Log("waiting"); }
-
+        
+        Debug.Log(request.result);
+        Debug.Log(request.error);
+        Debug.Log(request.downloadHandler.text);
+        
+        var test = JsonUtility.FromJson<TokenResponse>(request.downloadHandler.text);
+        
+        Debug.Log(test);
+        Debug.Log(test.token);
+        
         string resultText;
         switch (request.result)
         {
@@ -320,13 +391,18 @@ public class GameManager : MonoBehaviour
 
     #endregion
     
-    public class SessionPassword
+    private class SessionPassword
     {
-        private string _sessionPassword;
+        public string sessionPassword;
         public SessionPassword(string sessionPassword)
         {
-            _sessionPassword = sessionPassword;
+            this.sessionPassword = sessionPassword;
         }
+    }
+
+    private class TokenResponse
+    {
+        public string token;
     }
 
 }
