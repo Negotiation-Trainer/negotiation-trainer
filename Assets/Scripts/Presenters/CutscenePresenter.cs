@@ -58,6 +58,11 @@ namespace Presenters
             Invoke(nameof(MoveIsland), 1f);
         }
 
+        public void StartGame()
+        {
+            switchCamera = true;
+        }
+
         private void MoveIsland()
         {
             _transitioning = true;
