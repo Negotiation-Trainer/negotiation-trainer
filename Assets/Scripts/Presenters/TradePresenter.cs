@@ -1,3 +1,4 @@
+using System;
 using Enums;
 using Models;
 using ServiceLibrary;
@@ -10,6 +11,7 @@ namespace Presenters
     public class TradePresenter: MonoBehaviour
     {
         private readonly AlgorithmService _algorithmService = new AlgorithmService();
+        private InputPresenter _inputPresenter;
         
         private Trade _currentTrade;
         private Tribe _originator;
@@ -21,8 +23,14 @@ namespace Presenters
         [SerializeField] private TMP_Text requestText;
         [SerializeField] private TMP_Text requestAmount;
 
+        private void Start()
+        {
+            _inputPresenter = GetComponent<InputPresenter>();
+        }
+
         public void ShowTradeOffer(Trade trade, Tribe originator, Tribe target)
         {
+            _inputPresenter.ToggleNewOfferButton(false);
             if(!TradePossible(trade,originator,target)) return;
 
             _currentTrade = trade;
@@ -51,12 +59,14 @@ namespace Presenters
         {
             tradeOffer.SetActive(false);
             ClearOffer();
+            _inputPresenter.ToggleNewOfferButton(true);
         }
         
          public void SignTradeOffer()
          {
              tradeOffer.SetActive(false);
              MakeTrade();
+             _inputPresenter.ToggleNewOfferButton(true);
          }
 
          private void ClearOffer()

@@ -19,16 +19,15 @@ namespace SpeechServices
         
         public bool CheckSupport()
         {
-            return CheckSTTBrowserSupported();
-        }
+            if (CheckSTTBrowserSupported())
+            {
+                SetupSpeechRecognition(gameObject.name, nameof(OnLiveSpeechTranscribe), nameof(OnFinalSpeechRecognized));
+                return true;
+            }
 
-        private void Start()
-        {
-            //setup javascript code to recognize speech.
-            //given are the game object and functions on that object, that should be called when speech is recognized
-            SetupSpeechRecognition(gameObject.name, nameof(OnLiveSpeechTranscribe), nameof(OnFinalSpeechRecognized));
+            return false;
         }
-
+        
         public void StartRecognition()
         {
             if (!IsListening())
