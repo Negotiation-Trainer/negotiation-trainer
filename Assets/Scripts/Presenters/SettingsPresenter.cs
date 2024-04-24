@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -11,6 +10,8 @@ namespace Presenters
         [SerializeField] private GameObject settingsMenu;
         [SerializeField] private TMP_Dropdown selectedVoice;
         [SerializeField] private Slider voiceVolume;
+        [SerializeField] private Toggle speechRecognitionToggle ;
+        public bool fallbackEnabled = false;
         private SpeechPresenter _speechPresenter;
 
         private void Start()
@@ -18,6 +19,7 @@ namespace Presenters
             _speechPresenter = GetComponent<SpeechPresenter>();
             selectedVoice.onValueChanged.AddListener(SelectedVoiceChanged);
             voiceVolume.onValueChanged.AddListener(VoiceVolumeChanged);
+            speechRecognitionToggle.onValueChanged.AddListener(FallbackEnabledChanged);
         }
 
         public void ShowSettingsMenu(bool isActive)
@@ -25,6 +27,7 @@ namespace Presenters
             selectedVoice.ClearOptions();
             selectedVoice.AddOptions(_speechPresenter.PossibleVoices().ToList());
             voiceVolume.value = _speechPresenter.GetSpeechVolume();
+            speechRecognitionToggle.isOn = fallbackEnabled;
             settingsMenu.SetActive(isActive);
         }
 
@@ -37,5 +40,11 @@ namespace Presenters
         {
             _speechPresenter.SetSpeechVolume(value);
         }
+
+        private void FallbackEnabledChanged(bool isActive)
+        {
+            fallbackEnabled = isActive;
+        }
+        
     }
 }

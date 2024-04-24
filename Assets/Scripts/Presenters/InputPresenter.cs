@@ -4,7 +4,6 @@ using Enums;
 using Models;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Presenters
 {
@@ -19,9 +18,11 @@ namespace Presenters
         [SerializeField] private TMP_Dropdown targetTribe;
         [SerializeField] private TMP_Text errorText;
         private TradePresenter _tradePresenter;
+        private SettingsPresenter _settingsPresenter;
 
         private void Start()
         {
+            _settingsPresenter = GetComponent<SettingsPresenter>();
            _tradePresenter = GetComponent<TradePresenter>();
            targetTribe.ClearOptions();
            targetTribe.AddOptions(new List<string>(){GameManager.Instance.Cpu1.Name,GameManager.Instance.Cpu2.Name});
@@ -29,7 +30,7 @@ namespace Presenters
 
         public void ToggleNewOfferButton(bool isActive)
         {
-            newOfferButton.SetActive(isActive);
+            newOfferButton.SetActive(isActive && _settingsPresenter.fallbackEnabled);
         }
         public void ToggleInputFallBack(bool isActive)
         {

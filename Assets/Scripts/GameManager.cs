@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Cinemachine;
 using Enums;
 using Models;
 using Presenters;
 using UnityEngine;
-using UnityEngine.Playables;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -69,6 +65,7 @@ public class GameManager : MonoBehaviour
     }
     private void PauseGame()
     {
+        ToggleTradeUI(false);
         pauseMenu.SetActive(true);
         pauseButton.gameObject.SetActive(false);
     }
@@ -78,6 +75,7 @@ public class GameManager : MonoBehaviour
         _settingsPresenter.ShowSettingsMenu(false);
         pauseMenu.SetActive(false);
         pauseButton.gameObject.SetActive(true);
+        if(State == GameState.Trade) ToggleTradeUI(true);
     }
 
     private void SetPointTables()

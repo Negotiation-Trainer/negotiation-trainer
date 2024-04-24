@@ -1589,6 +1589,8 @@ MonoBehaviour:
   settingsMenu: {fileID: 2034868465}
   selectedVoice: {fileID: 1938347837}
   voiceVolume: {fileID: 1023694032}
+  speechRecognitionToggle: {fileID: 1063817172}
+  fallbackEnabled: 0
 --- !u!114 &969265032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1635,7 +1637,6 @@ GameObject:
   - component: {fileID: 997226269}
   - component: {fileID: 997226270}
   - component: {fileID: 997226271}
-  - component: {fileID: 997226272}
   m_Layer: 0
   m_Name: Main Camera (1)
   m_TagString: MainCamera
@@ -1836,18 +1837,6 @@ PlayableDirector:
     - afb02a9c046c95e4980f63024100e4bb: {fileID: 1268383168}
     - c272688d2dba0844480c6c6941fee033: {fileID: 2145771373}
     - 84e656e95e3b19241a19b9e65deb5d2f: {fileID: 0}
---- !u!114 &997226272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997226265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ca0a92044899b7418dc782bb9c580a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1023694032 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1660892726096246269, guid: f3a62f26a1771df4d976dcd566a6365f,
@@ -1858,6 +1847,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1063817172 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3177548034663679140, guid: f3a62f26a1771df4d976dcd566a6365f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2574284203544505455}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1077681865 stripped
