@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     private InventoryPresenter _inventoryPresenter;
     private ScorePresenter _scorePresenter;
-    //private InputPresenter _inputPresenter;
+    private InputPresenter _inputPresenter;
     private SettingsPresenter _settingsPresenter;
     
     public enum GameState
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     {
         _inventoryPresenter = GetComponent<InventoryPresenter>();
         _scorePresenter = GetComponent<ScorePresenter>();
-        //_inputPresenter = GetComponent<InputPresenter>();
+        _inputPresenter = GetComponent<InputPresenter>();
         _settingsPresenter = GetComponent<SettingsPresenter>();
         
         settingsButton.onClick.AddListener(ShowSettingsMenu);
@@ -241,7 +241,7 @@ public class GameManager : MonoBehaviour
     {
         _inventoryPresenter.ShowResourceCard(isActive);
         _scorePresenter.ShowScoreCard(isActive);
-        //_inputPresenter.ToggleNewOfferButton(isActive);
+        _inputPresenter.ToggleNewOfferButton(isActive);
     }
 
     /// <summary>
