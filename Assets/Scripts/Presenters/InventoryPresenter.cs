@@ -33,7 +33,7 @@ namespace Presenters
             _gameManager = GameManager.Instance;
             _player = _gameManager.Player;
             
-            _originalPosition = resourceCard.position;
+            _originalPosition = resourceCard.localPosition;
             _targetPosition = _originalPosition;
             
             _player.Inventory.InventoryUpdate += OnInventoryUpdate;
@@ -50,7 +50,7 @@ namespace Presenters
             if(_transitioning) return;
             if (_targetPosition.Compare(_originalPosition, 100))
             {
-                _targetPosition = resourceCardTarget.position;
+                _targetPosition = new Vector3(0,0,0);
                 _transitioning = true;
             }
             else
@@ -76,8 +76,8 @@ namespace Presenters
         {
             if (_transitioning)
             {
-                resourceCard.position = Vector3.MoveTowards(resourceCard.position, _targetPosition, speed);
-                if (resourceCard.position.Compare(_targetPosition, 100)) _transitioning = false;
+                resourceCard.localPosition = Vector3.MoveTowards(resourceCard.localPosition, _targetPosition, speed);
+                if (resourceCard.localPosition.Compare(_targetPosition, 100)) _transitioning = false;
             }
         }
     }
