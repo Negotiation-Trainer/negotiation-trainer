@@ -9,8 +9,8 @@ namespace SpeechServices
         public void StopSpeech();
         public string[] GetPossibleVoices();
         public void SetSpeechVoice(int voice);
-        public int GetSpeechVolume();
-        public void SetSpeechVolume(int volume);
+        public float GetSpeechVolume();
+        public void SetSpeechVolume(float volume);
         public int GetSpeechRate();
         public void SetSpeechRate(int speakingRate);
         public bool CheckSupport();

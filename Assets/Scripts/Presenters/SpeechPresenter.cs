@@ -9,8 +9,8 @@ namespace Presenters
     public class SpeechPresenter : MonoBehaviour
     {
         [SerializeField] private bool debugMode = false;
-        [SerializeField] private GameObject error;
-        [SerializeField] private TMP_Text errorMessage;
+        //[SerializeField] private GameObject error;
+        //[SerializeField] private TMP_Text errorMessage;
         private ISpeechToTextService _speechToTextService;
         private ITextToSpeechService _textToSpeechService;
         public bool speechToTextEnabled = false;
@@ -60,13 +60,13 @@ namespace Presenters
             _textToSpeechService.SetSpeechVoice(voice);
         }
 
-        public int GetSpeechVolume()
+        public float GetSpeechVolume()
         {
             if (!textToSpeechEnabled) return 0;
             return _textToSpeechService.GetSpeechVolume();
         }
 
-        public void SetSpeechVolume(int volume)
+        public void SetSpeechVolume(float volume)
         {
             if (!textToSpeechEnabled) return;
             _textToSpeechService.SetSpeechVolume(volume);
@@ -84,7 +84,7 @@ namespace Presenters
             _textToSpeechService.SetSpeechRate(speakingRate);
         }
         
-        private void ShowErrors()
+        /*private void ShowErrors()
         {
             if (!textToSpeechEnabled && !speechToTextEnabled)
             {
@@ -103,7 +103,7 @@ namespace Presenters
         public void HideError()
         {
             error.SetActive(false);
-        }
+        }*/
         
         void Start()
         {
@@ -134,7 +134,7 @@ namespace Presenters
 
             if (!textToSpeechEnabled || !speechToTextEnabled)
             {
-                ShowErrors();
+                //ShowErrors();
             }
         }
     }

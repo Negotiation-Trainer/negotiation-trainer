@@ -25,10 +25,10 @@ namespace SpeechServices
         private static extern void SetVoice(int voiceIndex);
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern int GetVolume();
+        private static extern float GetVolume();
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern void SetVolume(int volume);
+        private static extern void SetVolume(float volume);
         
         [System.Runtime.InteropServices.DllImport("__Internal")]
         private static extern int GetSpeakingRate();
@@ -47,7 +47,7 @@ namespace SpeechServices
         public string[] GetPossibleVoices()
         {
             string[] voices = GetVoices().Split('#');
-            voices = voices.Select(voice => voice.Length > 27 ? voice.Substring(0, 27) : voice).ToArray();
+            voices = voices.Select(voice => voice.Length > 26 ? voice.Substring(0, 26) : voice).ToArray();
             return voices;
         }
         
@@ -56,12 +56,12 @@ namespace SpeechServices
             SetVoice(voice);
         }
         
-        public int GetSpeechVolume()
+        public float GetSpeechVolume()
         {
             return GetVolume();
         }
         
-        public void SetSpeechVolume(int volume)
+        public void SetSpeechVolume(float volume)
         {
             SetVolume(volume);
         }
