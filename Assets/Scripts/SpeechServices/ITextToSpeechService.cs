@@ -13,6 +13,8 @@ namespace SpeechServices
         public void SetSpeechVolume(float volume);
         public int GetSpeechRate();
         public void SetSpeechRate(int speakingRate);
+        public void PauseSpeech();
+        public void ResumeSpeech(); 
         public bool CheckSupport();
     }
 }

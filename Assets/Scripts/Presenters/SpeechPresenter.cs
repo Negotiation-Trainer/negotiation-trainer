@@ -1,5 +1,4 @@
 using System;
-using ServiceLibrary;
 using SpeechServices;
 using TMPro;
 using UnityEngine;
@@ -82,6 +81,18 @@ namespace Presenters
         {
             if (!textToSpeechEnabled) return;
             _textToSpeechService.SetSpeechRate(speakingRate);
+        }
+
+        public void Pause()
+        {
+            if (!textToSpeechEnabled) return;
+            _textToSpeechService.PauseSpeech();
+        }
+
+        public void Resume()
+        {
+            if (!textToSpeechEnabled) return;
+            _textToSpeechService.ResumeSpeech();
         }
         
         private void ShowErrors()

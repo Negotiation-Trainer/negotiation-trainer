@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     private ScorePresenter _scorePresenter;
     private InputPresenter _inputPresenter;
     private SettingsPresenter _settingsPresenter;
+    private SpeechPresenter _speechPresenter;
     
     public enum GameState
     {
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
         _scorePresenter = GetComponent<ScorePresenter>();
         _inputPresenter = GetComponent<InputPresenter>();
         _settingsPresenter = GetComponent<SettingsPresenter>();
+        _speechPresenter = GetComponent<SpeechPresenter>();
         
         settingsButton.onClick.AddListener(ShowSettingsMenu);
         pauseButton.onClick.AddListener(PauseGame);
@@ -68,6 +70,7 @@ public class GameManager : MonoBehaviour
         ToggleTradeUI(false);
         pauseMenu.SetActive(true);
         pauseButton.gameObject.SetActive(false);
+        _speechPresenter.Pause();
     }
     
     private void UnpauseGame()
@@ -76,6 +79,7 @@ public class GameManager : MonoBehaviour
         pauseMenu.SetActive(false);
         pauseButton.gameObject.SetActive(true);
         if(State == GameState.Trade) ToggleTradeUI(true);
+        _speechPresenter.Resume();
     }
 
     private void SetPointTables()

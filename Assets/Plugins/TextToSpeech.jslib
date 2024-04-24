@@ -33,7 +33,7 @@ mergeInto(LibraryManager.library, {
     },
 
     Pause: function() {
-        speechSynthesis.Pause();
+        speechSynthesis.pause();
     },
 
     Resume: function() {

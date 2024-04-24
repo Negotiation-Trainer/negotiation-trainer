@@ -75,6 +75,16 @@ namespace SpeechServices
         {
             SetSpeakingRate(speakingRate);
         }
+
+        public void PauseSpeech()
+        {
+            Pause();
+        }
+
+        public void ResumeSpeech()
+        {
+            Resume();
+        }
         
         public bool CheckSupport()
         {
