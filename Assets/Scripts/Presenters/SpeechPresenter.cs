@@ -47,15 +47,51 @@ namespace Presenters
         {
             TTSFinished?.Invoke(this,EventArgs.Empty);
         }
+        
+        public string[] PossibleVoices()
+        {
+            if (!textToSpeechEnabled) return new []{""};
+            return _textToSpeechService.GetPossibleVoices();
+        }
 
+        public void SpeechVoice(int voice)
+        {
+            if (!textToSpeechEnabled) return;
+            _textToSpeechService.SetSpeechVoice(voice);
+        }
+
+        public int GetSpeechVolume()
+        {
+            if (!textToSpeechEnabled) return 0;
+            return _textToSpeechService.GetSpeechVolume();
+        }
+
+        public void SetSpeechVolume(int volume)
+        {
+            if (!textToSpeechEnabled) return;
+            _textToSpeechService.SetSpeechVolume(volume);
+        }
+
+        public int GetSpeechRate()
+        {
+            if (!textToSpeechEnabled) return 0;
+            return _textToSpeechService.GetSpeechRate();
+        }
+
+        public void SetSpeechRate(int speakingRate)
+        {
+            if (!textToSpeechEnabled) return;
+            _textToSpeechService.SetSpeechRate(speakingRate);
+        }
+        
         private void ShowErrors()
         {
             if (!textToSpeechEnabled && !speechToTextEnabled)
             {
-                errorMessage.text = "Speech recogonition and synthesis unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari";
+                errorMessage.text = "Speech recognition and synthesis unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari";
             } else if (!speechToTextEnabled)
             {
-                errorMessage.text = "Speech recogonition unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari";
+                errorMessage.text = "Speech recognition unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari";
             }
             else
             {
@@ -68,7 +104,7 @@ namespace Presenters
         {
             error.SetActive(false);
         }
-    
+        
         void Start()
         {
             if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor)

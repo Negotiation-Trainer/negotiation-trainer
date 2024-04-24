@@ -7,6 +7,12 @@ namespace SpeechServices
         public event EventHandler FinishedSpeaking;
         public void SpeakText(string text);
         public void StopSpeech();
-        public bool CheckSupport(); 
+        public string[] GetPossibleVoices();
+        public void SetSpeechVoice(int voice);
+        public int GetSpeechVolume();
+        public void SetSpeechVolume(int volume);
+        public int GetSpeechRate();
+        public void SetSpeechRate(int speakingRate);
+        public bool CheckSupport();
     }
 }
