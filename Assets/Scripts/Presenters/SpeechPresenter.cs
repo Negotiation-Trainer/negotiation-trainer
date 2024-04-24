@@ -16,18 +16,29 @@ namespace Presenters
         public bool textToSpeechEnabled = false;
         public event EventHandler TTSFinished;
         
+        /// <summary>
+        /// Start listening to users mic.
+        /// fires TTSFinished with the result. 
+        /// </summary>
         public void StartRecognition()
         {
             if (!speechToTextEnabled) return;
             _speechToTextService?.StartRecognition();
         }
 
+        /// <summary>
+        /// Have TTS speak a text.
+        /// </summary>
+        /// <param name="text">Text to speak</param>
         public void Speak(string text)
         {
             if (!textToSpeechEnabled) return;
             _textToSpeechService?.SpeakText(text);
         }
 
+        /// <summary>
+        /// Force TTS to stop talking.
+        /// </summary>
         public void StopSpeaking()
         {
             if (!textToSpeechEnabled) return;
@@ -47,48 +58,78 @@ namespace Presenters
             TTSFinished?.Invoke(this,EventArgs.Empty);
         }
         
+        /// <summary>
+        /// Get all available voices on the machine.
+        /// </summary>
+        /// <returns>String array with voice names</returns>
         public string[] PossibleVoices()
         {
             if (!textToSpeechEnabled) return new []{""};
             return _textToSpeechService.GetPossibleVoices();
         }
-
+        
+        /// <summary>
+        /// Set the TTS voice.
+        /// </summary>
+        /// <param name="voice">index of voice in the PossibleVoices array</param>
         public void SpeechVoice(int voice)
         {
             if (!textToSpeechEnabled) return;
             _textToSpeechService.SetSpeechVoice(voice);
         }
 
+        /// <summary>
+        /// Get current TTS volume.
+        /// </summary>
+        /// <returns>Float between 0 and 1</returns>
         public float GetSpeechVolume()
         {
             if (!textToSpeechEnabled) return 0;
             return _textToSpeechService.GetSpeechVolume();
         }
 
+        /// <summary>
+        /// Set TTS volume.
+        /// </summary>
+        /// <param name="volume">Float between 0 and 1</param>
         public void SetSpeechVolume(float volume)
         {
             if (!textToSpeechEnabled) return;
             _textToSpeechService.SetSpeechVolume(volume);
         }
 
+        /// <summary>
+        /// Get current speaking rate of the TTS.
+        /// </summary>
+        /// <returns>Int between 1 and 10</returns>
         public int GetSpeechRate()
         {
             if (!textToSpeechEnabled) return 0;
             return _textToSpeechService.GetSpeechRate();
         }
 
+        /// <summary>
+        /// Set speaking rate of the tts.
+        /// </summary>
+        /// <param name="speakingRate">Int between 1 and 10</param>
         public void SetSpeechRate(int speakingRate)
         {
             if (!textToSpeechEnabled) return;
             _textToSpeechService.SetSpeechRate(speakingRate);
         }
 
+        /// <summary>
+        /// Pause TTS. Will not speak again until Resume is called
+        /// </summary>
         public void Pause()
         {
             if (!textToSpeechEnabled) return;
             _textToSpeechService.PauseSpeech();
         }
-
+        
+        /// <summary>
+        /// Resume TTS if it was previously paused.
+        /// </summary>
         public void Resume()
         {
             if (!textToSpeechEnabled) return;
