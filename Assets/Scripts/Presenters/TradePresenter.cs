@@ -105,7 +105,6 @@ namespace Presenters
                 if (TradePossible(_currentTrade, _originator, _target))
                 {
                     ProcessTrade();
-                    ClearOffer();
                     DiscardTradeOffer();
                     return;
                 }
