@@ -47,7 +47,7 @@ namespace SpeechServices
         public string[] GetPossibleVoices()
         {
             string[] voices = GetVoices().Split('#');
-            voices = voices.Select(voice => voice.Length > 26 ? voice.Substring(0, 26) : voice).ToArray();
+            voices = voices.Select(voice => voice.Length > 26 ? voice.Substring(0, 26).TrimEnd('(') : voice).ToArray();
             return voices;
         }
         
