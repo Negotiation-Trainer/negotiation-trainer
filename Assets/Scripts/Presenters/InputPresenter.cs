@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Enums;
-using Models;
+using ModelLibrary;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Presenters
 {
@@ -90,7 +88,7 @@ namespace Presenters
             int requestedAmount = Convert.ToInt32(requestingResourceAmount.text);
             InventoryItems offeredItem = GetInventoryItemFromDropdown(offeringResourceType);
             InventoryItems requestedItem = GetInventoryItemFromDropdown(requestingResourceType);
-            Trade trade = new Trade(requestedItem, requestedAmount, offeredItem, offeredAmount);
+            Trade trade = new Trade(requestedItem, requestedAmount, offeredItem, offeredAmount,target.Name , originator.Name);
             
             if (!CheckForInputErrors(trade, originator, target)) return;
             HideError();

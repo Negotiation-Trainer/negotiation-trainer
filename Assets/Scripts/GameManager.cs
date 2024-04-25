@@ -1,13 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Cinemachine;
-using Enums;
-using Models;
+using ModelLibrary;
 using Presenters;
 using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
