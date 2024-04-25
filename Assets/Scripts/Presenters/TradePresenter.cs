@@ -21,17 +21,28 @@ namespace Presenters
         [SerializeField] private TMP_Text offerAmount;
         [SerializeField] private TMP_Text requestText;
         [SerializeField] private TMP_Text requestAmount;
+        [SerializeField] private TMP_Text errorText;
 
         private void Start()
         {
             _inputPresenter = GetComponent<InputPresenter>();
             _algorithmService.AlgorithmDecision += OnAlgorithmDesicion;
         }
+        
+        private void ShowError(string error)
+        {
+            errorText.gameObject.SetActive(true);
+            errorText.text = error;
+        }
+
+        private void HideError()
+        {
+            errorText.gameObject.SetActive(false);
+        }
 
         public void ShowTradeOffer(Trade trade, Tribe originator, Tribe target)
         {
             _inputPresenter.ToggleNewOfferButton(false);
-            if (!TradePossible(trade, originator, target)) return;
 
             _currentTrade = trade;
             _originator = originator;
@@ -67,15 +78,26 @@ namespace Presenters
             tradeOffer.SetActive(false);
             if (_originator == GameManager.Instance.Player)
             {
-                MakeTrade();
+                if (TradePossible(_currentTrade, _originator, _target))
+                {
+                    MakeTrade();
+                }
+                else
+                {
+                    ShowError("you don't have enough resources");
+                }
             }
             else
             {
-                ProcessTrade();
-                ClearOffer();
+                if (TradePossible(_currentTrade, _originator, _target))
+                {
+                    ProcessTrade();
+                    ClearOffer();
+                    _inputPresenter.ToggleNewOfferButton(true);
+                    return;
+                }
+                ShowError("you don't have enough resources");
             }
-            
-            _inputPresenter.ToggleNewOfferButton(true);
         }
 
         private void ClearOffer()
@@ -83,6 +105,7 @@ namespace Presenters
             _currentTrade = null;
             _originator = null;
             _target = null;
+            HideError();
         }
 
         private void ProcessTrade()
@@ -110,8 +133,6 @@ namespace Presenters
             {
                 Debug.Log(e.Message);
             }
-
-            ClearOffer();
         }
 
         private void OnAlgorithmDesicion(object sender,
@@ -121,10 +142,12 @@ namespace Presenters
             {
                 Debug.Log("ACCEPTED");
                 ProcessTrade();
+                _inputPresenter.ToggleNewOfferButton(true);
             }
             else if(!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null)
             {
                 Debug.Log("COUNTER");
+                Debug.Log($"origin:{algorithmDecisionEventArgs.counterOffer.originName} - Origin offer:{algorithmDecisionEventArgs.counterOffer.OfferedItem}");
                 ShowTradeOffer(algorithmDecisionEventArgs.counterOffer, _target,_originator);
             }
             else
@@ -135,6 +158,7 @@ namespace Presenters
 
         private bool TradePossible(Trade trade, Tribe originator, Tribe target)
         {
+            Debug.Log($"trade:{trade}, o:{originator}, t:{target}");
             return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount &&
                    target.Inventory.GetInventoryAmount(trade.RequestedItem) >= trade.RequestedAmount;
         }
