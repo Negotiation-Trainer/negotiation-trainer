@@ -106,7 +106,7 @@ namespace Presenters
                 {
                     ProcessTrade();
                     ClearOffer();
-                    _inputPresenter.ToggleNewOfferButton(true);
+                    DiscardTradeOffer();
                     return;
                 }
                 ShowError("you don't have enough resources");
@@ -154,7 +154,7 @@ namespace Presenters
             {
                 //Accept the players offer.
                 ProcessTrade();
-                _inputPresenter.ToggleNewOfferButton(true);
+                DiscardTradeOffer();
             }
             else if(!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null)
             {
@@ -164,6 +164,7 @@ namespace Presenters
             else
             {
                 //Offer should be declined by the AI.
+                DiscardTradeOffer();
             }
         }
 

@@ -76,6 +76,7 @@ namespace Presenters
 
         public void DiscardDeal()
         {
+            HideError();
             ToggleInputFallBack(false);
             ToggleNewOfferButton(true);
         }
