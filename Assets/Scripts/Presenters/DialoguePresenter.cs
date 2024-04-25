@@ -85,7 +85,6 @@ namespace Presenters
         
         private void OnTTSFinished(object sender, EventArgs eventArgs)
         {
-            //TODO: This doesnt trigger. Text doesnt continue.
             ShowNextMessage();
         }
 
