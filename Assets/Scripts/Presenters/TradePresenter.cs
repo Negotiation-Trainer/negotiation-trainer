@@ -156,6 +156,11 @@ namespace Presenters
                 ProcessTrade();
                 DiscardTradeOffer();
             }
+            else if(!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null && algorithmDecisionEventArgs.counterOffer == _currentTrade)
+            {
+                //TEMPORARY decline when counter is same as original offer. 
+                DiscardTradeOffer();
+            }
             else if(!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null)
             {
                 //Present counter offer to player
