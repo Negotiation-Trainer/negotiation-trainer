@@ -125,6 +125,22 @@ public class DebugPresenter : MonoBehaviour
                 {
                     _speechPresenter.StartRecognition();
                 }
+    
+                if (GUILayout.Button("Voices"))
+                {
+                   Debug.Log(_speechPresenter.PossibleVoices());
+                }
+                
+                if (GUILayout.Button("Volume"))
+                {
+                    Debug.Log(_speechPresenter.GetSpeechVolume());
+                }
+                
+                if (GUILayout.Button("Rate"))
+                {
+                    Debug.Log(_speechPresenter.GetSpeechRate());
+                }
+
             }
 
             if (_tradePresenter)
