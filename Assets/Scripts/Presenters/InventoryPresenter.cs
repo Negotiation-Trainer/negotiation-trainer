@@ -48,7 +48,7 @@ namespace Presenters
             if(_transitioning) return;
             if (_targetPosition.Compare(_originalPosition, 100))
             {
-                _targetPosition = new Vector3(0,0,0);
+                _targetPosition = _originalPosition - new Vector3(0,550,0);
                 _transitioning = true;
             }
             else
