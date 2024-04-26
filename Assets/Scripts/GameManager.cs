@@ -2,9 +2,14 @@ using System.Collections.Generic;
 using ModelLibrary;
 using Presenters;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Button settingsButton;
+    [SerializeField] private Button pauseButton;
+    [SerializeField] private Button[] unpauseButtons;
+    [SerializeField] private GameObject pauseMenu;
     public static GameManager Instance { get; private set; }
     public Tribe Cpu1 { get; private set; }
     public Tribe Cpu2 { get; private set; }
@@ -14,6 +19,8 @@ public class GameManager : MonoBehaviour
     private InventoryPresenter _inventoryPresenter;
     private ScorePresenter _scorePresenter;
     private InputPresenter _inputPresenter;
+    private SettingsPresenter _settingsPresenter;
+    private SpeechPresenter _speechPresenter;
     
     public enum GameState
     {
@@ -39,8 +46,39 @@ public class GameManager : MonoBehaviour
         _inventoryPresenter = GetComponent<InventoryPresenter>();
         _scorePresenter = GetComponent<ScorePresenter>();
         _inputPresenter = GetComponent<InputPresenter>();
+        _settingsPresenter = GetComponent<SettingsPresenter>();
+        _speechPresenter = GetComponent<SpeechPresenter>();
         
+        settingsButton.onClick.AddListener(ShowSettingsMenu);
+        pauseButton.onClick.AddListener(PauseGame);
+        foreach (var button in unpauseButtons)
+        {
+            button.onClick.AddListener(UnpauseGame);
+        }
         ChangeGameState(GameState.Start);
+    }
+
+    
+    private void ShowSettingsMenu()
+    {
+        pauseMenu.SetActive(false);
+        _settingsPresenter.ShowSettingsMenu(true);
+    }
+    private void PauseGame()
+    {
+        ToggleTradeUI(false);
+        pauseMenu.SetActive(true);
+        pauseButton.gameObject.SetActive(false);
+        _speechPresenter.Pause();
+    }
+    
+    private void UnpauseGame()
+    {
+        _settingsPresenter.ShowSettingsMenu(false);
+        pauseMenu.SetActive(false);
+        pauseButton.gameObject.SetActive(true);
+        if(State == GameState.Trade) ToggleTradeUI(true);
+        _speechPresenter.Resume();
     }
 
     private void SetPointTables()

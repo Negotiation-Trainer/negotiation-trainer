@@ -49,5 +49,5 @@ mergeInto(LibraryManager.library, {
     IsListening: function() {
         if(isListening) return true;
         return false;
-    },
+    }
 });
