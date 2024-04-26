@@ -88,7 +88,6 @@ namespace Presenters
         /// </summary>
         public void SignTradeOffer()
         {
-            tradeOffer.SetActive(false);
             if (_originator == GameManager.Instance.Player)
             {
                 if (TradePossible(_currentTrade, _originator, _target))
