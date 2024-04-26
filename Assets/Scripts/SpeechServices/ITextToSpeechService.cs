@@ -7,5 +7,6 @@ namespace SpeechServices
         public event EventHandler FinishedSpeaking;
         public void SpeakText(string text);
         public void StopSpeech();
+        public bool CheckSupport(); 
     }
 }

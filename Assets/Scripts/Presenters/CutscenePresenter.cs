@@ -16,7 +16,11 @@ namespace Presenters
 
         [SerializeField] private ScrollAndFadeTexture fogScript;
         [SerializeField] private FanController fanScript;
-        
+
+        [SerializeField] private GameObject rainbow;
+        [SerializeField] private GameObject stormIncoming;
+        [SerializeField] private GameObject storm;
+        [SerializeField] private GameObject softClouds;
         
         [SerializeField] private CinemachineVirtualCamera[] virtualCameras;
         [SerializeField] private int[] switchMoment;
@@ -66,6 +70,25 @@ namespace Presenters
         private void MoveIsland()
         {
             _transitioning = true;
+        }
+
+        public void ToggleRainbow(bool isActive)
+        {
+            rainbow.SetActive(isActive);
+        }
+
+        public void ToggleStormIncoming(bool stormIncomingActive)
+        {
+            if (stormIncomingActive)
+            {
+                softClouds.GetComponent<ParticleSystem>().Stop();
+                stormIncoming.GetComponent<ParticleSystem>().Play();
+            }
+            else
+            {
+                stormIncoming.GetComponent<ParticleSystem>().Stop();
+            }
+            
         }
 
         private void FixedUpdate()
