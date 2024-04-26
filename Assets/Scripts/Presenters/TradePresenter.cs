@@ -1,18 +1,16 @@
-using System;
-using Enums;
-using Models;
+using ModelLibrary;
+using ModelLibrary.Exceptions;
 using ServiceLibrary;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Presenters
 {
-    public class TradePresenter: MonoBehaviour
+    public class TradePresenter : MonoBehaviour
     {
         private readonly AlgorithmService _algorithmService = new AlgorithmService();
         private InputPresenter _inputPresenter;
-        
+
         private Trade _currentTrade;
         private Tribe _originator;
         private Tribe _target;
@@ -22,16 +20,36 @@ namespace Presenters
         [SerializeField] private TMP_Text offerAmount;
         [SerializeField] private TMP_Text requestText;
         [SerializeField] private TMP_Text requestAmount;
+        [SerializeField] private TMP_Text errorText;
 
         private void Start()
         {
             _inputPresenter = GetComponent<InputPresenter>();
+            _algorithmService.AlgorithmDecision += OnAlgorithmDecision;
+        }
+        
+        ///Show error text at bottom of trade offer.
+        private void ShowError(string error)
+        {
+            errorText.gameObject.SetActive(true);
+            errorText.text = error;
         }
 
+        ///Hide error text on trade offer. 
+        private void HideError()
+        {
+            errorText.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Show trade offer on the screen.
+        /// </summary>
+        /// <param name="trade">The trade offer</param>
+        /// <param name="originator">The tribe that made the offer</param>
+        /// <param name="target">The tribe the offer targets</param>
         public void ShowTradeOffer(Trade trade, Tribe originator, Tribe target)
         {
             _inputPresenter.ToggleNewOfferButton(false);
-            if(!TradePossible(trade,originator,target)) return;
 
             _currentTrade = trade;
             _originator = originator;
@@ -55,49 +73,108 @@ namespace Presenters
             tradeOffer.SetActive(true);
         }
 
+        /// <summary>
+        /// Decline trade offer. Hides UI and clears the offer.
+        /// </summary>
         public void DiscardTradeOffer()
         {
             tradeOffer.SetActive(false);
             ClearOffer();
             _inputPresenter.ToggleNewOfferButton(true);
         }
-        
-         public void SignTradeOffer()
-         {
-             tradeOffer.SetActive(false);
-             MakeTrade();
-             _inputPresenter.ToggleNewOfferButton(true);
-         }
 
-         private void ClearOffer()
-         {
-             _currentTrade = null;
-             _originator = null;
-             _target = null;
-         }
-        
-        private void MakeTrade()
+        /// <summary>
+        /// Accept the current trade offer.
+        /// </summary>
+        public void SignTradeOffer()
         {
-            if (_currentTrade == null || _originator == null || _target == null) return;
-            if (_algorithmService.Decide(_currentTrade, _originator, _target))
+            if (_originator == GameManager.Instance.Player)
             {
-                Debug.Log("Trade accepted");
-                _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
-                _target.Inventory.AddToInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
-                
-                _originator.Inventory.AddToInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
-                _target.Inventory.RemoveFromInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
+                if (TradePossible(_currentTrade, _originator, _target))
+                {
+                    MakeTrade();
+                }
+                else
+                {
+                    ShowError("you don't have enough resources");
+                }
             }
             else
             {
-                Debug.Log("Trade Refused");
+                if (TradePossible(_currentTrade, _originator, _target))
+                {
+                    ProcessTrade();
+                    DiscardTradeOffer();
+                    return;
+                }
+                ShowError("you don't have enough resources");
             }
-            ClearOffer();
         }
 
+        /// Clear the current offer and hide error.
+        private void ClearOffer()
+        {
+            _currentTrade = null;
+            _originator = null;
+            _target = null;
+            HideError();
+        }
+        
+        /// Handles the inventory changes after the trade offer has been accepted
+        private void ProcessTrade()
+        {
+            _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
+            _target.Inventory.AddToInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
+
+            _originator.Inventory.AddToInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
+            _target.Inventory.RemoveFromInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
+        }
+
+        /// Make algorithm process the trade offer.
+        private void MakeTrade()
+        {
+            if (_currentTrade == null || _originator == null || _target == null) return;
+            try
+            {
+                _algorithmService.Decide(_currentTrade, _originator, _target);
+            }
+            catch (OfferDeclinedException e)
+            {
+                Debug.Log($"OFFER DECLINED {e.Message}");
+            }
+        }
+
+        /// Handle the algorithm decision event. Either accepts the offer, shows a counter offer or declines the offer.
+        private void OnAlgorithmDecision(object sender,
+            AlgorithmService.AlgorithmDecisionEventArgs algorithmDecisionEventArgs)
+        {
+            if (algorithmDecisionEventArgs.tradeAccepted)
+            {
+                //Accept the players offer.
+                ProcessTrade();
+                DiscardTradeOffer();
+            }
+            else if(!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null && algorithmDecisionEventArgs.counterOffer == _currentTrade)
+            {
+                //TEMPORARY decline when counter is same as original offer. 
+                DiscardTradeOffer();
+            }
+            else if(!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null)
+            {
+                //Present counter offer to player
+                ShowTradeOffer(algorithmDecisionEventArgs.counterOffer, _target,_originator);
+            }
+            else
+            {
+                //Offer should be declined by the AI.
+                DiscardTradeOffer();
+            }
+        }
+
+        /// Check if the participants of the deal have enough resources.
         private bool TradePossible(Trade trade, Tribe originator, Tribe target)
         {
-            return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount && 
+            return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount &&
                    target.Inventory.GetInventoryAmount(trade.RequestedItem) >= trade.RequestedAmount;
         }
     }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Enums;
-using Models;
+using ModelLibrary;
 using TMPro;
 using UnityEngine;
 
@@ -48,7 +47,7 @@ namespace Presenters
             errorText.gameObject.SetActive(false);
         }
 
-        private bool CheckForInputErrors(Trade trade, Tribe originator, Tribe target)
+        private bool CheckForInputErrors(Trade trade, Tribe originator)
         {
             if (trade.OfferedAmount == 0 || trade.RequestedAmount == 0)
             {
@@ -79,6 +78,7 @@ namespace Presenters
 
         public void DiscardDeal()
         {
+            HideError();
             ToggleInputFallBack(false);
             ToggleNewOfferButton(true);
         }
@@ -91,9 +91,9 @@ namespace Presenters
             int requestedAmount = Convert.ToInt32(requestingResourceAmount.text);
             InventoryItems offeredItem = GetInventoryItemFromDropdown(offeringResourceType);
             InventoryItems requestedItem = GetInventoryItemFromDropdown(requestingResourceType);
-            Trade trade = new Trade(requestedItem, requestedAmount, offeredItem, offeredAmount);
+            Trade trade = new Trade(requestedItem, requestedAmount, offeredItem, offeredAmount,target.Name , originator.Name);
             
-            if (!CheckForInputErrors(trade, originator, target)) return;
+            if (!CheckForInputErrors(trade, originator)) return;
             HideError();
             
             _tradePresenter.ShowTradeOffer(trade,originator,target);
