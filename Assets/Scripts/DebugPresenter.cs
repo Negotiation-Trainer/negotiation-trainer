@@ -34,19 +34,20 @@ public class DebugPresenter : MonoBehaviour
 
     void OnAlgorithmDecision(object sender, AlgorithmService.AlgorithmDecisionEventArgs algorithmDecisionEventArgs)
     {
-        Debug.Log("====ORIGINAL====\n" +
-                  $"SelfBuild: {algorithmDecisionEventArgs.SelfBuild}\n " +
-                  $"BuildEffect: {algorithmDecisionEventArgs.BuildEffect}\n " +
-                  $"Usefulness: {algorithmDecisionEventArgs.Usefulness}\n " +
-                  $"TradeBalance: {algorithmDecisionEventArgs.TradeBalance}\n " +
-                  "====RANDOM====\n " +
-                  $"SelfBuild: {algorithmDecisionEventArgs.RndSelfBuild}\n " +
-                  $"BuildEffect: {algorithmDecisionEventArgs.RndBuildEffect}\n " +
-                  $"Usefulness: {algorithmDecisionEventArgs.RndUsefulness}\n " +
-                  $"TradeBalance: {algorithmDecisionEventArgs.RndTradeBalance}\n " +
-                  "====GOODWILL====\n " +
-                  $"Start: {algorithmDecisionEventArgs.StartGoodwill}\n" +
-                  $"End: {algorithmDecisionEventArgs.EndGoodWill}");
+        Debug.Log(algorithmDecisionEventArgs.issuesWithTrade);
+        // Debug.Log("====ORIGINAL====\n" +
+        //           $"SelfBuild: {algorithmDecisionEventArgs.SelfBuild}\n " +
+        //           $"BuildEffect: {algorithmDecisionEventArgs.BuildEffect}\n " +
+        //           $"Usefulness: {algorithmDecisionEventArgs.Usefulness}\n " +
+        //           $"TradeBalance: {algorithmDecisionEventArgs.TradeBalance}\n " +
+        //           "====RANDOM====\n " +
+        //           $"SelfBuild: {algorithmDecisionEventArgs.RndSelfBuild}\n " +
+        //           $"BuildEffect: {algorithmDecisionEventArgs.RndBuildEffect}\n " +
+        //           $"Usefulness: {algorithmDecisionEventArgs.RndUsefulness}\n " +
+        //           $"TradeBalance: {algorithmDecisionEventArgs.RndTradeBalance}\n " +
+        //           "====GOODWILL====\n " +
+        //           $"Start: {algorithmDecisionEventArgs.StartGoodwill}\n" +
+        //           $"End: {algorithmDecisionEventArgs.EndGoodWill}");
     }
     
     void StartServices()

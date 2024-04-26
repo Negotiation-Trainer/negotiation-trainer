@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Cinemachine;
 using ModelLibrary;
+using Newtonsoft.Json;
 using Presenters;
 using ServiceLibrary;
 using TMPro;
@@ -11,10 +12,16 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Playables;
 using UnityEngine.UI;
+using UnityHttpClients;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    
+    public static AIService aiService { get; private set; }
+
+    public static BackOfficeHttpClient httpClient { get; private set; }
+    
     public Tribe Cpu1 { get; private set; }
     public Tribe Cpu2 { get; private set; }
     public Tribe Player { get; private set; }
@@ -23,7 +30,6 @@ public class GameManager : MonoBehaviour
     private InventoryPresenter _inventoryPresenter;
     private ScorePresenter _scorePresenter;
     private InputPresenter _inputPresenter;
-    public AIService AIService;
     
     public enum GameState
     {
@@ -39,10 +45,6 @@ public class GameManager : MonoBehaviour
         Player = new Tribe("Azari");
         Cpu1 = new Tribe("Beluga");
         Cpu2 = new Tribe("Cinatu");
-
-        Player.GoodWill = new Dictionary<Tribe, int>();
-        Cpu1.GoodWill = new Dictionary<Tribe, int>();
-        Cpu2.GoodWill = new Dictionary<Tribe, int>();
         
         Player.GoodWill[Cpu1] = 0;
         Player.GoodWill[Cpu2] = 0;
@@ -62,117 +64,14 @@ public class GameManager : MonoBehaviour
         _inventoryPresenter = GetComponent<InventoryPresenter>();
         _scorePresenter = GetComponent<ScorePresenter>();
         _inputPresenter = GetComponent<InputPresenter>();
-        Debug.Log("Starting");
-        Debug.Log(webResponse);
-        StartCoroutine(
-            Post("https://negotiation-game.azurewebsites.net/api/v1/authenticate", new Dictionary<string, string>(), new SessionPassword("1G6Y")
-            , (response) => { Debug.Log("callbackResponse: " + response); }));
-        Debug.Log("Done");
-        Debug.Log(webResponse);
         ChangeGameState(GameState.Start);
-    }
-
-
-    IEnumerator GetSessionToken()
-    {
-        string jsonBody = JsonUtility.ToJson(new SessionPassword("1G6Y"));
-        using (UnityWebRequest www = UnityWebRequest.Post("https://negotiation-game.azurewebsites.net/api/v1/authenticate", jsonBody, "application/json"))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError(www.error);
-                Debug.Log(www.downloadHandler.text);
-            }
-            else
-            {
-                Debug.Log(www.downloadHandler.text);
-            }
-        }
-    }
-    
-    
-
-    public string webResponse = "not set yet";
-
-    IEnumerator Post<T>(string pathUrl, Dictionary<string, string> headers, T body, Action<string> callback = null)
-    {
-        string jsonBody = JsonUtility.ToJson(body) ?? "{}";
         
-        using (UnityWebRequest wr = UnityWebRequest.Post($"{pathUrl}", jsonBody, "application/json"))
-        {
-            foreach (KeyValuePair<string, string> header in headers)
-            {
-                wr.SetRequestHeader(header.Key, header.Value);
-            }
-            
-            yield return wr.SendWebRequest();
-            
-            if (wr.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError(wr.error);
-                Debug.Log(wr.downloadHandler.text);
-            }
-            else
-            {
-                Debug.Log(wr.downloadHandler.text);
-            }
-            
-            webResponse = wr.downloadHandler.text;
-            callback?.Invoke(wr.downloadHandler.text);
-        }
-    }
-    
-    protected string Post<T>(string pathUrl, string bla, Dictionary<string, string> headers, T body)
-    {
-        // Add the body to the request when it is not null
-        string bodyJson = body != null ? JsonUtility.ToJson(body) : "{}";
+        Debug.Log("Start game");
         
-        Debug.Log(bodyJson);
+        var trade = new Trade(InventoryItems.Clay, 1, InventoryItems.Wood, 1, Player.Name, Cpu1.Name);
+        var result = JsonConvert.SerializeObject(trade);
+        Debug.Log(result);
 
-
-        using UnityWebRequest request = UnityWebRequest.Post($"https://negotiation-game.azurewebsites.net/api/v1/{pathUrl}", bodyJson, "application/json");
-        
-        
-        
-        foreach (KeyValuePair<string, string> header in headers)
-        {
-            request.SetRequestHeader(header.Key, header.Value);
-        }
-                
-        var operation = request.SendWebRequest();
-
-        // Wait for the request to complete
-        while (!operation.isDone) {Debug.Log("waiting"); }
-        
-        Debug.Log(request.result);
-        Debug.Log(request.error);
-        Debug.Log(request.downloadHandler.text);
-        
-        var test = JsonUtility.FromJson<TokenResponse>(request.downloadHandler.text);
-        
-        Debug.Log(test);
-        Debug.Log(test.token);
-        
-        string resultText;
-        switch (request.result)
-        {
-            case UnityWebRequest.Result.Success:
-                resultText = request.downloadHandler.text;
-                break;
-            case UnityWebRequest.Result.ConnectionError:
-                resultText = $"Connection Error: {request.error}";
-                break;
-            case UnityWebRequest.Result.ProtocolError:
-                resultText = $"Protocol Error: {request.error}";
-                break;
-            default:
-                resultText = "Unknown error";
-                break;
-        }
-
-        return resultText;
     }
     
     private void SetPointTables()
@@ -384,25 +283,22 @@ public class GameManager : MonoBehaviour
     {
         var baseUrl = aiBaseURL.text;
         var sessionPassword = aiSessionPassword.text;
-        AIService = new AIService(baseUrl,sessionPassword);
+        // aiService = new AIService();
+        httpClient = new BackOfficeHttpClient(baseUrl, sessionPassword);
+
+        StartCoroutine(httpClient.Authenticate(OnReceiveToken));
+    }
+
+    private void OnReceiveToken(string token)
+    {
+        Debug.Log("Token received: " + token);
+        httpClient.SetToken(token);
+        
+        Debug.Log("Token is set to: " + httpClient.Debug_GetAuth());
         ChangeGameState(GameState.Trade);
     }
     
 
     #endregion
     
-    private class SessionPassword
-    {
-        public string sessionPassword;
-        public SessionPassword(string sessionPassword)
-        {
-            this.sessionPassword = sessionPassword;
-        }
-    }
-
-    private class TokenResponse
-    {
-        public string token;
-    }
-
 }

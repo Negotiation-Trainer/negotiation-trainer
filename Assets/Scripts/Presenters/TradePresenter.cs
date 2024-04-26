@@ -85,22 +85,50 @@ namespace Presenters
          
         private void MakeTrade()
         {
+            string speakerStyle = "lunatic";
             if (_currentTrade == null || _originator == null || _target == null) return;
-            if (_algorithmService.Decide(_currentTrade, _originator, _target))
+            try
             {
+                _algorithmService.Decide(_currentTrade, _originator, _target);
+                
+                //if it gets here, the trade is accepted and no exception was thrown by the algorithm service
                 accepted.SetActive(true);
                 Debug.Log("Trade accepted");
-                _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
-                _target.Inventory.AddToInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
-                
-                _originator.Inventory.AddToInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
-                _target.Inventory.RemoveFromInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
+
+                StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
             }
-            else
+            catch (Exception ex)
             {
-                rejected.SetActive(true);
-                Debug.Log("Trade Refused");
+                Debug.Log(ex.Message);
+                Debug.Log(ex.GetType());
+
+                StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, ex.Message,
+                    RejectCallback));
             }
+        }
+
+        private void AcceptCallback(string response)
+        {
+            DealReturnMessage returnMessage = GameManager.aiService.AcceptDeal(response);
+            Debug.Log("Return Message" + returnMessage);
+            
+            _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
+            _target.Inventory.AddToInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
+                
+            _originator.Inventory.AddToInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
+            _target.Inventory.RemoveFromInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
+            
+            Invoke(nameof(ClearOffer), 2);
+        }
+
+        private void RejectCallback(string response)
+        {
+            var returnMessage = GameManager.aiService.RejectDeal(response);
+            Debug.Log("Return Message" + returnMessage);
+            
+            rejected.SetActive(true);
+            Debug.Log("Trade Refused");
+                
             Invoke(nameof(ClearOffer), 2);
         }
 

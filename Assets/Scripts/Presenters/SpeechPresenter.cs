@@ -49,15 +49,21 @@ namespace Presenters
             {
                 try
                 {
-                    Trade trade = GameManager.Instance.AIService.ConvertToTrade(eventArgs.Text);
-                    Debug.Log($"trade: {trade}");
-                    _tradePresenter.ShowTradeOffer(trade, GameManager.Instance.Player, GameManager.Instance.Cpu1);
+                    StartCoroutine(GameManager.httpClient.ConvertToTrade(eventArgs.Text, OnHTTPConvertCallback));
                 }
                 catch (Exception e)
                 {
                     Debug.Log(e);
                 }
             }
+        }
+
+        private void OnHTTPConvertCallback(string response)
+        {
+            Trade trade = GameManager.aiService.ConvertToTrade(response);
+            
+            Debug.Log($"trade: {trade}");
+            _tradePresenter.ShowTradeOffer(trade, GameManager.Instance.Player, GameManager.Instance.Cpu1);
         }
 
         private void OnTextToSpeechFinished(object sender, EventArgs eventArgs)
