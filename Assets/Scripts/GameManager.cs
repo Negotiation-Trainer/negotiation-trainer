@@ -3,6 +3,7 @@ using ModelLibrary;
 using Presenters;
 using ServiceLibrary;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -69,10 +70,17 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        ChangeGameState(GameState.Start);
-        _DialoguePresenter.QueueMessages(new DialogueGenerationService().SplitTextToInstructionMessages($"The game is over. you got {Player.Points} points, The {Cpu1.Name} got {Cpu1.Points} points and {Cpu2.Name} got {Cpu2.Points} points"));
+        ToggleTradeUI(false);
+        _DialoguePresenter.QueueMessages(new DialogueGenerationService().SplitTextToInstructionMessages($"The game is over. you got {Player.Points} points, The {Cpu1.Name} got {Cpu1.Points} points and {Cpu2.Name} got {Cpu2.Points} points. Game wil now restart"));
         _DialoguePresenter.ShowNextMessage();
         endGame.gameObject.SetActive(false);
+        Invoke(nameof(RestartGame),10);
+    }
+
+    private void RestartGame()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
     }
     
     private void ShowSettingsMenu()
