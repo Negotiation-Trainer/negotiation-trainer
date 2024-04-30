@@ -8,8 +8,6 @@ namespace Presenters
     public class SpeechPresenter : MonoBehaviour
     {
         [SerializeField] private bool debugMode = false;
-        [SerializeField] private GameObject error;
-        [SerializeField] private TMP_Text errorMessage;
         private ISpeechToTextService _speechToTextService;
         private ITextToSpeechService _textToSpeechService;
         public bool speechToTextEnabled = false;
@@ -140,21 +138,20 @@ namespace Presenters
         {
             if (!textToSpeechEnabled && !speechToTextEnabled)
             {
-                errorMessage.text = "Speech recognition and synthesis unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari";
+                ErrorPresenter.ShowError("Speech recogonition and synthesis unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari");
             } else if (!speechToTextEnabled)
             {
-                errorMessage.text = "Speech recognition unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari";
+                ErrorPresenter.ShowError("Speech recogonition unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari");
             }
             else
             {
-                errorMessage.text = "Speech synthesis unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari";
+                ErrorPresenter.ShowError("Speech synthesis unsupported in current browser. \nplease use one of the following:\nChrome, Edge, Opera or Safari");
             }
-            error.SetActive(true);
         }
 
         public void HideError()
         {
-            error.SetActive(false);
+            ErrorPresenter.HideError();
         }
         
         void Start()
