@@ -1,8 +1,6 @@
-using Enums;
-using Models;
+using ModelLibrary;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Presenters
 {
@@ -59,7 +57,7 @@ namespace Presenters
             
             FillScoreCard();
             
-            _originalPosition = scoreCard.position;
+            _originalPosition = scoreCard.localPosition;
             _targetPosition = _originalPosition;        
         }
 
@@ -112,7 +110,7 @@ namespace Presenters
             if(_transitioning) return;
             if (_targetPosition.Compare(_originalPosition, 100))
             {
-                _targetPosition = scoreCardTarget.position;
+                _targetPosition = _originalPosition - new Vector3(0,693,0);
                 _transitioning = true;
             }
             else
@@ -126,8 +124,8 @@ namespace Presenters
         {
             if (_transitioning)
             {
-                scoreCard.position = Vector3.MoveTowards(scoreCard.position, _targetPosition, speed);
-                if (scoreCard.position.Compare(_targetPosition, 100)) _transitioning = false;
+                scoreCard.localPosition = Vector3.MoveTowards(scoreCard.localPosition, _targetPosition, speed);
+                if (scoreCard.localPosition.Compare(_targetPosition, 100)) _transitioning = false;
             }
         }
     }
