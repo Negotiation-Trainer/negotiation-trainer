@@ -21,6 +21,8 @@ namespace Presenters
         [SerializeField] private TMP_Text requestText;
         [SerializeField] private TMP_Text requestAmount;
         [SerializeField] private TMP_Text errorText;
+        [SerializeField] private GameObject accepted;
+        [SerializeField] private GameObject rejected;
 
         private void Start()
         {
@@ -79,6 +81,8 @@ namespace Presenters
         public void DiscardTradeOffer()
         {
             tradeOffer.SetActive(false);
+            accepted.SetActive(false);
+            rejected.SetActive(false);
             ClearOffer();
             _inputPresenter.ToggleNewOfferButton(true);
         }
@@ -103,8 +107,9 @@ namespace Presenters
             {
                 if (TradePossible(_currentTrade, _originator, _target))
                 {
+                    accepted.SetActive(true);
                     ProcessTrade();
-                    DiscardTradeOffer();
+                    Invoke(nameof(DiscardTradeOffer), 2);
                     return;
                 }
                 ShowError("you don't have enough resources");
@@ -151,13 +156,15 @@ namespace Presenters
             if (algorithmDecisionEventArgs.tradeAccepted)
             {
                 //Accept the players offer.
+                accepted.SetActive(true);
                 ProcessTrade();
-                DiscardTradeOffer();
+                Invoke(nameof(DiscardTradeOffer), 2);
             }
             else if(!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null && algorithmDecisionEventArgs.counterOffer == _currentTrade)
             {
                 //TEMPORARY decline when counter is same as original offer. 
-                DiscardTradeOffer();
+                rejected.SetActive(true);
+                Invoke(nameof(DiscardTradeOffer), 2);
             }
             else if(!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null)
             {
@@ -167,7 +174,8 @@ namespace Presenters
             else
             {
                 //Offer should be declined by the AI.
-                DiscardTradeOffer();
+                rejected.SetActive(true);
+                Invoke(nameof(DiscardTradeOffer), 2);
             }
         }
 
