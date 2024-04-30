@@ -1,8 +1,6 @@
-using Enums;
-using Models;
+using ModelLibrary;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Presenters
 {
@@ -112,7 +110,7 @@ namespace Presenters
             if(_transitioning) return;
             if (_targetPosition.Compare(_originalPosition, 100))
             {
-                _targetPosition = new Vector3(0, 0, 0);
+                _targetPosition = _originalPosition - new Vector3(0,693,0);
                 _transitioning = true;
             }
             else

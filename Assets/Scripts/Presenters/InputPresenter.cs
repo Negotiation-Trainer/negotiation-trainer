@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Enums;
-using Models;
+using ModelLibrary;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Presenters
 {
@@ -19,9 +17,11 @@ namespace Presenters
         [SerializeField] private TMP_Dropdown targetTribe;
         [SerializeField] private TMP_Text errorText;
         private TradePresenter _tradePresenter;
+        private SettingsPresenter _settingsPresenter;
 
         private void Start()
         {
+            _settingsPresenter = GetComponent<SettingsPresenter>();
            _tradePresenter = GetComponent<TradePresenter>();
            targetTribe.ClearOptions();
            targetTribe.AddOptions(new List<string>(){GameManager.Instance.Cpu1.Name,GameManager.Instance.Cpu2.Name});
@@ -29,7 +29,7 @@ namespace Presenters
 
         public void ToggleNewOfferButton(bool isActive)
         {
-            newOfferButton.SetActive(isActive);
+            newOfferButton.SetActive(isActive && _settingsPresenter.fallbackEnabled);
         }
         public void ToggleInputFallBack(bool isActive)
         {
@@ -47,7 +47,7 @@ namespace Presenters
             errorText.gameObject.SetActive(false);
         }
 
-        private bool CheckForInputErrors(Trade trade, Tribe originator, Tribe target)
+        private bool CheckForInputErrors(Trade trade, Tribe originator)
         {
             if (trade.OfferedAmount == 0 || trade.RequestedAmount == 0)
             {
@@ -78,6 +78,7 @@ namespace Presenters
 
         public void DiscardDeal()
         {
+            HideError();
             ToggleInputFallBack(false);
             ToggleNewOfferButton(true);
         }
@@ -90,9 +91,9 @@ namespace Presenters
             int requestedAmount = Convert.ToInt32(requestingResourceAmount.text);
             InventoryItems offeredItem = GetInventoryItemFromDropdown(offeringResourceType);
             InventoryItems requestedItem = GetInventoryItemFromDropdown(requestingResourceType);
-            Trade trade = new Trade(requestedItem, requestedAmount, offeredItem, offeredAmount);
+            Trade trade = new Trade(requestedItem, requestedAmount, offeredItem, offeredAmount,target.Name , originator.Name);
             
-            if (!CheckForInputErrors(trade, originator, target)) return;
+            if (!CheckForInputErrors(trade, originator)) return;
             HideError();
             
             _tradePresenter.ShowTradeOffer(trade,originator,target);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Models;
+using ModelLibrary;
+using ModelLibrary.Interfaces;
 using ServiceLibrary;
 using TMPro;
 using UnityEngine;
@@ -24,6 +25,11 @@ namespace Presenters
             {
                 _dialogueQueue.Enqueue(message);
             }
+        }
+
+        public int MessagesRemaining()
+        {
+            return _dialogueQueue.Count;
         }
         
         public void ShowNextMessage()
