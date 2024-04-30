@@ -1,5 +1,6 @@
 using System;
 using ModelLibrary;
+using Newtonsoft.Json;
 using ServiceLibrary;
 using TMPro;
 using UnityEngine;
@@ -109,8 +110,9 @@ namespace Presenters
 
         private void AcceptCallback(string response)
         {
-            DealReturnMessage returnMessage = GameManager.aiService.AcceptDeal(response);
-            Debug.Log("Return Message" + returnMessage);
+            //TODO: AI Service fix
+            ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
+            Debug.Log("Return Message" + returnMessage.message);
             
             _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
             _target.Inventory.AddToInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
@@ -123,8 +125,11 @@ namespace Presenters
 
         private void RejectCallback(string response)
         {
-            var returnMessage = GameManager.aiService.RejectDeal(response);
-            Debug.Log("Return Message" + returnMessage);
+            Debug.Log("Rejected: " + response);
+            
+            //TODO: AI Service fix
+            ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
+            Debug.Log("Return Message" + returnMessage.message);
             
             rejected.SetActive(true);
             Debug.Log("Trade Refused");

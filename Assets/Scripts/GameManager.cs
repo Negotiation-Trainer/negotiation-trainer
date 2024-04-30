@@ -17,8 +17,8 @@ using UnityHttpClients;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    
-    public static AIService aiService { get; private set; }
+
+    public static AIService aiService { get; private set; } = new();
 
     public static BackOfficeHttpClient httpClient { get; private set; }
     
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
+        
         Player = new Tribe("Azari");
         Cpu1 = new Tribe("Beluga");
         Cpu2 = new Tribe("Cinatu");
@@ -68,10 +68,18 @@ public class GameManager : MonoBehaviour
         
         Debug.Log("Start game");
         
-        var trade = new Trade(InventoryItems.Clay, 1, InventoryItems.Wood, 1, Player.Name, Cpu1.Name);
-        var result = JsonConvert.SerializeObject(trade);
-        Debug.Log(result);
-
+        var jsonText = "{\"message\":\"No way! I Want to build the build myself. My precious Steel is not for sale! Mwuahaha!\"}";
+        Debug.Log("json text" + jsonText);
+        
+        ChatMessage resultDeserializeObject = JsonConvert.DeserializeObject<ChatMessage>(jsonText);
+        
+        Debug.Log(resultDeserializeObject.message ?? "no msg :(");
+        
+        ChatMessage msg = httpClient.RejectDeal(jsonText);
+        
+        Debug.Log(msg.message ?? "no msg on deal :(");
+        
+        Debug.Log("ai Service - " + aiService);
     }
     
     private void SetPointTables()
@@ -283,7 +291,6 @@ public class GameManager : MonoBehaviour
     {
         var baseUrl = aiBaseURL.text;
         var sessionPassword = aiSessionPassword.text;
-        // aiService = new AIService();
         httpClient = new BackOfficeHttpClient(baseUrl, sessionPassword);
 
         StartCoroutine(httpClient.Authenticate(OnReceiveToken));

@@ -60,7 +60,7 @@ namespace Presenters
 
         private void OnHTTPConvertCallback(string response)
         {
-            Trade trade = GameManager.aiService.ConvertToTrade(response);
+            Trade trade = GameManager.httpClient.ConvertToTrade(response);
             
             Debug.Log($"trade: {trade}");
             _tradePresenter.ShowTradeOffer(trade, GameManager.Instance.Player, GameManager.Instance.Cpu1);
