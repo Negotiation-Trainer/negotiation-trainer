@@ -6,10 +6,11 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Button settingsButton;
+    [SerializeField] private Button[] settingsButton;
     [SerializeField] private Button pauseButton;
     [SerializeField] private Button[] unpauseButtons;
     [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject mainMenu;
     public static GameManager Instance { get; private set; }
     public Tribe Cpu1 { get; private set; }
     public Tribe Cpu2 { get; private set; }
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     private InputPresenter _inputPresenter;
     private SettingsPresenter _settingsPresenter;
     private SpeechPresenter _speechPresenter;
+    private CutscenePresenter _cutscenePresenter;
     
     public enum GameState
     {
@@ -48,9 +50,12 @@ public class GameManager : MonoBehaviour
         _inputPresenter = GetComponent<InputPresenter>();
         _settingsPresenter = GetComponent<SettingsPresenter>();
         _speechPresenter = GetComponent<SpeechPresenter>();
-        
-        settingsButton.onClick.AddListener(ShowSettingsMenu);
+        _cutscenePresenter = GetComponent<CutscenePresenter>();
         pauseButton.onClick.AddListener(PauseGame);
+        foreach (var button in settingsButton)
+        {
+            button.onClick.AddListener(ShowSettingsMenu);
+        }
         foreach (var button in unpauseButtons)
         {
             button.onClick.AddListener(UnpauseGame);
@@ -76,7 +81,7 @@ public class GameManager : MonoBehaviour
     {
         _settingsPresenter.ShowSettingsMenu(false);
         pauseMenu.SetActive(false);
-        pauseButton.gameObject.SetActive(true);
+        if(State != GameState.Start) pauseButton.gameObject.SetActive(true);
         if(State == GameState.Trade) ToggleTradeUI(true);
         _speechPresenter.Resume();
     }
@@ -238,6 +243,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void StartIntroduction()
+    {
+        HandleIntroductionState();
+        State = GameState.Introduction;
+    }
+
+    public void StartTrade()
+    {
+        HandleTradeState();
+        State = GameState.Trade;
+    }
+
     private void ToggleTradeUI(bool isActive)
     {
         _inventoryPresenter.ShowResourceCard(isActive);
@@ -251,6 +268,8 @@ public class GameManager : MonoBehaviour
     private void HandleGameStartState()
     {
         ToggleTradeUI(false);
+        pauseButton.gameObject.SetActive(false);
+        mainMenu.SetActive(true);
     }
 
 
@@ -260,6 +279,8 @@ public class GameManager : MonoBehaviour
     private void HandleIntroductionState()
     {
         ToggleTradeUI(false);
+        pauseButton.gameObject.SetActive(true);
+        _cutscenePresenter.StartGame();
     }
 
     /// <summary>
