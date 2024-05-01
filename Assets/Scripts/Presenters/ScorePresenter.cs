@@ -57,11 +57,7 @@ namespace Presenters
         [SerializeField] private Image steelHammer;
         
         [SerializeField] private Transform scoreCard;
-        [SerializeField] private Transform scoreCardTarget;
-        [SerializeField] private float speed;
-        private Vector3 _originalPosition;
-        private Vector3 _targetPosition;
-        
+
         private GameManager _gameManager;
         private Tribe _player;
         private bool _transitioning = false;
@@ -74,9 +70,6 @@ namespace Presenters
             _player = _gameManager.Player;
             
             FillScoreCard();
-            
-            _originalPosition = scoreCard.localPosition;
-            _targetPosition = _originalPosition;        
         }
 
         private void FillScoreCard()
@@ -123,21 +116,6 @@ namespace Presenters
             scoreCard.gameObject.SetActive(isActive);
         }
         
-        public void ToggleScoreCard()
-        {
-            if(_transitioning) return;
-            if (_targetPosition.Compare(_originalPosition, 100))
-            {
-                _targetPosition = _originalPosition - new Vector3(0,693,0);
-                _transitioning = true;
-            }
-            else
-            {
-                _targetPosition = _originalPosition;
-                _transitioning = true;
-            }
-        }
-
         public void UpdateScoreCard(Tribe tribe, InventoryItems resourceBuildingBuild)
         {
             Sprite hammer;
@@ -198,15 +176,6 @@ namespace Presenters
                     steelHammer.gameObject.SetActive(true);
                     steelHammer.sprite = hammer;
                     break;
-            }
-        }
-
-        private void FixedUpdate()
-        {
-            if (_transitioning)
-            {
-                scoreCard.localPosition = Vector3.MoveTowards(scoreCard.localPosition, _targetPosition, speed);
-                if (scoreCard.localPosition.Compare(_targetPosition, 100)) _transitioning = false;
             }
         }
     }
