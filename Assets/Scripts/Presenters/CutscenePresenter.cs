@@ -8,6 +8,7 @@ namespace Presenters
 {
     public class CutscenePresenter : MonoBehaviour
     {
+        [SerializeField] private GameObject animals;
         [SerializeField] private GameObject island;
         [SerializeField] private Vector3 targetPosition;
         [SerializeField] private GameObject board;
@@ -103,6 +104,7 @@ namespace Presenters
                             _dialoguePresenter.GetInstruction("general")));
                     _dialoguePresenter.ShowNextMessage();
                     UnDarken();
+                    animals.SetActive(true);
                     fogScript.StopFade();
                     fanScript.isActive = true;
                     board.SetActive(false);
