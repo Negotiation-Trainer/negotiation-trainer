@@ -1,0 +1,97 @@
+name: Test & Deploy to development
+
+on:
+    push:
+        branches:
+            - "main"
+
+jobs:
+  Build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
+
+      # Build the project
+      - name: Build Unity Artifact
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+
+      # Output 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: webGL-build
+          path: build
+
+  RunTests:
+    name: Test
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+          with:
+            lfs: true
+      
+        # Cache
+        - uses: actions/cache@v2
+          with:
+            path: Library
+            key: Library
+      
+        # Test
+        - name: Run tests
+          uses: game-ci/unity-test-runner@v4
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+            UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+            UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          with:
+            # packageMode: true # Needs to be enabled when packages are used
+            unityVersion: 2022.3.20f1
+            githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  DeployReleaseToDevelop:
+    needs: Build
+    runs-on: ubuntu-latest
+    name: Deploy
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Download the WebGL build
+      - name: Download WebGL Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webGL-build
+          path: build
+      
+      # Deploy the webGL build to production
+      - name: Deploy to Production
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build/WebGL/WebGL
+          commit-message: Deploy
+          single-commit: true
+          target-folder: development
+          
+      # Cleanup to avoid storage limit
+      - name: Cleanup to avoid storage limit
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: webGL-build
