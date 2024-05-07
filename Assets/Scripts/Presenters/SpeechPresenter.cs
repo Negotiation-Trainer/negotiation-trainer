@@ -9,7 +9,7 @@ namespace Presenters
 {
     public class SpeechPresenter : MonoBehaviour
     {
-        [SerializeField] private bool debugMode = false;
+        [SerializeField] private bool debugMode = true;
         [SerializeField] private GameObject error;
         [SerializeField] private TMP_Text errorMessage;
         private ISpeechToTextService _speechToTextService;

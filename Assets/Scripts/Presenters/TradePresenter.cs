@@ -15,6 +15,7 @@ namespace Presenters
         private readonly AlgorithmService _algorithmService = new();
         private readonly DialogueGenerationService _dialogueGenerationService = new();
         private InputPresenter _inputPresenter;
+        private DialoguePresenter _dialoguePresenter;
         
         private Trade _currentTrade;
         private Tribe _originator;
@@ -32,6 +33,7 @@ namespace Presenters
         private void Start()
         {
             _inputPresenter = GetComponent<InputPresenter>();
+            _dialoguePresenter = GetComponent<DialoguePresenter>();
         }
 
         public void ShowTradeOffer(Trade trade, Tribe originator, Tribe target)
@@ -92,9 +94,9 @@ namespace Presenters
             string speakerStyle = "lunatic";
             if (_currentTrade == null || _originator == null || _target == null) return;
             
-            AlgorithmService.AlgorithmDecision += (sender, args) =>
+            _algorithmService.AlgorithmDecision += (sender, args) =>
             {
-                if (args.issuesWithTrade.Count > 0)
+                if (args.issuesWithTrade.Count > 0) // When issues with the trade are found, the trade will be rejected
                 {
                     StringBuilder sb = new StringBuilder();
                     
@@ -103,28 +105,21 @@ namespace Presenters
                         sb.Append($"{t.Message} +");
                     }
                     
+                    Debug.Log("Trade Rejected");
+                    
                     StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
                         RejectCallback));
                 }
+                else
+                {
+                    accepted.SetActive(true);
+                    Debug.Log("Trade accepted");
+
+                    StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
+                }
             };
-            _algorithmService.Decide(_currentTrade, _originator, _target);
             
-            try
-            {
-                //if it gets here, the trade is accepted and no exception was thrown by the algorithm service
-                accepted.SetActive(true);
-                Debug.Log("Trade accepted");
-
-                StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
-            }
-            catch (Exception ex)
-            {
-                Debug.Log(ex.Message);
-                Debug.Log(ex.GetType());
-
-                StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, ex.Message,
-                    RejectCallback));
-            }
+            _algorithmService.Decide(_currentTrade, _originator, _target);
         }
 
         private void AcceptCallback(string response)
@@ -133,6 +128,7 @@ namespace Presenters
             ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
             Debug.Log("Return Message" + returnMessage.Message);
             
+            
             _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
             _target.Inventory.AddToInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
                 
@@ -140,6 +136,10 @@ namespace Presenters
             _target.Inventory.RemoveFromInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
             
             Invoke(nameof(ClearOffer), 2);
+            
+            
+            
+            _dialoguePresenter.QueueMessages(_dialogueGenerationService.SplitTextToDialogueMessages(SplitMessageIntoChunks(returnMessage.Message), _target.Name));
         }
 
         private void RejectCallback(string response)
@@ -152,14 +152,49 @@ namespace Presenters
             
             rejected.SetActive(true);
             Debug.Log("Trade Refused");
-                
+            
             Invoke(nameof(ClearOffer), 2);
+            
+            _dialoguePresenter.QueueMessages(_dialogueGenerationService.SplitTextToDialogueMessages(SplitMessageIntoChunks(returnMessage.Message), _target.Name));
         }
 
         private bool TradePossible(Trade trade, Tribe originator, Tribe target)
         {
             return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount && 
                    target.Inventory.GetInventoryAmount(trade.RequestedItem) >= trade.RequestedAmount;
+        }
+
+        private string SplitMessageIntoChunks(string message)
+        {
+            StringBuilder chunks = new StringBuilder();
+            int currentIndex = 0;
+
+            while (currentIndex < message.Length)
+            {
+                int chunkSize = 200;
+                if (currentIndex + chunkSize > message.Length)
+                {
+                    chunkSize = message.Length - currentIndex;
+                }
+                else
+                {
+                    while (message[currentIndex + chunkSize] != ' ' && chunkSize > 0)
+                    {
+                        chunkSize--;
+                    }
+                }
+
+                chunks.Append(message.Substring(currentIndex, chunkSize));
+                currentIndex += chunkSize;
+
+                // Add the separator if there is more message to process
+                if (currentIndex < message.Length)
+                {
+                    chunks.Append("{nm}");
+                }
+            }
+
+            return chunks.ToString();
         }
     }
 }
