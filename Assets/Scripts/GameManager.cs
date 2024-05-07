@@ -73,11 +73,11 @@ public class GameManager : MonoBehaviour
         
         ChatMessage resultDeserializeObject = JsonConvert.DeserializeObject<ChatMessage>(jsonText);
         
-        Debug.Log(resultDeserializeObject.message ?? "no msg :(");
+        Debug.Log(resultDeserializeObject.Message ?? "no msg :(");
         
         ChatMessage msg = httpClient.RejectDeal(jsonText);
         
-        Debug.Log(msg.message ?? "no msg on deal :(");
+        Debug.Log(msg.Message ?? "no msg on deal :(");
         
         Debug.Log("ai Service - " + aiService);
     }

@@ -1,0 +1,5 @@
+<linker>
+  <assembly fullname="ModelLibrary">
+    <type fullname="ModelLibrary.ChatMessage" preserve="all"/>
+  </assembly>
+</linker>

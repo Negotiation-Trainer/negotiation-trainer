@@ -112,7 +112,7 @@ namespace Presenters
         {
             //TODO: AI Service fix
             ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
-            Debug.Log("Return Message" + returnMessage.message);
+            Debug.Log("Return Message" + returnMessage.Message);
             
             _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
             _target.Inventory.AddToInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
@@ -129,7 +129,7 @@ namespace Presenters
             
             //TODO: AI Service fix
             ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
-            Debug.Log("Return Message" + returnMessage.message);
+            Debug.Log("Return Message" + returnMessage.Message);
             
             rejected.SetActive(true);
             Debug.Log("Trade Refused");
