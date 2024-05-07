@@ -1,5 +1,7 @@
 using System;
+using System.Text;
 using ModelLibrary;
+using ModelLibrary.Exceptions;
 using Newtonsoft.Json;
 using ServiceLibrary;
 using TMPro;
@@ -10,7 +12,8 @@ namespace Presenters
 {
     public class TradePresenter: MonoBehaviour
     {
-        private readonly AlgorithmService _algorithmService = new AlgorithmService();
+        private readonly AlgorithmService _algorithmService = new();
+        private readonly DialogueGenerationService _dialogueGenerationService = new();
         private InputPresenter _inputPresenter;
         
         private Trade _currentTrade;
@@ -88,10 +91,26 @@ namespace Presenters
         {
             string speakerStyle = "lunatic";
             if (_currentTrade == null || _originator == null || _target == null) return;
+            
+            AlgorithmService.AlgorithmDecision += (sender, args) =>
+            {
+                if (args.issuesWithTrade.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    
+                    foreach (var t in args.issuesWithTrade)
+                    {
+                        sb.Append($"{t.Message} +");
+                    }
+                    
+                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
+                        RejectCallback));
+                }
+            };
+            _algorithmService.Decide(_currentTrade, _originator, _target);
+            
             try
             {
-                _algorithmService.Decide(_currentTrade, _originator, _target);
-                
                 //if it gets here, the trade is accepted and no exception was thrown by the algorithm service
                 accepted.SetActive(true);
                 Debug.Log("Trade accepted");
