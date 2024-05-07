@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Enums;
-using LogicServices;
-using Models;
+using ModelLibrary;
 using Presenters;
+using ServiceLibrary;
 using UnityEngine;
 
 public class DebugPresenter : MonoBehaviour
@@ -14,6 +10,7 @@ public class DebugPresenter : MonoBehaviour
     private DialoguePresenter _dialoguePresenter;
     private SpeechPresenter _speechPresenter;
     private TradePresenter _tradePresenter;
+    private InputPresenter _inputPresenter;
 
     [SerializeField] private InventoryItems debugRequestedItem = InventoryItems.Wood;
     [SerializeField] private int debugRequestedAmount = 2;
@@ -29,6 +26,7 @@ public class DebugPresenter : MonoBehaviour
         _dialoguePresenter = GetComponent<DialoguePresenter>();
         _speechPresenter = GetComponent<SpeechPresenter>();
         _tradePresenter = GetComponent<TradePresenter>();
+        _inputPresenter = GetComponent<InputPresenter>();
 
         StartServices();
     }
@@ -50,6 +48,19 @@ public class DebugPresenter : MonoBehaviour
     {
         if (_enabeld)
         {
+            GUILayout.Label("Game Manger");
+            if (GUILayout.Button("Start state"))
+            {
+                _gameManager.ChangeGameState(GameManager.GameState.Start);
+            }
+            if (GUILayout.Button("Introduction state"))
+            {
+                _gameManager.ChangeGameState(GameManager.GameState.Introduction);
+            }
+            if (GUILayout.Button("Trade state"))
+            {
+               _gameManager.ChangeGameState(GameManager.GameState.Trade);
+            }
             if (_dialoguePresenter)
             {
                 GUILayout.Label("Dialogue");
@@ -108,6 +119,27 @@ public class DebugPresenter : MonoBehaviour
                 {
                     _speechPresenter.StopSpeaking();
                 }
+                
+                if (GUILayout.Button("Start STT"))
+                {
+                    _speechPresenter.StartRecognition();
+                }
+    
+                if (GUILayout.Button("Voices"))
+                {
+                   Debug.Log(_speechPresenter.PossibleVoices());
+                }
+                
+                if (GUILayout.Button("Volume"))
+                {
+                    Debug.Log(_speechPresenter.GetSpeechVolume());
+                }
+                
+                if (GUILayout.Button("Rate"))
+                {
+                    Debug.Log(_speechPresenter.GetSpeechRate());
+                }
+
             }
 
             if (_tradePresenter)
@@ -116,15 +148,24 @@ public class DebugPresenter : MonoBehaviour
                 if (GUILayout.Button("Show trade offer to player"))
                 {
                     var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem,
-                        debugOfferedAmount);
+                        debugOfferedAmount, _gameManager.Player.Name, _gameManager.Cpu1.Name);
                     _tradePresenter.ShowTradeOffer(trade, _gameManager.Cpu1, _gameManager.Player);
                 }
 
                 if (GUILayout.Button("Show trade offer from player"))
                 {
                     var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem,
-                        debugOfferedAmount);
+                        debugOfferedAmount, _gameManager.Cpu1.Name, _gameManager.Player.Name);
                     _tradePresenter.ShowTradeOffer(trade, _gameManager.Player, _gameManager.Cpu1);
+                }
+            }
+
+            if (_inputPresenter)
+            {
+                GUILayout.Label("Fallback");
+                if (GUILayout.Button("Toggle Fallback"))
+                {
+                    _inputPresenter.ToggleInputFallBack(true);
                 }
             }
         }
