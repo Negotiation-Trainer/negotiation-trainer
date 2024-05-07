@@ -1,6 +1,7 @@
 using ModelLibrary;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Presenters
 {
@@ -38,12 +39,25 @@ namespace Presenters
         [SerializeField] private TMP_Text steelB;
         [SerializeField] private TMP_Text steelC;
         
-        [SerializeField] private Transform scoreCard;
-        [SerializeField] private Transform scoreCardTarget;
-        [SerializeField] private float speed;
-        private Vector3 _originalPosition;
-        private Vector3 _targetPosition;
+        [SerializeField] private TMP_Text woodScore;
+        [SerializeField] private TMP_Text insulationScore;
+        [SerializeField] private TMP_Text stoneScore;
+        [SerializeField] private TMP_Text fertilizerScore;
+        [SerializeField] private TMP_Text lensesScore;
+        [SerializeField] private TMP_Text clayScore;
+        [SerializeField] private TMP_Text goldScore;
+        [SerializeField] private TMP_Text steelScore;
         
+        [SerializeField] private Image woodHammer;
+        [SerializeField] private Image insulationHammer;
+        [SerializeField] private Image stoneHammer;
+        [SerializeField] private Image lensesHammer;
+        [SerializeField] private Image clayHammer;
+        [SerializeField] private Image goldHammer;
+        [SerializeField] private Image steelHammer;
+        
+        [SerializeField] private Transform scoreCard;
+
         private GameManager _gameManager;
         private Tribe _player;
         private bool _transitioning = false;
@@ -56,9 +70,6 @@ namespace Presenters
             _player = _gameManager.Player;
             
             FillScoreCard();
-            
-            _originalPosition = scoreCard.localPosition;
-            _targetPosition = _originalPosition;        
         }
 
         private void FillScoreCard()
@@ -105,27 +116,66 @@ namespace Presenters
             scoreCard.gameObject.SetActive(isActive);
         }
         
-        public void ToggleScoreCard()
+        public void UpdateScoreCard(Tribe tribe, InventoryItems resourceBuildingBuild)
         {
-            if(_transitioning) return;
-            if (_targetPosition.Compare(_originalPosition, 100))
+            Sprite hammer;
+            if (tribe == _gameManager.Cpu1)
             {
-                _targetPosition = _originalPosition - new Vector3(0,693,0);
-                _transitioning = true;
+                hammer = Resources.Load<Sprite>( "UI/Icons/Green_Hammer_Icon" );
+            }
+            else if (tribe == _gameManager.Cpu2)
+            {
+                hammer = Resources.Load<Sprite>( "UI/Icons/Red_Hammer_Icon" );
             }
             else
             {
-                _targetPosition = _originalPosition;
-                _transitioning = true;
+                hammer = Resources.Load<Sprite>( "UI/Icons/Yellow_Hammer_Icon" );
             }
-        }
-
-        private void FixedUpdate()
-        {
-            if (_transitioning)
+            
+            switch (resourceBuildingBuild)
             {
-                scoreCard.localPosition = Vector3.MoveTowards(scoreCard.localPosition, _targetPosition, speed);
-                if (scoreCard.localPosition.Compare(_targetPosition, 100)) _transitioning = false;
+                case InventoryItems.Wood:
+                    woodScore.gameObject.SetActive(true);
+                    woodScore.text = _player.PointTable[(InventoryItems.Wood, tribe)].ToString();
+                    woodHammer.gameObject.SetActive(true);
+                    woodHammer.sprite = hammer;
+                    break;
+                case InventoryItems.Insulation:
+                    insulationScore.gameObject.SetActive(true);
+                    insulationScore.text = _player.PointTable[(InventoryItems.Insulation, tribe)].ToString();
+                    insulationHammer.gameObject.SetActive(true);
+                    insulationHammer.sprite = hammer;
+                    break;
+                case InventoryItems.Stone:
+                    stoneScore.gameObject.SetActive(true);
+                    stoneScore.text = _player.PointTable[(InventoryItems.Stone, tribe)].ToString();
+                    stoneHammer.gameObject.SetActive(true);
+                    stoneHammer.sprite = hammer;
+                    break;
+                case InventoryItems.Lenses:
+                    lensesScore.gameObject.SetActive(true);
+                    lensesScore.text = _player.PointTable[(InventoryItems.Lenses, tribe)].ToString();
+                    lensesHammer.gameObject.SetActive(true);
+                    lensesHammer.sprite = hammer;
+                    break;
+                case InventoryItems.Clay:
+                    clayScore.gameObject.SetActive(true);
+                    clayScore.text = _player.PointTable[(InventoryItems.Clay, tribe)].ToString();
+                    clayHammer.gameObject.SetActive(true);
+                    clayHammer.sprite = hammer;
+                    break;
+                case InventoryItems.Gold:
+                    goldScore.gameObject.SetActive(true);
+                    goldScore.text = _player.PointTable[(InventoryItems.Gold, tribe)].ToString();
+                    goldHammer.gameObject.SetActive(true);
+                    goldHammer.sprite = hammer;
+                    break;
+                case InventoryItems.Steel:
+                    steelScore.gameObject.SetActive(true);
+                    steelScore.text = _player.PointTable[(InventoryItems.Steel, tribe)].ToString();
+                    steelHammer.gameObject.SetActive(true);
+                    steelHammer.sprite = hammer;
+                    break;
             }
         }
     }

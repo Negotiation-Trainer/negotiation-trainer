@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using ModelLibrary;
 using Presenters;
+using ServiceLibrary;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button[] unpauseButtons;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject mainMenu;
+    [SerializeField] private Button endGame;
     public static GameManager Instance { get; private set; }
     public Tribe Cpu1 { get; private set; }
     public Tribe Cpu2 { get; private set; }
@@ -23,6 +26,7 @@ public class GameManager : MonoBehaviour
     private SettingsPresenter _settingsPresenter;
     private SpeechPresenter _speechPresenter;
     private CutscenePresenter _cutscenePresenter;
+    private DialoguePresenter _DialoguePresenter;
     
     public enum GameState
     {
@@ -51,6 +55,7 @@ public class GameManager : MonoBehaviour
         _settingsPresenter = GetComponent<SettingsPresenter>();
         _speechPresenter = GetComponent<SpeechPresenter>();
         _cutscenePresenter = GetComponent<CutscenePresenter>();
+        _DialoguePresenter = GetComponent<DialoguePresenter>();
         pauseButton.onClick.AddListener(PauseGame);
         foreach (var button in settingsButton)
         {
@@ -63,6 +68,20 @@ public class GameManager : MonoBehaviour
         ChangeGameState(GameState.Start);
     }
 
+    public void EndGame()
+    {
+        ToggleTradeUI(false);
+        _DialoguePresenter.QueueMessages(new DialogueGenerationService().SplitTextToInstructionMessages($"The game is over. you got {Player.Points} points, The {Cpu1.Name} got {Cpu1.Points} points and {Cpu2.Name} got {Cpu2.Points} points. Game wil now restart"));
+        _DialoguePresenter.ShowNextMessage();
+        endGame.gameObject.SetActive(false);
+        Invoke(nameof(RestartGame),10);
+    }
+
+    private void RestartGame()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
+    }
     
     private void ShowSettingsMenu()
     {
@@ -289,6 +308,7 @@ public class GameManager : MonoBehaviour
     private void HandleTradeState()
     {
         ToggleTradeUI(true);
+        endGame.gameObject.SetActive(true);
     }
 
 }
