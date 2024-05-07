@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Enums;
-using Models;
+using ModelLibrary;
 using ServiceLibrary;
 using UnityEngine;
 
@@ -39,6 +38,7 @@ namespace Presenters
 
         private readonly BuildingService _buildingService = new BuildingService();
         private GameManager _gameManager;
+        private ScorePresenter _scorePresenter;
         private Dictionary<(Tribe, InventoryItems), List<GameObject>> _buildableStructures;
         private Dictionary<Tribe, List<GameObject>> _buildStructures;
         private Tribe[] _tribes;
@@ -46,6 +46,7 @@ namespace Presenters
         private void Start()
         {
             _gameManager = GameManager.Instance;
+            _scorePresenter = GetComponent<ScorePresenter>();
 
             _buildableStructures = new()
             {
@@ -105,6 +106,7 @@ namespace Presenters
         // adds the activated model to the build structures list of the tribe.
         private void PlaceBuilding(Tribe tribe, InventoryItems resource)
         {
+            _scorePresenter.UpdateScoreCard(tribe,resource);
             var modelList = _buildableStructures[(tribe, resource)];
 
             if (modelList.Count == 1)
