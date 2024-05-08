@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.8281953, g: 0.5049967, b: 0.3102379, a: 1}
+  m_IndirectSpecularColor: {r: 0.8281037, g: 0.5050344, b: 0.31007183, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -545,13 +545,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!43 &235957388
+--- !u!114 &247165797 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8114376908470384664, guid: f3a62f26a1771df4d976dcd566a6365f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2574284203544505455}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!43 &307989164
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WaterVolume--52976
+  m_Name: WaterVolume-79100
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -710,18 +722,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &247165797 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8114376908470384664, guid: f3a62f26a1771df4d976dcd566a6365f,
-    type: 3}
-  m_PrefabInstance: {fileID: 2574284203544505455}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &326015544
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1518,6 +1518,8 @@ MonoBehaviour:
   dialogueBox: {fileID: 1696549039}
   dialogueText: {fileID: 686494541}
   portraits: {fileID: 1964122343}
+  nameBox: {fileID: 1153518956}
+  nameText: {fileID: 1147106913}
   nextDialogueButton: {fileID: 915890073}
 --- !u!114 &969265024
 MonoBehaviour:
@@ -1531,6 +1533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a735eefd4e09460c8223926b7dacdcd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrading: 0
   tradeOffer: {fileID: 1660427259}
   offerText: {fileID: 775158769}
   offerAmount: {fileID: 158535949}
@@ -1736,7 +1739,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997226265}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.063366316, y: 0.5827098, z: -0.04587937, w: -0.8089062}
+  m_LocalRotation: {x: -0.063366316, y: 0.5827097, z: -0.04587937, w: -0.8089061}
   m_LocalPosition: {x: 19.739655, y: 29.993477, z: -12.584931}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1893,6 +1896,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1147106913 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1326514709753108086, guid: f3a62f26a1771df4d976dcd566a6365f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2574284203544505455}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1153518956 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9015070123169172601, guid: f3a62f26a1771df4d976dcd566a6365f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2574284203544505455}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1191703490 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7123334173269509518, guid: f3a62f26a1771df4d976dcd566a6365f,
@@ -2786,7 +2807,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 235957388}
+      objectReference: {fileID: 307989164}
     - target: {fileID: 1944063041435680547, guid: 2abbe179bdc4d8d439fc0d10b89452d0,
         type: 3}
       propertyPath: m_IsActive

@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using System.Text;
 using ModelLibrary;
 using ModelLibrary.Exceptions;
@@ -76,6 +77,7 @@ namespace Presenters
         
          public void SignTradeOffer()
          {
+             Debug.Log("Button pressed");
              MakeTrade();
          }
 
@@ -93,6 +95,7 @@ namespace Presenters
          
         private void MakeTrade()
         {
+            Debug.Log("Make a trade was called.");
             string speakerStyle = "lunatic";
             if (_currentTrade == null || _originator == null || _target == null) return;
             
@@ -132,7 +135,7 @@ namespace Presenters
         {
             //TODO: AI Service fix
             ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
-            Debug.Log("Return Message" + returnMessage.Message);
+            Debug.Log("Return Message: " + returnMessage.Message);
             
             
             _originator.Inventory.RemoveFromInventory(_currentTrade.OfferedItem, _currentTrade.OfferedAmount);
@@ -143,9 +146,10 @@ namespace Presenters
             
             Invoke(nameof(ClearOffer), 2);
             
-            
-            
-            _dialoguePresenter.QueueMessages(_dialogueGenerationService.SplitTextToDialogueMessages(SplitMessageIntoChunks(returnMessage.Message), _target.Name));
+            DisableButtons();
+            _dialoguePresenter.DialogueFinished += EnableButtons;
+            _dialoguePresenter.QueueMessages(_dialogueGenerationService.SplitTextToDialogueMessages(returnMessage.Message, _target.Name));
+            _dialoguePresenter.ShowNextMessage();
         }
 
         private void RejectCallback(string response)
@@ -158,11 +162,12 @@ namespace Presenters
             
             rejected.SetActive(true);
             Debug.Log("Trade Refused");
-            
-            _dialoguePresenter.QueueMessages(_dialogueGenerationService.SplitTextToDialogueMessages(SplitMessageIntoChunks(returnMessage.Message), _target.Name));
-            _dialoguePresenter.ShowNextMessage();
-            
             Invoke(nameof(ClearOffer), 2);
+            
+            DisableButtons();
+            _dialoguePresenter.DialogueFinished += EnableButtons;
+            _dialoguePresenter.QueueMessages(_dialogueGenerationService.SplitTextToDialogueMessages(returnMessage.Message, _target.Name));
+            _dialoguePresenter.ShowNextMessage();
         }
 
         private bool TradePossible(Trade trade, Tribe originator, Tribe target)
@@ -171,37 +176,16 @@ namespace Presenters
                    target.Inventory.GetInventoryAmount(trade.RequestedItem) >= trade.RequestedAmount;
         }
 
-        private string SplitMessageIntoChunks(string message)
+        private void EnableButtons(object sender, EventArgs args)
         {
-            StringBuilder chunks = new StringBuilder();
-            int currentIndex = 0;
+            _inputPresenter.ToggleNewOfferButton(true);
+            _inputPresenter.ToggleTalkButton(true);
+        }
 
-            while (currentIndex < message.Length)
-            {
-                int chunkSize = 200;
-                if (currentIndex + chunkSize > message.Length)
-                {
-                    chunkSize = message.Length - currentIndex;
-                }
-                else
-                {
-                    while (message[currentIndex + chunkSize] != ' ' && chunkSize > 0)
-                    {
-                        chunkSize--;
-                    }
-                }
-
-                chunks.Append(message.Substring(currentIndex, chunkSize));
-                currentIndex += chunkSize;
-
-                // Add the separator if there is more message to process
-                if (currentIndex < message.Length)
-                {
-                    chunks.Append("{nm}");
-                }
-            }
-
-            return chunks.ToString();
+        private void DisableButtons()
+        {
+            _inputPresenter.ToggleNewOfferButton(false);
+            _inputPresenter.ToggleTalkButton(false);
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Presenters
         private SpeechPresenter _speechPresenter;
         private DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
         private Queue<IMessage> _dialogueQueue = new Queue<IMessage>();
+        public event EventHandler DialogueFinished;
 
         public void QueueMessages(IMessage[] messages)
         {
@@ -35,6 +36,7 @@ namespace Presenters
             if (_dialogueQueue.Count == 0)
             {
                 dialogueBox.SetActive(false);
+                DialogueFinished?.Invoke(this, EventArgs.Empty);
                 return;
             }
             if(!dialogueBox.activeSelf) dialogueBox.SetActive(true);
