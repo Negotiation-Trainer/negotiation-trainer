@@ -12,6 +12,8 @@ namespace Presenters
 {
     public class TradePresenter: MonoBehaviour
     {
+        public bool isTrading = false;
+        
         private readonly AlgorithmService _algorithmService = new();
         private readonly DialogueGenerationService _dialogueGenerationService = new();
         private InputPresenter _inputPresenter;
@@ -104,11 +106,15 @@ namespace Presenters
                     {
                         sb.Append($"{t.Message} +");
                     }
-                    
-                    Debug.Log("Trade Rejected");
-                    
-                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
-                        RejectCallback));
+
+                    if (!isTrading)
+                    {
+                        isTrading = true;
+                        Debug.Log("Trade Rejected");
+
+                        StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
+                            RejectCallback));
+                    }
                 }
                 else
                 {
@@ -153,9 +159,10 @@ namespace Presenters
             rejected.SetActive(true);
             Debug.Log("Trade Refused");
             
-            Invoke(nameof(ClearOffer), 2);
-            
             _dialoguePresenter.QueueMessages(_dialogueGenerationService.SplitTextToDialogueMessages(SplitMessageIntoChunks(returnMessage.Message), _target.Name));
+            _dialoguePresenter.ShowNextMessage();
+            
+            Invoke(nameof(ClearOffer), 2);
         }
 
         private bool TradePossible(Trade trade, Tribe originator, Tribe target)
