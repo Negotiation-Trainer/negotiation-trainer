@@ -3,8 +3,8 @@ name: Test & Deploy to development
 on:
     push:
         branches:
-            - "develop"
-
+            - "main"
+            
 jobs:
   Build:
     name: Build
