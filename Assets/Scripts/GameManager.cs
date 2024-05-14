@@ -94,21 +94,6 @@ public class GameManager : MonoBehaviour
             button.onClick.AddListener(UnpauseGame);
         }
         ChangeGameState(GameState.Start);
-        
-        Debug.Log("Start game");
-        
-        var jsonText = "{\"message\":\"No way! I Want to build the build myself. My precious Steel is not for sale! Mwuahaha!\"}";
-        Debug.Log("json text" + jsonText);
-        
-        ChatMessage resultDeserializeObject = JsonConvert.DeserializeObject<ChatMessage>(jsonText);
-        
-        Debug.Log(resultDeserializeObject.Message ?? "no msg :(");
-        
-        ChatMessage msg = httpClient.RejectDeal(jsonText);
-        
-        Debug.Log(msg.Message ?? "no msg on deal :(");
-        
-        Debug.Log("ai Service - " + aiService);
     }
 
     public void EndGame()

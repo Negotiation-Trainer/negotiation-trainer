@@ -1556,8 +1556,8 @@ MonoBehaviour:
   dialogueBox: {fileID: 505848272}
   dialogueText: {fileID: 505848270}
   portraits: {fileID: 505848271}
-  nameBox: {fileID: 0}
-  nameText: {fileID: 0}
+  nameBox: {fileID: 2048609663}
+  nameText: {fileID: 1553107620}
   nextDialogueButton: {fileID: 505848263}
 --- !u!114 &176141572
 MonoBehaviour:
@@ -2728,6 +2728,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4685110934151630139, guid: f3a62f26a1771df4d976dcd566a6365f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 176141573}
+    - target: {fileID: 4685110934151630139, guid: f3a62f26a1771df4d976dcd566a6365f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnAIOkButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4685110934151630139, guid: f3a62f26a1771df4d976dcd566a6365f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, NegotiationTrainer
       objectReference: {fileID: 0}
     - target: {fileID: 4739833255321056299, guid: f3a62f26a1771df4d976dcd566a6365f,
         type: 3}
@@ -6456,6 +6471,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 505848252}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1553107620 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1326514709753108086, guid: f3a62f26a1771df4d976dcd566a6365f,
+    type: 3}
+  m_PrefabInstance: {fileID: 505848252}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1561985773 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2344654653846417690, guid: f3a62f26a1771df4d976dcd566a6365f,
@@ -9205,6 +9232,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2048609663 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9015070123169172601, guid: f3a62f26a1771df4d976dcd566a6365f,
+    type: 3}
+  m_PrefabInstance: {fileID: 505848252}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2049484352
 PrefabInstance:
   m_ObjectHideFlags: 0
