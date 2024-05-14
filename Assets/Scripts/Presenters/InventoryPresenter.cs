@@ -19,7 +19,6 @@ namespace Presenters
 
         private GameManager _gameManager;
         private Tribe _player;
-        private bool _transitioning = false;
 
         private void Start()
         {
