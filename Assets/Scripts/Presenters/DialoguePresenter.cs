@@ -29,6 +29,11 @@ namespace Presenters
                 _dialogueQueue.Enqueue(message);
             }
         }
+
+        public int MessagesRemaining()
+        {
+            return _dialogueQueue.Count;
+        }
         
         public void ShowNextMessage()
         {

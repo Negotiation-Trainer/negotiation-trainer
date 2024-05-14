@@ -11,11 +11,23 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Playables;
+using System.Collections.Generic;
+using ModelLibrary;
+using Presenters;
+using ServiceLibrary;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityHttpClients;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Button[] settingsButton;
+    [SerializeField] private Button pauseButton;
+    [SerializeField] private Button[] unpauseButtons;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject mainMenu;
+    [SerializeField] private Button endGame;
     public static GameManager Instance { get; private set; }
 
     public static AIService aiService { get; private set; } = new();
@@ -30,6 +42,10 @@ public class GameManager : MonoBehaviour
     private InventoryPresenter _inventoryPresenter;
     private ScorePresenter _scorePresenter;
     private InputPresenter _inputPresenter;
+    private SettingsPresenter _settingsPresenter;
+    private SpeechPresenter _speechPresenter;
+    private CutscenePresenter _cutscenePresenter;
+    private DialoguePresenter _DialoguePresenter;
     
     public enum GameState
     {
@@ -64,6 +80,19 @@ public class GameManager : MonoBehaviour
         _inventoryPresenter = GetComponent<InventoryPresenter>();
         _scorePresenter = GetComponent<ScorePresenter>();
         _inputPresenter = GetComponent<InputPresenter>();
+        _settingsPresenter = GetComponent<SettingsPresenter>();
+        _speechPresenter = GetComponent<SpeechPresenter>();
+        _cutscenePresenter = GetComponent<CutscenePresenter>();
+        _DialoguePresenter = GetComponent<DialoguePresenter>();
+        pauseButton.onClick.AddListener(PauseGame);
+        foreach (var button in settingsButton)
+        {
+            button.onClick.AddListener(ShowSettingsMenu);
+        }
+        foreach (var button in unpauseButtons)
+        {
+            button.onClick.AddListener(UnpauseGame);
+        }
         ChangeGameState(GameState.Start);
         
         Debug.Log("Start game");
@@ -81,7 +110,44 @@ public class GameManager : MonoBehaviour
         
         Debug.Log("ai Service - " + aiService);
     }
+
+    public void EndGame()
+    {
+        ToggleTradeUI(false);
+        _DialoguePresenter.QueueMessages(new DialogueGenerationService().SplitTextToInstructionMessages($"The game is over. you got {Player.Points} points, The {Cpu1.Name} got {Cpu1.Points} points and {Cpu2.Name} got {Cpu2.Points} points. Game wil now restart"));
+        _DialoguePresenter.ShowNextMessage();
+        endGame.gameObject.SetActive(false);
+        Invoke(nameof(RestartGame),10);
+    }
+
+    private void RestartGame()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
+    }
     
+    private void ShowSettingsMenu()
+    {
+        pauseMenu.SetActive(false);
+        _settingsPresenter.ShowSettingsMenu(true);
+    }
+    private void PauseGame()
+    {
+        ToggleTradeUI(false);
+        pauseMenu.SetActive(true);
+        pauseButton.gameObject.SetActive(false);
+        _speechPresenter.Pause();
+    }
+    
+    private void UnpauseGame()
+    {
+        _settingsPresenter.ShowSettingsMenu(false);
+        pauseMenu.SetActive(false);
+        if(State != GameState.Start) pauseButton.gameObject.SetActive(true);
+        if(State == GameState.Trade) ToggleTradeUI(true);
+        _speechPresenter.Resume();
+    }
+
     private void SetPointTables()
     {
         Player.PointTable = new Dictionary<(InventoryItems, Tribe), int>
@@ -239,6 +305,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void StartIntroduction()
+    {
+        HandleIntroductionState();
+        State = GameState.Introduction;
+    }
+
+    public void StartTrade()
+    {
+        HandleTradeState();
+        State = GameState.Trade;
+    }
+
     private void ToggleTradeUI(bool isActive)
     {
         _inventoryPresenter.ShowResourceCard(isActive);
@@ -254,6 +332,8 @@ public class GameManager : MonoBehaviour
     {
         ToggleTradeUI(false);
         ToggleAIOptions(true);
+        pauseButton.gameObject.SetActive(false);
+        mainMenu.SetActive(true);
     }
 
 
@@ -264,6 +344,8 @@ public class GameManager : MonoBehaviour
     {
         ToggleTradeUI(false);
         ToggleAIOptions(false);
+        pauseButton.gameObject.SetActive(true);
+        _cutscenePresenter.StartGame();
     }
 
     /// <summary>
@@ -273,6 +355,7 @@ public class GameManager : MonoBehaviour
     {
         ToggleTradeUI(true);
         ToggleAIOptions(false);
+        endGame.gameObject.SetActive(true);
     }
 
     #region tempSetting

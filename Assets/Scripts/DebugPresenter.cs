@@ -124,6 +124,22 @@ public class DebugPresenter : MonoBehaviour
                 {
                     _speechPresenter.StartRecognition();
                 }
+    
+                if (GUILayout.Button("Voices"))
+                {
+                   Debug.Log(_speechPresenter.PossibleVoices());
+                }
+                
+                if (GUILayout.Button("Volume"))
+                {
+                    Debug.Log(_speechPresenter.GetSpeechVolume());
+                }
+                
+                if (GUILayout.Button("Rate"))
+                {
+                    Debug.Log(_speechPresenter.GetSpeechRate());
+                }
+
             }
 
             if (_tradePresenter)
@@ -139,7 +155,7 @@ public class DebugPresenter : MonoBehaviour
                 if (GUILayout.Button("Show trade offer from player"))
                 {
                     var trade = new Trade(debugRequestedItem, debugRequestedAmount, debugOfferedItem,
-                        debugOfferedAmount, _gameManager.Cpu1.Name,_gameManager.Player.Name);
+                        debugOfferedAmount, _gameManager.Cpu1.Name, _gameManager.Player.Name);
                     _tradePresenter.ShowTradeOffer(trade, _gameManager.Player, _gameManager.Cpu1);
                 }
             }
