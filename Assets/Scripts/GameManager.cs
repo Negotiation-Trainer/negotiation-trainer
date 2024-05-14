@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
     
     public enum GameState
     {
+        AIOptions,
         Start,
         Introduction,
         Trade
@@ -93,7 +94,7 @@ public class GameManager : MonoBehaviour
         {
             button.onClick.AddListener(UnpauseGame);
         }
-        ChangeGameState(GameState.Start);
+        ChangeGameState(GameState.AIOptions);
     }
 
     public void EndGame()
@@ -275,6 +276,10 @@ public class GameManager : MonoBehaviour
     {
         switch (newState)
         {
+            case GameState.AIOptions:
+                HandleAIOptionsState();
+                State = newState;
+                break;
             case GameState.Start:
                 HandleGameStartState();
                 State = newState;
@@ -310,13 +315,21 @@ public class GameManager : MonoBehaviour
         _inputPresenter.ToggleTalkButton(isActive);
     }
 
+    private void HandleAIOptionsState()
+    {
+        ToggleAIOptions(true); 
+        ToggleTradeUI(false);
+        pauseButton.gameObject.SetActive(false);
+        mainMenu.SetActive(false);
+    }
+    
     /// <summary>
     /// Show menu UI
     /// </summary>
     private void HandleGameStartState()
     {
         ToggleTradeUI(false);
-        ToggleAIOptions(true);
+        ToggleAIOptions(false);
         pauseButton.gameObject.SetActive(false);
         mainMenu.SetActive(true);
     }
@@ -370,7 +383,7 @@ public class GameManager : MonoBehaviour
         httpClient.SetToken(token);
         
         Debug.Log("Token is set to: " + httpClient.Debug_GetAuth());
-        ChangeGameState(GameState.Trade);
+        ChangeGameState(GameState.Start);
     }
     
 
