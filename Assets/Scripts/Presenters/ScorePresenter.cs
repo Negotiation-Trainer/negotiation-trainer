@@ -60,8 +60,6 @@ namespace Presenters
 
         private GameManager _gameManager;
         private Tribe _player;
-        private bool _transitioning = false;
-        
         
         // Start is called before the first frame update
         void Start()

@@ -30,7 +30,7 @@ public class DebugPresenter : MonoBehaviour
 
         StartServices();
     }
-
+    
     void StartServices()
     {
         _dialogueGenerationService = new DialogueGenerationService();
@@ -101,7 +101,7 @@ public class DebugPresenter : MonoBehaviour
                     _dialoguePresenter.QueueMessages(
                         _dialogueGenerationService.SplitTextToDialogueMessages(
                             _dialoguePresenter.GetInstruction("general"),
-                            1));
+                            "DebugTribe"));
                     _dialoguePresenter.ShowNextMessage();
                 }
             }
