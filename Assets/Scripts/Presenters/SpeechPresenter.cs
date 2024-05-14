@@ -1,4 +1,6 @@
 using System;
+using ModelLibrary;
+using ServiceLibrary;
 using SpeechServices;
 using TMPro;
 using UnityEngine;
@@ -13,6 +15,8 @@ namespace Presenters
         public bool speechToTextEnabled = false;
         public bool textToSpeechEnabled = false;
         public event EventHandler TTSFinished;
+
+        private TradePresenter _tradePresenter;
         
         /// <summary>
         /// Start listening to users mic.
@@ -49,6 +53,26 @@ namespace Presenters
             {
                 Debug.Log($"{eventArgs.Text} -isFinal:{eventArgs.IsFinal}");
             }
+
+            if (eventArgs.IsFinal)
+            {
+                try
+                {
+                    StartCoroutine(GameManager.httpClient.ConvertToTrade(eventArgs.Text, OnHTTPConvertCallback));
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                }
+            }
+        }
+
+        private void OnHTTPConvertCallback(string response)
+        {
+            Trade trade = GameManager.httpClient.ConvertToTrade(response);
+            
+            Debug.Log($"trade: {trade}");
+            _tradePresenter.ShowTradeOffer(trade, GameManager.Instance.Player, GameManager.Instance.Cpu1);
         }
 
         private void OnTextToSpeechFinished(object sender, EventArgs eventArgs)
@@ -156,6 +180,8 @@ namespace Presenters
         
         void Start()
         {
+            _tradePresenter = GetComponent<TradePresenter>();
+            
             if (Application.platform == RuntimePlatform.WebGLPlayer && !Application.isEditor)
             {
                 _speechToTextService = gameObject.AddComponent<WebGLSpeechToTextService>();

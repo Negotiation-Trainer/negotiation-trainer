@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using ModelLibrary;
 using Presenters;
 using ServiceLibrary;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityHttpClients;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +17,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private Button endGame;
     public static GameManager Instance { get; private set; }
+
+    public static AIService aiService { get; private set; } = new();
+
+    public static BackOfficeHttpClient httpClient { get; private set; }
+    
     public Tribe Cpu1 { get; private set; }
     public Tribe Cpu2 { get; private set; }
     public Tribe Player { get; private set; }
@@ -30,6 +37,7 @@ public class GameManager : MonoBehaviour
     
     public enum GameState
     {
+        AIOptions,
         Start,
         Introduction,
         Trade
@@ -38,10 +46,19 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
+        
         Player = new Tribe("Azari");
         Cpu1 = new Tribe("Beluga");
         Cpu2 = new Tribe("Cinatu");
+        
+        Player.GoodWill[Cpu1] = 0;
+        Player.GoodWill[Cpu2] = 0;
+
+        Cpu1.GoodWill[Player] = 0;
+        Cpu1.GoodWill[Cpu2] = 0;
+
+        Cpu2.GoodWill[Player] = 0;
+        Cpu2.GoodWill[Cpu1] = 0;
         
         SetPointTables();
         FillInventory();
@@ -65,7 +82,7 @@ public class GameManager : MonoBehaviour
         {
             button.onClick.AddListener(UnpauseGame);
         }
-        ChangeGameState(GameState.Start);
+        ChangeGameState(GameState.AIOptions);
     }
 
     public void EndGame()
@@ -247,6 +264,10 @@ public class GameManager : MonoBehaviour
     {
         switch (newState)
         {
+            case GameState.AIOptions:
+                HandleAIOptionsState();
+                State = newState;
+                break;
             case GameState.Start:
                 HandleGameStartState();
                 State = newState;
@@ -279,14 +300,24 @@ public class GameManager : MonoBehaviour
         _inventoryPresenter.ShowResourceCard(isActive);
         _scorePresenter.ShowScoreCard(isActive);
         _inputPresenter.ToggleNewOfferButton(isActive);
+        _inputPresenter.ToggleTalkButton(isActive);
     }
 
+    private void HandleAIOptionsState()
+    {
+        ToggleAIOptions(true); 
+        ToggleTradeUI(false);
+        pauseButton.gameObject.SetActive(false);
+        mainMenu.SetActive(false);
+    }
+    
     /// <summary>
     /// Show menu UI
     /// </summary>
     private void HandleGameStartState()
     {
         ToggleTradeUI(false);
+        ToggleAIOptions(false);
         pauseButton.gameObject.SetActive(false);
         mainMenu.SetActive(true);
     }
@@ -298,6 +329,7 @@ public class GameManager : MonoBehaviour
     private void HandleIntroductionState()
     {
         ToggleTradeUI(false);
+        ToggleAIOptions(false);
         pauseButton.gameObject.SetActive(true);
         _cutscenePresenter.StartGame();
     }
@@ -308,7 +340,41 @@ public class GameManager : MonoBehaviour
     private void HandleTradeState()
     {
         ToggleTradeUI(true);
+        ToggleAIOptions(false);
         endGame.gameObject.SetActive(true);
     }
 
+    #region tempSetting
+
+    [SerializeField] private GameObject aiOptions;
+    [SerializeField] private TMP_InputField aiBaseURL;
+    [SerializeField] private TMP_InputField aiSessionPassword;
+    
+
+    private void ToggleAIOptions(bool isActive)
+    {
+        aiOptions.SetActive(isActive);
+    }
+
+    public void OnAIOkButton()
+    {
+        var baseUrl = aiBaseURL.text;
+        var sessionPassword = aiSessionPassword.text;
+        httpClient = new BackOfficeHttpClient(baseUrl, sessionPassword);
+
+        StartCoroutine(httpClient.Authenticate(OnReceiveToken));
+    }
+
+    private void OnReceiveToken(string token)
+    {
+        Debug.Log("Token received: " + token);
+        httpClient.SetToken(token);
+        
+        Debug.Log("Token is set to: " + httpClient.Debug_GetAuth());
+        ChangeGameState(GameState.Start);
+    }
+    
+
+    #endregion
+    
 }

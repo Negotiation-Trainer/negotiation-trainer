@@ -8,6 +8,7 @@ namespace Presenters
 {
     public class InputPresenter : MonoBehaviour
     {
+        [SerializeField] private GameObject talkButton;
         [SerializeField] private GameObject newOfferButton;
         [SerializeField] private GameObject inputFallback;
         [SerializeField] private TMP_Dropdown offeringResourceType;
@@ -27,6 +28,10 @@ namespace Presenters
            targetTribe.AddOptions(new List<string>(){GameManager.Instance.Cpu1.Name,GameManager.Instance.Cpu2.Name});
         }
 
+        public void ToggleTalkButton(bool isActive)
+        {
+            talkButton.SetActive(isActive);
+        }
         public void ToggleNewOfferButton(bool isActive)
         {
             newOfferButton.SetActive(isActive && _settingsPresenter.fallbackEnabled);
@@ -73,6 +78,7 @@ namespace Presenters
         public void ShowProposal()
         {
             ToggleNewOfferButton(false);
+            ToggleTalkButton(false);
             ToggleInputFallBack(true);
         }
 
@@ -80,6 +86,7 @@ namespace Presenters
         {
             HideError();
             ToggleInputFallBack(false);
+            ToggleTalkButton(true);
             ToggleNewOfferButton(true);
         }
         
