@@ -62,14 +62,10 @@ namespace Presenters
         {
             _inputPresenter.ToggleNewOfferButton(false);
             _inputPresenter.ToggleTalkButton(false);
-            if (!TradePossible(trade, originator, target)) return;
-
-            _currentTrade = trade;
-            _originator = originator;
-            _target = target;
-
-            if (_originator == GameManager.Instance.Player)
+            
+            if (originator == GameManager.Instance.Player)
             {
+                if (!TradePossibleForOriginator(trade,originator)) return;
                 offerText.text = $"We, The {originator.Name} tribe, are offering";
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to the {target.Name} tribe, in exchange for:";
@@ -77,11 +73,16 @@ namespace Presenters
             }
             else
             {
+                if (!TradePossibleForTarget(trade, target)) return;
                 offerText.text = $"The {originator.Name} tribe, are offering";
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to us, the {target.Name} tribe, in exchange for:";
                 requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
             }
+            
+            _currentTrade = trade;
+            _originator = originator;
+            _target = target;
 
             tradeOffer.SetActive(true);
         }
@@ -116,39 +117,15 @@ namespace Presenters
         private void MakeTrade()
         {
             Debug.Log("Make a trade was called.");
-            string speakerStyle = "lunatic";
             if (_currentTrade == null || _originator == null || _target == null) return;
-
-            _algorithmService.AlgorithmDecision += (sender, args) =>
+            try
             {
-                if (args.issuesWithTrade.Count > 0) // When issues with the trade are found, the trade will be rejected
-                {
-                    StringBuilder sb = new StringBuilder();
-
-                    foreach (var t in args.issuesWithTrade)
-                    {
-                        sb.Append($"{t.Message} +");
-                    }
-
-                    if (!isTrading)
-                    {
-                        isTrading = true;
-                        Debug.Log("Trade Rejected");
-
-                        StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
-                            RejectCallback));
-                    }
-                }
-                else
-                {
-                    accepted.SetActive(true);
-                    Debug.Log("Trade accepted");
-
-                    StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
-                }
-            };
-
-            _algorithmService.Decide(_currentTrade, _originator, _target);
+                _algorithmService.Decide(_currentTrade, _originator, _target);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            } 
         }
 
         private void AcceptCallback(string response)
@@ -164,7 +141,7 @@ namespace Presenters
             _originator.Inventory.AddToInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
             _target.Inventory.RemoveFromInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
 
-            Invoke(nameof(ClearOffer), 2);
+            Invoke(nameof(DiscardTradeOffer), 2);
 
             DisableButtons();
             _dialoguePresenter.DialogueFinished += EnableButtons;
@@ -183,7 +160,7 @@ namespace Presenters
 
             rejected.SetActive(true);
             Debug.Log("Trade Refused");
-            Invoke(nameof(ClearOffer), 2);
+            Invoke(nameof(DiscardTradeOffer), 2);
 
             DisableButtons();
             _dialoguePresenter.DialogueFinished += EnableButtons;
@@ -199,7 +176,7 @@ namespace Presenters
             {
                 if (_originator == GameManager.Instance.Player)
                 {
-                    if (TradePossible(_currentTrade, _originator, _target))
+                    if (TradePossibleForOriginator(_currentTrade, _originator))
                     {
                         MakeTrade();
                     }
@@ -236,19 +213,25 @@ namespace Presenters
             private void OnAlgorithmDecision(object sender,
                 AlgorithmService.AlgorithmDecisionEventArgs algorithmDecisionEventArgs)
             {
+                string speakerStyle = "lunatic";
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var t in algorithmDecisionEventArgs.issuesWithTrade)
+                {
+                    sb.Append($"{t.Message} +");
+                }
+                
                 if (algorithmDecisionEventArgs.tradeAccepted)
                 {
                     //Accept the players offer.
-                    accepted.SetActive(true);
-                    ProcessTrade();
-                    Invoke(nameof(DiscardTradeOffer), 2);
+                    StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
                 }
                 else if (!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null &&
                          algorithmDecisionEventArgs.counterOffer == _currentTrade)
                 {
                     //TEMPORARY decline when counter is same as original offer. 
-                    rejected.SetActive(true);
-                    Invoke(nameof(DiscardTradeOffer), 2);
+                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
+                        RejectCallback));
                 }
                 else if (!algorithmDecisionEventArgs.tradeAccepted && algorithmDecisionEventArgs.counterOffer != null)
                 {
@@ -258,11 +241,22 @@ namespace Presenters
                 else
                 {
                     //Offer should be declined by the AI.
-                    rejected.SetActive(true);
-                    Invoke(nameof(DiscardTradeOffer), 2);
+                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
+                        RejectCallback));
                 }
             }
 
+            
+            private bool TradePossibleForTarget(Trade trade, Tribe target)
+            {
+                return target.Inventory.GetInventoryAmount(trade.RequestedItem) >= trade.RequestedAmount;
+            }
+            
+            private bool TradePossibleForOriginator(Trade trade, Tribe originator)
+            {
+                return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount;
+            }
+            
             /// Check if the participants of the deal have enough resources.
             private bool TradePossible(Trade trade, Tribe originator, Tribe target)
             {
