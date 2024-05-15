@@ -102,6 +102,12 @@ namespace Presenters
             }
         }
 
+        public void EnqueueAndShowDialogueString(string message, string tribeName)
+        {
+            QueueMessages(_dialogueGenerationService.SplitTextToDialogueMessages(message, tribeName));
+            ShowNextMessage();
+        }
+
         public void StartGeneralInstruction()
         {
             QueueMessages(_dialogueGenerationService.SplitTextToInstructionMessages(GetInstruction("general")));
