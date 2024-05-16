@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ModelLibrary;
 using Presenters;
@@ -34,13 +35,16 @@ public class GameManager : MonoBehaviour
     private SpeechPresenter _speechPresenter;
     private CutscenePresenter _cutscenePresenter;
     private DialoguePresenter _DialoguePresenter;
+    private BuildingPresenter _buildingPresenter;
     
     public enum GameState
     {
         AIOptions,
         Start,
         Introduction,
-        Trade
+        Trade,
+        Intermission,
+        Ending
     }
 
     private void Awake()
@@ -73,6 +77,7 @@ public class GameManager : MonoBehaviour
         _speechPresenter = GetComponent<SpeechPresenter>();
         _cutscenePresenter = GetComponent<CutscenePresenter>();
         _DialoguePresenter = GetComponent<DialoguePresenter>();
+        _buildingPresenter = GetComponent<BuildingPresenter>();
         pauseButton.onClick.AddListener(PauseGame);
         foreach (var button in settingsButton)
         {
@@ -87,11 +92,7 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        ToggleTradeUI(false);
-        _DialoguePresenter.QueueMessages(new DialogueGenerationService().SplitTextToInstructionMessages($"The game is over. you got {Player.Points} points, The {Cpu1.Name} got {Cpu1.Points} points and {Cpu2.Name} got {Cpu2.Points} points. Game wil now restart"));
-        _DialoguePresenter.ShowNextMessage();
-        endGame.gameObject.SetActive(false);
-        Invoke(nameof(RestartGame),10);
+        ChangeGameState(GameState.Intermission);
     }
 
     private void RestartGame()
@@ -280,6 +281,14 @@ public class GameManager : MonoBehaviour
                 HandleTradeState();
                 State = newState;
                 break;
+            case GameState.Intermission:
+                HandleIntermissionState();
+                State = newState;
+                break;
+            case GameState.Ending:
+                HandleEndingState();
+                State = newState;
+                break;
         }
     }
 
@@ -301,6 +310,53 @@ public class GameManager : MonoBehaviour
         _scorePresenter.ShowScoreCard(isActive);
         _inputPresenter.ToggleNewOfferButton(isActive);
         _inputPresenter.ToggleTalkButton(isActive);
+    }
+
+    private void HandleEndingState()
+    {
+        _cutscenePresenter.ToggleRainbow(true);
+    }
+    private void HandleIntermissionState()
+    {
+        ToggleAIOptions(false); 
+        ToggleTradeUI(false);
+        pauseButton.gameObject.SetActive(false);
+        mainMenu.SetActive(false);
+
+        EmptyInventory(Player);
+        EmptyInventory(Cpu1);
+        EmptyInventory(Cpu2);
+        FillInventory();
+        
+        _scorePresenter.ResetHammers();
+        _buildingPresenter.ResetBuildings();
+        
+        Player.Points = 0;
+        Cpu1.Points = 0;
+        Cpu2.Points = 0;
+        
+        Player.GoodWill[Cpu1] = 0;
+        Player.GoodWill[Cpu2] = 0;
+
+        Cpu1.GoodWill[Player] = 0;
+        Cpu1.GoodWill[Cpu2] = 0;
+
+        Cpu2.GoodWill[Player] = 0;
+        Cpu2.GoodWill[Cpu1] = 0;
+        
+        _cutscenePresenter.StartIntermission();
+    }
+
+    private void EmptyInventory(Tribe tribe)
+    {
+        tribe.Inventory.RemoveFromInventory(InventoryItems.Wood,tribe.Inventory.GetInventoryAmount(InventoryItems.Wood));
+        tribe.Inventory.RemoveFromInventory(InventoryItems.Fertilizer,tribe.Inventory.GetInventoryAmount(InventoryItems.Fertilizer));
+        tribe.Inventory.RemoveFromInventory(InventoryItems.Insulation,tribe.Inventory.GetInventoryAmount(InventoryItems.Insulation));
+        tribe.Inventory.RemoveFromInventory(InventoryItems.Clay,tribe.Inventory.GetInventoryAmount(InventoryItems.Clay));
+        tribe.Inventory.RemoveFromInventory(InventoryItems.Gold,tribe.Inventory.GetInventoryAmount(InventoryItems.Gold));
+        tribe.Inventory.RemoveFromInventory(InventoryItems.Lenses,tribe.Inventory.GetInventoryAmount(InventoryItems.Lenses));
+        tribe.Inventory.RemoveFromInventory(InventoryItems.Steel,tribe.Inventory.GetInventoryAmount(InventoryItems.Steel));
+        tribe.Inventory.RemoveFromInventory(InventoryItems.Stone,tribe.Inventory.GetInventoryAmount(InventoryItems.Stone));
     }
 
     private void HandleAIOptionsState()

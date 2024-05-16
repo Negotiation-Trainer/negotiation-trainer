@@ -88,6 +88,24 @@ namespace Presenters
             
             _tribes = new[] {_gameManager.Player, _gameManager.Cpu1, _gameManager.Cpu2};
         }
+
+        public void ResetBuildings()
+        {
+            foreach (var tribe in _tribes)
+            {
+                foreach (var building in _buildStructures[tribe])
+                {
+                    building.gameObject.SetActive(false);
+                }
+            }
+            
+            _buildStructures = new Dictionary<Tribe, List<GameObject>>
+            {
+                [_gameManager.Player] = new List<GameObject>(),
+                [_gameManager.Cpu1] = new List<GameObject>(),
+                [_gameManager.Cpu2] = new List<GameObject>()
+            };
+        }
     
         private void InventoryUpdateEventHandler(object sender, EventArgs eventArgs)
         {

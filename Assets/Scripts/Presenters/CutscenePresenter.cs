@@ -25,6 +25,8 @@ namespace Presenters
         
         [SerializeField] private CinemachineVirtualCamera[] virtualCameras;
         [SerializeField] private int[] switchMoment;
+        [SerializeField] private CinemachineVirtualCamera[] intermissionVirtualCameras;
+        [SerializeField] private int[] intermissionSwitchMoment;
         [SerializeField] private bool switchCamera = false;
         [SerializeField] private Light light;
         private float _t = 0;
@@ -89,7 +91,23 @@ namespace Presenters
             {
                 stormIncoming.GetComponent<ParticleSystem>().Stop();
             }
-            
+        }
+
+        public void ToggleStorm(bool stormActive)
+        {
+            if (stormActive)
+            {
+                if (softClouds.GetComponent<ParticleSystem>().isPlaying)
+                {
+                    softClouds.GetComponent<ParticleSystem>().Stop();
+                }
+                storm.GetComponent<ParticleSystem>().Play();
+            }
+            else
+            {
+                storm.GetComponent<ParticleSystem>().Stop();
+                softClouds.GetComponent<ParticleSystem>().Play();
+            }
         }
 
         private void FixedUpdate()
@@ -112,6 +130,14 @@ namespace Presenters
                 }
             }
         }
+
+        public void StartIntermission()
+        {
+            _dialoguePresenter.QueueMessages(
+                _dialogueGenerationService.SplitTextToInstructionMessages(
+                    _dialoguePresenter.GetInstruction("Intermission")));
+            _dialoguePresenter.ShowNextMessage();
+        }
         
         void Update()
         {
@@ -122,13 +148,23 @@ namespace Presenters
                 if (light.intensity == _min) _darken = false;
             }
 
-            if (switchMoment.Length -1 != index)
+            if (switchMoment.Length -1 != index && GameManager.Instance.State == GameManager.GameState.Introduction)
             {
                 if (switchMoment[index] == _dialoguePresenter.MessagesRemaining() || switchCamera)
                 {
                     virtualCameras[index].gameObject.SetActive(false);
                     index++;
                     virtualCameras[index].gameObject.SetActive(true);
+                    switchCamera = false;
+                }
+            }
+
+            if (intermissionSwitchMoment.Length != index && GameManager.Instance.State == GameManager.GameState.Intermission)
+            {
+                if (intermissionSwitchMoment[index] == _dialoguePresenter.MessagesRemaining() || switchCamera)
+                {
+                    intermissionVirtualCameras[index].gameObject.SetActive(true);
+                    index++;
                     switchCamera = false;
                 }
             }
