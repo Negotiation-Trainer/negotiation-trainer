@@ -328,7 +328,7 @@ public class GameManager : MonoBehaviour
         EmptyInventory(Cpu2);
         FillInventory();
         
-        _scorePresenter.ResetHammers();
+        _scorePresenter.ResetScoreCard();
         _buildingPresenter.ResetBuildings();
         
         Player.Points = 0;
@@ -349,14 +349,10 @@ public class GameManager : MonoBehaviour
 
     private void EmptyInventory(Tribe tribe)
     {
-        tribe.Inventory.RemoveFromInventory(InventoryItems.Wood,tribe.Inventory.GetInventoryAmount(InventoryItems.Wood));
-        tribe.Inventory.RemoveFromInventory(InventoryItems.Fertilizer,tribe.Inventory.GetInventoryAmount(InventoryItems.Fertilizer));
-        tribe.Inventory.RemoveFromInventory(InventoryItems.Insulation,tribe.Inventory.GetInventoryAmount(InventoryItems.Insulation));
-        tribe.Inventory.RemoveFromInventory(InventoryItems.Clay,tribe.Inventory.GetInventoryAmount(InventoryItems.Clay));
-        tribe.Inventory.RemoveFromInventory(InventoryItems.Gold,tribe.Inventory.GetInventoryAmount(InventoryItems.Gold));
-        tribe.Inventory.RemoveFromInventory(InventoryItems.Lenses,tribe.Inventory.GetInventoryAmount(InventoryItems.Lenses));
-        tribe.Inventory.RemoveFromInventory(InventoryItems.Steel,tribe.Inventory.GetInventoryAmount(InventoryItems.Steel));
-        tribe.Inventory.RemoveFromInventory(InventoryItems.Stone,tribe.Inventory.GetInventoryAmount(InventoryItems.Stone));
+        foreach (InventoryItems resource in Enum.GetValues(typeof(InventoryItems)))
+        {
+            tribe.Inventory.RemoveFromInventory(resource, tribe.Inventory.GetInventoryAmount(resource));
+        }
     }
 
     private void HandleAIOptionsState()

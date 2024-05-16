@@ -115,7 +115,7 @@ namespace Presenters
             scoreCard.gameObject.SetActive(isActive);
         }
 
-        public void ResetHammers()
+        public void ResetScoreCard()
         {
             woodHammer.gameObject.SetActive(false);
             clayHammer.gameObject.SetActive(false);
