@@ -610,6 +610,7 @@ GameObject:
   - component: {fileID: 8277091533299061796}
   - component: {fileID: 2193583640826490085}
   - component: {fileID: 277234266610976115}
+  - component: {fileID: 8134248514393810408}
   m_Layer: 0
   m_Name: Bird (1)
   m_TagString: Untagged
@@ -746,6 +747,27 @@ NavMeshAgent:
   m_BaseOffset: 0.06
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
+--- !u!95 &8134248514393810408
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578695217647536258}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ce777f508b46a6e499414b4863459d4e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1755580659371186352
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,6 +1284,7 @@ GameObject:
   - component: {fileID: 4647839043608714650}
   - component: {fileID: 905232456229051020}
   - component: {fileID: 3741158638304958943}
+  - component: {fileID: 7129371051198578740}
   m_Layer: 0
   m_Name: Bird (4)
   m_TagString: Untagged
@@ -1398,6 +1421,27 @@ NavMeshAgent:
   m_BaseOffset: 0.06
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
+--- !u!95 &7129371051198578740
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2748162968505847023}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ce777f508b46a6e499414b4863459d4e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2973599047032041691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1561,6 +1605,7 @@ GameObject:
   - component: {fileID: 4825999494680570570}
   - component: {fileID: 5195216874969322425}
   - component: {fileID: 7133196656365007423}
+  - component: {fileID: 7899946340957558259}
   m_Layer: 0
   m_Name: Bird (2)
   m_TagString: Untagged
@@ -1697,6 +1742,27 @@ NavMeshAgent:
   m_BaseOffset: 0.06
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
+--- !u!95 &7899946340957558259
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3667940623932547111}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ce777f508b46a6e499414b4863459d4e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3726338246271238480
 GameObject:
   m_ObjectHideFlags: 0
@@ -2588,6 +2654,7 @@ GameObject:
   - component: {fileID: 6778293441321392711}
   - component: {fileID: 1815478725372546866}
   - component: {fileID: 9184565034816494839}
+  - component: {fileID: 2825173107774543845}
   m_Layer: 0
   m_Name: Bird (6)
   m_TagString: Untagged
@@ -2724,6 +2791,27 @@ NavMeshAgent:
   m_BaseOffset: 0.06
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
+--- !u!95 &2825173107774543845
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5056636536795691009}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ce777f508b46a6e499414b4863459d4e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5181812400137187284
 GameObject:
   m_ObjectHideFlags: 0
@@ -2982,6 +3070,7 @@ GameObject:
   - component: {fileID: 7598018916671763184}
   - component: {fileID: 6172665395975470569}
   - component: {fileID: 5858444863291569403}
+  - component: {fileID: 7927117857225391979}
   m_Layer: 0
   m_Name: Bird (5)
   m_TagString: Untagged
@@ -3118,6 +3207,27 @@ NavMeshAgent:
   m_BaseOffset: 0.06
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
+--- !u!95 &7927117857225391979
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372492228462349588}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ce777f508b46a6e499414b4863459d4e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5576524367727869409
 GameObject:
   m_ObjectHideFlags: 0
@@ -3430,6 +3540,7 @@ GameObject:
   - component: {fileID: 7882411412101512275}
   - component: {fileID: 1737091821208267243}
   - component: {fileID: 2544718549859672340}
+  - component: {fileID: 5580481968279323316}
   m_Layer: 0
   m_Name: Bird (3)
   m_TagString: Untagged
@@ -3566,6 +3677,27 @@ NavMeshAgent:
   m_BaseOffset: 0.06
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
+--- !u!95 &5580481968279323316
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7346017987225134824}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ce777f508b46a6e499414b4863459d4e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7422115251233825889
 GameObject:
   m_ObjectHideFlags: 0
