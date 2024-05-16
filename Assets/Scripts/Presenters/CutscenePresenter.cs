@@ -27,6 +27,8 @@ namespace Presenters
         [SerializeField] private int[] switchMoment;
         [SerializeField] private CinemachineVirtualCamera[] intermissionVirtualCameras;
         [SerializeField] private int[] intermissionSwitchMoment;
+        [SerializeField] private CinemachineVirtualCamera[] endingVirtualCameras;
+        [SerializeField] private int[] endingSwitchMoment;
         [SerializeField] private bool switchCamera = false;
         [SerializeField] private Light light;
         private float _t = 0;
@@ -35,13 +37,15 @@ namespace Presenters
         private float _min;
         private DialoguePresenter _dialoguePresenter;
         private readonly DialogueGenerationService _dialogueGenerationService = new DialogueGenerationService();
-        
+
 
         private int index = 0;
         // Start is called before the first frame update
         private void Start()
         {
             _dialoguePresenter = GetComponent<DialoguePresenter>();
+            var main = storm.GetComponent<ParticleSystem>().main;
+            main.stopAction = ParticleSystemStopAction.Callback;
         }
 
         public void Darken()
@@ -78,6 +82,10 @@ namespace Presenters
         public void ToggleRainbow(bool isActive)
         {
             rainbow.SetActive(isActive);
+            if (!softClouds.GetComponent<ParticleSystem>().isPlaying)
+            {
+                softClouds.GetComponent<ParticleSystem>().Play();
+            }
         }
 
         public void ToggleStormIncoming(bool stormIncomingActive)
@@ -101,11 +109,11 @@ namespace Presenters
                 {
                     softClouds.GetComponent<ParticleSystem>().Stop();
                 }
-                storm.GetComponent<ParticleSystem>().Play();
+                storm.gameObject.SetActive(true);
             }
             else
             {
-                storm.GetComponent<ParticleSystem>().Stop();
+                storm.gameObject.SetActive(false);
                 softClouds.GetComponent<ParticleSystem>().Play();
             }
         }
@@ -133,9 +141,26 @@ namespace Presenters
 
         public void StartIntermission()
         {
+            index = 0;
+            ToggleStorm(true);
             _dialoguePresenter.QueueMessages(
                 _dialogueGenerationService.SplitTextToInstructionMessages(
                     _dialoguePresenter.GetInstruction("Intermission")));
+            _dialoguePresenter.ShowNextMessage();
+        }
+
+        public void StartSecondRound()
+        {
+            ToggleStorm(false);
+            GameManager.Instance.ChangeGameState(GameManager.GameState.CollectiveTrade);
+        }
+
+        public void StartEnding()
+        {
+            index = 0;
+            _dialoguePresenter.QueueMessages(
+                _dialogueGenerationService.SplitTextToInstructionMessages(
+                    _dialoguePresenter.GetInstruction("Ending")));
             _dialoguePresenter.ShowNextMessage();
         }
         
@@ -164,6 +189,16 @@ namespace Presenters
                 if (intermissionSwitchMoment[index] == _dialoguePresenter.MessagesRemaining() || switchCamera)
                 {
                     intermissionVirtualCameras[index].gameObject.SetActive(true);
+                    index++;
+                    switchCamera = false;
+                }
+            }
+            
+            if (endingSwitchMoment.Length != index && GameManager.Instance.State == GameManager.GameState.Ending)
+            {
+                if (endingSwitchMoment[index] == _dialoguePresenter.MessagesRemaining() || switchCamera)
+                {
+                    endingVirtualCameras[index].gameObject.SetActive(true);
                     index++;
                     switchCamera = false;
                 }

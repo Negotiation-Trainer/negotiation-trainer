@@ -128,6 +128,8 @@ namespace Presenters
                     return GetInstructionTextFromFile("TribeC");
                 case "Intermission":
                     return GetInstructionTextFromFile("Intermission");
+                case "Ending":
+                    return GetInstructionTextFromFile("Ending");
                 default:
                     return GetInstructionTextFromFile("general");
             }
