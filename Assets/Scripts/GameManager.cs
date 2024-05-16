@@ -315,6 +315,7 @@ public class GameManager : MonoBehaviour
     private void HandleEndingState()
     {
         _cutscenePresenter.ToggleRainbow(true);
+        _cutscenePresenter.StartEnding();
     }
     private void HandleIntermissionState()
     {

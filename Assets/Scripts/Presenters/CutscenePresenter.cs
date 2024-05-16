@@ -27,6 +27,8 @@ namespace Presenters
         [SerializeField] private int[] switchMoment;
         [SerializeField] private CinemachineVirtualCamera[] intermissionVirtualCameras;
         [SerializeField] private int[] intermissionSwitchMoment;
+        [SerializeField] private CinemachineVirtualCamera[] endingVirtualCameras;
+        [SerializeField] private int[] endingSwitchMoment;
         [SerializeField] private bool switchCamera = false;
         [SerializeField] private Light light;
         private float _t = 0;
@@ -78,6 +80,10 @@ namespace Presenters
         public void ToggleRainbow(bool isActive)
         {
             rainbow.SetActive(isActive);
+            if (!softClouds.GetComponent<ParticleSystem>().isPlaying)
+            {
+                softClouds.GetComponent<ParticleSystem>().Play();
+            }
         }
 
         public void ToggleStormIncoming(bool stormIncomingActive)
@@ -138,6 +144,14 @@ namespace Presenters
                     _dialoguePresenter.GetInstruction("Intermission")));
             _dialoguePresenter.ShowNextMessage();
         }
+
+        public void StartEnding()
+        {
+            _dialoguePresenter.QueueMessages(
+                _dialogueGenerationService.SplitTextToInstructionMessages(
+                    _dialoguePresenter.GetInstruction("Ending")));
+            _dialoguePresenter.ShowNextMessage();
+        }
         
         void Update()
         {
@@ -164,6 +178,16 @@ namespace Presenters
                 if (intermissionSwitchMoment[index] == _dialoguePresenter.MessagesRemaining() || switchCamera)
                 {
                     intermissionVirtualCameras[index].gameObject.SetActive(true);
+                    index++;
+                    switchCamera = false;
+                }
+            }
+            
+            if (endingSwitchMoment.Length != index && GameManager.Instance.State == GameManager.GameState.Ending)
+            {
+                if (endingSwitchMoment[index] == _dialoguePresenter.MessagesRemaining() || switchCamera)
+                {
+                    endingVirtualCameras[index].gameObject.SetActive(true);
                     index++;
                     switchCamera = false;
                 }
