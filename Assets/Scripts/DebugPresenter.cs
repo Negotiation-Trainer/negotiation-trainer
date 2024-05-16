@@ -61,6 +61,14 @@ public class DebugPresenter : MonoBehaviour
             {
                _gameManager.ChangeGameState(GameManager.GameState.Trade);
             }
+            if (GUILayout.Button("Intermission state"))
+            {
+                _gameManager.ChangeGameState(GameManager.GameState.Intermission);
+            }
+            if (GUILayout.Button("Ending state"))
+            {
+                _gameManager.ChangeGameState(GameManager.GameState.Ending);
+            }
             if (_dialoguePresenter)
             {
                 GUILayout.Label("Dialogue");

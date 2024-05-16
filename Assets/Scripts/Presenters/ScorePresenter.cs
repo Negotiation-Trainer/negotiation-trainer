@@ -1,3 +1,4 @@
+using System;
 using ModelLibrary;
 using TMPro;
 using UnityEngine;
@@ -113,7 +114,26 @@ namespace Presenters
         {
             scoreCard.gameObject.SetActive(isActive);
         }
-        
+
+        public void ResetScoreCard()
+        {
+            woodHammer.gameObject.SetActive(false);
+            clayHammer.gameObject.SetActive(false);
+            insulationHammer.gameObject.SetActive(false);
+            stoneHammer.gameObject.SetActive(false);
+            goldHammer.gameObject.SetActive(false);
+            steelHammer.gameObject.SetActive(false);
+            lensesHammer.gameObject.SetActive(false);
+            
+            woodScore.gameObject.SetActive(false);
+            clayScore.gameObject.SetActive(false);
+            insulationScore.gameObject.SetActive(false);
+            stoneScore.gameObject.SetActive(false);
+            goldScore.gameObject.SetActive(false);
+            steelScore.gameObject.SetActive(false);
+            lensesScore.gameObject.SetActive(false);
+        }
+
         public void UpdateScoreCard(Tribe tribe, InventoryItems resourceBuildingBuild)
         {
             Sprite hammer;
