@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
         Introduction,
         Trade,
         Intermission,
+        CollectiveTrade,
         Ending
     }
 
@@ -92,7 +93,16 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        ChangeGameState(GameState.Intermission);
+        if (State == GameState.Trade)
+        {
+            ChangeGameState(GameState.Intermission);
+            return;
+        }
+
+        if (State == GameState.CollectiveTrade)
+        {
+            ChangeGameState(GameState.Ending);
+        }
     }
 
     private void RestartGame()
@@ -285,6 +295,10 @@ public class GameManager : MonoBehaviour
                 HandleIntermissionState();
                 State = newState;
                 break;
+            case GameState.CollectiveTrade:
+                HandleTradeState();
+                State = newState;
+                break;
             case GameState.Ending:
                 HandleEndingState();
                 State = newState;
@@ -314,11 +328,17 @@ public class GameManager : MonoBehaviour
 
     private void HandleEndingState()
     {
+        ToggleAIOptions(false); 
+        ToggleTradeUI(false);
+        pauseButton.gameObject.SetActive(false);
+        mainMenu.SetActive(false);
+        endGame.gameObject.SetActive(false);
         _cutscenePresenter.ToggleRainbow(true);
         _cutscenePresenter.StartEnding();
     }
     private void HandleIntermissionState()
     {
+        endGame.gameObject.SetActive(false);
         ToggleAIOptions(false); 
         ToggleTradeUI(false);
         pauseButton.gameObject.SetActive(false);
@@ -394,6 +414,7 @@ public class GameManager : MonoBehaviour
     {
         ToggleTradeUI(true);
         ToggleAIOptions(false);
+        pauseButton.gameObject.SetActive(true);
         endGame.gameObject.SetActive(true);
     }
 
