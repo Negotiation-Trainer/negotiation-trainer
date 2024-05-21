@@ -152,7 +152,7 @@ namespace Presenters
         public void StartSecondRound()
         {
             ToggleStorm(false);
-            GameManager.Instance.ChangeGameState(GameManager.GameState.CollectiveTrade);
+            GameManager.Instance.ChangeGameState(GameManager.GameState.Ending);
         }
 
         public void StartEnding()
