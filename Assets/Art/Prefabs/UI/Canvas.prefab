@@ -18779,6 +18779,7 @@ GameObject:
   - component: {fileID: 1255419551483626421}
   - component: {fileID: 8806810466990832268}
   - component: {fileID: 6996687898114642863}
+  - component: {fileID: 7696139491743614554}
   m_Layer: 5
   m_Name: Offering_Resource_Amount
   m_TagString: Untagged
@@ -18942,6 +18943,18 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
+--- !u!114 &7696139491743614554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6256452666143183062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 162897d6685d56a459b9c9951793216d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6256510838933389033
 GameObject:
   m_ObjectHideFlags: 0
@@ -22623,6 +22636,7 @@ GameObject:
   - component: {fileID: 7230468740955679562}
   - component: {fileID: 8955487710445003443}
   - component: {fileID: 123496073177277569}
+  - component: {fileID: 6421551943746513255}
   m_Layer: 5
   m_Name: Requesting_Resource_Amount
   m_TagString: Untagged
@@ -22786,6 +22800,18 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
+--- !u!114 &6421551943746513255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7986538511074570053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 162897d6685d56a459b9c9951793216d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7995518684125765028
 GameObject:
   m_ObjectHideFlags: 0
