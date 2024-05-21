@@ -90,7 +90,7 @@ namespace Presenters
             ToggleNewOfferButton(true);
         }
 
-        private bool CheckAmountOfferd()
+        private bool CheckAmountOffered()
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Presenters
         
         public void ProposeDeal()
         {
-            if(!CheckAmountOfferd()) return;
+            if(!CheckAmountOffered()) return;
             Tribe originator = GameManager.Instance.Player;
             Tribe target = GetTribeFromDropDown(targetTribe);
             int offeredAmount = Convert.ToInt32(offeringResourceAmount.text);
