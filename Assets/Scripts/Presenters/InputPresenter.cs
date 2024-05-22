@@ -89,9 +89,26 @@ namespace Presenters
             ToggleTalkButton(true);
             ToggleNewOfferButton(true);
         }
+
+        private bool CheckAmountInput()
+        {
+            try
+            {
+                Convert.ToInt32(offeringResourceAmount.text);
+                Convert.ToInt32(requestingResourceAmount.text);
+            }
+            catch (Exception e)
+            {
+                ShowError("you can not offer or request 0 resources");
+                return false;
+            }
+
+            return true;
+        }
         
         public void ProposeDeal()
         {
+            if(!CheckAmountInput()) return;
             Tribe originator = GameManager.Instance.Player;
             Tribe target = GetTribeFromDropDown(targetTribe);
             int offeredAmount = Convert.ToInt32(offeringResourceAmount.text);

@@ -8,6 +8,12 @@ public class UICard : MonoBehaviour
     private Vector2 _bottomPosition;
     private bool _movingDown = false;
 
+    private void Awake()
+    {
+        _topPosition = transform.localPosition;
+        _bottomPosition = _topPosition - distanceToMove;
+    }
+
     private void Start()
     {
         _topPosition = transform.localPosition;
