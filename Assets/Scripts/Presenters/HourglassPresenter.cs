@@ -1,17 +1,18 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Presenters
 {
     public class HourglassPresenter : MonoBehaviour
     {
-        public UnityEvent OnHourglassFinished;
-        public UnityEvent OnStormEvent;
+        public UnityEvent onHourglassFinished;
+        public UnityEvent onStormEvent;
         private const float StormEventTime = 0.5f; //percentage of hourglass duration as a float
-        private bool stormEventTriggered;
+        private bool _stormEventTriggered;
         
-        private float lerpPercentage;
+        private float _lerpPercentage;
 
         #region Sand
 
@@ -27,7 +28,7 @@ namespace Presenters
 
         /* Falling Sand */
         [SerializeField] private Transform fallingSand;
-        private Vector3 sandStartPos;
+        private Vector3 _sandStartPos;
         private static readonly Vector3 SandInitialPos = new(0, -1000, 0);
         private const float FallingSandEndTarget = -2000;
         private const float FallingSandSpeed = 6f;
@@ -37,7 +38,7 @@ namespace Presenters
 
         /* Timer */
         public float duration = 3.0f; // Timer duration
-        private float elapsedTime;
+        private float _elapsedTime;
 
         private void Start()
         {
@@ -46,12 +47,12 @@ namespace Presenters
 
         private void ResetHourglass()
         {
-            elapsedTime = 0;
-            sandStartPos = SandInitialPos;
-            stormEventTriggered = false;
+            _elapsedTime = 0;
+            _sandStartPos = SandInitialPos;
+            _stormEventTriggered = false;
 
             fallingSand.gameObject.SetActive(true);
-            fallingSand.localPosition = sandStartPos;
+            fallingSand.localPosition = _sandStartPos;
 
             // Ensure the top and bottom sand positions are reset
             sandTop.localPosition = new Vector3(0, SandTopStartY, 0);
@@ -74,17 +75,17 @@ namespace Presenters
         private void Update()
         {
             // Increment elapsed time
-            elapsedTime += Time.deltaTime;
+            _elapsedTime += Time.deltaTime;
 
             LerpSand();
             MoveFallingSand();
-            if (!stormEventTriggered && elapsedTime >= duration * StormEventTime)
+            if (!_stormEventTriggered && _elapsedTime >= duration * StormEventTime)
             {
-                stormEventTriggered = true;
-                OnStormEvent?.Invoke();
+                _stormEventTriggered = true;
+                onStormEvent?.Invoke();
             }
 
-            if (elapsedTime >= duration)
+            if (_elapsedTime >= duration)
             {
                 TimerFinished();
             }
@@ -93,16 +94,16 @@ namespace Presenters
         private void TimerFinished()
         {
             enabled = false;
-            OnHourglassFinished?.Invoke();
+            onHourglassFinished?.Invoke();
         }
 
         private void LerpSand()
         {
             // Calculate the percentage of time elapsed
-            lerpPercentage = Mathf.Clamp01(elapsedTime / duration);
+            _lerpPercentage = Mathf.Clamp01(_elapsedTime / duration);
 
-            sandTop.localPosition = new Vector3(0, Mathf.Lerp(SandTopStartY, SandTopTargetY, lerpPercentage), 0);
-            sandBottom.localPosition = new Vector3(0, Mathf.Lerp(SandBottomStartY, SandBottomTargetY, lerpPercentage), 0);
+            sandTop.localPosition = new Vector3(0, Mathf.Lerp(SandTopStartY, SandTopTargetY, _lerpPercentage), 0);
+            sandBottom.localPosition = new Vector3(0, Mathf.Lerp(SandBottomStartY, SandBottomTargetY, _lerpPercentage), 0);
         }
 
         private void MoveFallingSand()
@@ -113,7 +114,7 @@ namespace Presenters
             // Check if the falling sand has reached the bottom and reset it
             if (fallingSand.localPosition.y < FallingSandEndTarget)
             {
-                fallingSand.localPosition = sandStartPos;
+                fallingSand.localPosition = _sandStartPos;
             }
         }
 
