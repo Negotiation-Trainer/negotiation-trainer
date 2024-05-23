@@ -6,6 +6,9 @@ namespace Presenters
     public class HourglassPresenter : MonoBehaviour
     {
         public event EventHandler OnHourglassFinished;
+        public event EventHandler OnStormEvent;
+        private const float StormEventTime = 0.5f; //percentage of hourglass duration as a float
+        private bool stormEventTriggered;
         
         private float lerpPercentage;
 
@@ -44,6 +47,7 @@ namespace Presenters
         {
             elapsedTime = 0;
             sandStartPos = SandInitialPos;
+            stormEventTriggered = false;
 
             fallingSand.gameObject.SetActive(true);
             fallingSand.localPosition = sandStartPos;
@@ -73,6 +77,11 @@ namespace Presenters
 
             LerpSand();
             MoveFallingSand();
+            if (!stormEventTriggered && elapsedTime >= duration * StormEventTime)
+            {
+                stormEventTriggered = true;
+                OnStormEvent?.Invoke(this, EventArgs.Empty);
+            }
 
             if (elapsedTime >= duration)
             {
