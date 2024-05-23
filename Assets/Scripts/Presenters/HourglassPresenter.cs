@@ -1,12 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Presenters
 {
     public class HourglassPresenter : MonoBehaviour
     {
-        public event EventHandler OnHourglassFinished;
-        public event EventHandler OnStormEvent;
+        public UnityEvent OnHourglassFinished;
+        public UnityEvent OnStormEvent;
         private const float StormEventTime = 0.5f; //percentage of hourglass duration as a float
         private bool stormEventTriggered;
         
@@ -80,7 +81,7 @@ namespace Presenters
             if (!stormEventTriggered && elapsedTime >= duration * StormEventTime)
             {
                 stormEventTriggered = true;
-                OnStormEvent?.Invoke(this, EventArgs.Empty);
+                OnStormEvent?.Invoke();
             }
 
             if (elapsedTime >= duration)
@@ -92,7 +93,7 @@ namespace Presenters
         private void TimerFinished()
         {
             enabled = false;
-            OnHourglassFinished?.Invoke(this, EventArgs.Empty);
+            OnHourglassFinished?.Invoke();
         }
 
         private void LerpSand()
