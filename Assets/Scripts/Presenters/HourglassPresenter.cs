@@ -5,9 +5,9 @@ namespace Presenters
 {
     public class HourglassPresenter : MonoBehaviour
     {
-        public Action OnHourglassFinished;
+        public event EventHandler OnHourglassFinished;
         
-        private float _lerpPercentage;
+        private float lerpPercentage;
 
         #region Sand
 
@@ -23,7 +23,7 @@ namespace Presenters
 
         /* Falling Sand */
         [SerializeField] private Transform fallingSand;
-        private Vector3 _sandStartPos;
+        private Vector3 sandStartPos;
         private static readonly Vector3 SandInitialPos = new(0, -1000, 0);
         private const float FallingSandEndTarget = -2000;
         private const float FallingSandSpeed = 6f;
@@ -33,7 +33,7 @@ namespace Presenters
 
         /* Timer */
         public float duration = 3.0f; // Timer duration
-        private float _elapsedTime;
+        private float elapsedTime;
 
         private void Start()
         {
@@ -42,11 +42,11 @@ namespace Presenters
 
         private void ResetHourglass()
         {
-            _elapsedTime = 0;
-            _sandStartPos = SandInitialPos;
+            elapsedTime = 0;
+            sandStartPos = SandInitialPos;
 
             fallingSand.gameObject.SetActive(true);
-            fallingSand.localPosition = _sandStartPos;
+            fallingSand.localPosition = sandStartPos;
 
             // Ensure the top and bottom sand positions are reset
             sandTop.localPosition = new Vector3(0, SandTopStartY, 0);
@@ -69,12 +69,12 @@ namespace Presenters
         private void Update()
         {
             // Increment elapsed time
-            _elapsedTime += Time.deltaTime;
+            elapsedTime += Time.deltaTime;
 
             LerpSand();
             MoveFallingSand();
 
-            if (_elapsedTime >= duration)
+            if (elapsedTime >= duration)
             {
                 TimerFinished();
             }
@@ -83,16 +83,16 @@ namespace Presenters
         private void TimerFinished()
         {
             enabled = false;
-            OnHourglassFinished?.Invoke();
+            OnHourglassFinished?.Invoke(this, EventArgs.Empty);
         }
 
         private void LerpSand()
         {
             // Calculate the percentage of time elapsed
-            _lerpPercentage = Mathf.Clamp01(_elapsedTime / duration);
+            lerpPercentage = Mathf.Clamp01(elapsedTime / duration);
 
-            sandTop.localPosition = new Vector3(0, Mathf.Lerp(SandTopStartY, SandTopTargetY, _lerpPercentage), 0);
-            sandBottom.localPosition = new Vector3(0, Mathf.Lerp(SandBottomStartY, SandBottomTargetY, _lerpPercentage), 0);
+            sandTop.localPosition = new Vector3(0, Mathf.Lerp(SandTopStartY, SandTopTargetY, lerpPercentage), 0);
+            sandBottom.localPosition = new Vector3(0, Mathf.Lerp(SandBottomStartY, SandBottomTargetY, lerpPercentage), 0);
         }
 
         private void MoveFallingSand()
@@ -103,7 +103,7 @@ namespace Presenters
             // Check if the falling sand has reached the bottom and reset it
             if (fallingSand.localPosition.y < FallingSandEndTarget)
             {
-                fallingSand.localPosition = _sandStartPos;
+                fallingSand.localPosition = sandStartPos;
             }
         }
 
