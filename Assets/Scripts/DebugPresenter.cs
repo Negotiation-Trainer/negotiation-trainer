@@ -69,6 +69,34 @@ public class DebugPresenter : MonoBehaviour
             {
                 _gameManager.ChangeGameState(GameManager.GameState.Ending);
             }
+            if (GUILayout.Button("Build wood"))
+            {
+                _gameManager.Player.Inventory.AddToInventory(InventoryItems.Wood,10);
+            }
+            if (GUILayout.Button("Build stone"))
+            {
+                _gameManager.Player.Inventory.AddToInventory(InventoryItems.Stone,10);
+            }
+            if (GUILayout.Button("Build lenses"))
+            {
+                _gameManager.Player.Inventory.AddToInventory(InventoryItems.Lenses,10);
+            }
+            if (GUILayout.Button("Build gold"))
+            {
+                _gameManager.Player.Inventory.AddToInventory(InventoryItems.Gold,10);
+            }
+            if (GUILayout.Button("Build steel"))
+            {
+                _gameManager.Player.Inventory.AddToInventory(InventoryItems.Steel,10);
+            }
+            if (GUILayout.Button("Build clay"))
+            {
+                _gameManager.Player.Inventory.AddToInventory(InventoryItems.Clay,10);
+            }
+            if (GUILayout.Button("Build insulation"))
+            {
+                _gameManager.Player.Inventory.AddToInventory(InventoryItems.Insulation,10);
+            }
             if (_dialoguePresenter)
             {
                 GUILayout.Label("Dialogue");
