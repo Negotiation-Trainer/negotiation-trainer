@@ -37,7 +37,7 @@ namespace Presenters
             _availableTribes[2] = GameManager.Instance.Cpu2;
             _inputPresenter = GetComponent<InputPresenter>();
             _dialoguePresenter = GetComponent<DialoguePresenter>();
-            _algorithmService.AlgorithmDecision += OnPlayerToAiAlgorithmDecision;
+            _algorithmService.AlgorithmDecision += OnAlgorithmDecision;
         }
 
         ///Show error text at bottom of trade offer.
@@ -204,7 +204,7 @@ namespace Presenters
         }
             
         /// Handle the algorithm decision event. Either accepts the offer, shows a counter offer or declines the offer.
-        private void OnPlayerToAiAlgorithmDecision(object sender,
+        private void OnAlgorithmDecision(object sender,
             AlgorithmService.AlgorithmDecisionEventArgs algorithmDecisionEventArgs)
         {
             string speakerStyle = "lunatic";
