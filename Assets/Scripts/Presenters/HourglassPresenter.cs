@@ -1,10 +1,17 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Presenters
 {
     public class HourglassPresenter : MonoBehaviour
     {
+        public UnityEvent onHourglassFinished;
+        public UnityEvent onStormEvent;
+        private const float StormEventTime = 0.5f; //percentage of hourglass duration as a float
+        private bool _stormEventTriggered;
+        
         private float _lerpPercentage;
 
         #region Sand
@@ -19,13 +26,14 @@ namespace Presenters
         private const float SandBottomStartY = -1860;
         private const float SandBottomTargetY = -1050;
 
-
         /* Falling Sand */
         [SerializeField] private Transform fallingSand;
         private Vector3 _sandStartPos;
+        private static readonly Vector3 SandInitialPos = new(0, -1000, 0);
         private const float FallingSandEndTarget = -2000;
         private const float FallingSandSpeed = 6f;
-        
+        private static readonly Vector3 FallingSandDirection = Vector3.down * FallingSandSpeed;
+
         #endregion
 
         /* Timer */
@@ -40,10 +48,17 @@ namespace Presenters
         private void ResetHourglass()
         {
             _elapsedTime = 0;
-            _sandStartPos = new Vector3(0, -1000, 0);
-            
+            _sandStartPos = SandInitialPos;
+            _stormEventTriggered = false;
+
             fallingSand.gameObject.SetActive(true);
             fallingSand.localPosition = _sandStartPos;
+
+            // Ensure the top and bottom sand positions are reset
+            sandTop.localPosition = new Vector3(0, SandTopStartY, 0);
+            sandBottom.localPosition = new Vector3(0, SandBottomStartY, 0);
+
+            enabled = true; // Ensure the script is enabled to start the timer
         }
 
         private void OnEnable()
@@ -64,6 +79,11 @@ namespace Presenters
 
             LerpSand();
             MoveFallingSand();
+            if (!_stormEventTriggered && _elapsedTime >= duration * StormEventTime)
+            {
+                _stormEventTriggered = true;
+                onStormEvent?.Invoke();
+            }
 
             if (_elapsedTime >= duration)
             {
@@ -74,6 +94,7 @@ namespace Presenters
         private void TimerFinished()
         {
             enabled = false;
+            onHourglassFinished?.Invoke();
         }
 
         private void LerpSand()
@@ -82,17 +103,24 @@ namespace Presenters
             _lerpPercentage = Mathf.Clamp01(_elapsedTime / duration);
 
             sandTop.localPosition = new Vector3(0, Mathf.Lerp(SandTopStartY, SandTopTargetY, _lerpPercentage), 0);
-            sandBottom.localPosition =
-                new Vector3(0, Mathf.Lerp(SandBottomStartY, SandBottomTargetY, _lerpPercentage), 0);
+            sandBottom.localPosition = new Vector3(0, Mathf.Lerp(SandBottomStartY, SandBottomTargetY, _lerpPercentage), 0);
         }
 
         private void MoveFallingSand()
         {
-            //move the sand down over time
-            fallingSand.localPosition -= new Vector3(0, FallingSandSpeed, 0);
+            // Move the sand down over time
+            fallingSand.localPosition += FallingSandDirection * Time.deltaTime;
 
-            //check if the falling sand has reached the bottom and reset it
-            if (fallingSand.localPosition.y < FallingSandEndTarget) fallingSand.localPosition = _sandStartPos;
+            // Check if the falling sand has reached the bottom and reset it
+            if (fallingSand.localPosition.y < FallingSandEndTarget)
+            {
+                fallingSand.localPosition = _sandStartPos;
+            }
+        }
+
+        public void StartHourglass()
+        {
+            ResetHourglass(); // Reset and start the hourglass
         }
     }
 }

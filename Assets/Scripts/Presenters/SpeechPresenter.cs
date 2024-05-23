@@ -71,7 +71,7 @@ namespace Presenters
         {
             Trade trade = GameManager.httpClient.ConvertToTrade(response);
             
-            Debug.Log($"trade: {trade}");
+            Debug.Log($"trade: {trade.OfferedItem} {trade.OfferedAmount} for {trade.RequestedItem} {trade.RequestedAmount} -ply- {trade.targetName} - {trade.originName}");
             _tradePresenter.ShowTradeOffer(trade, GameManager.Instance.Player, GameManager.Instance.Cpu1);
         }
 
