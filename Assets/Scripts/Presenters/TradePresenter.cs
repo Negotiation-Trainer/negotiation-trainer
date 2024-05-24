@@ -17,6 +17,7 @@ namespace Presenters
         private DialoguePresenter _dialoguePresenter;
 
         private List<Tribe> _availableTribes = new();
+        private Queue<Tribe> _turnCycle = new();
         private Trade _currentTrade;
         private Tribe _originator;
         private Tribe _target;
@@ -59,6 +60,27 @@ namespace Presenters
         private void HideError()
         {
             errorText.gameObject.SetActive(false);
+        }
+
+        private void FillTurnQueue()
+        {
+            foreach (var tribe in _availableTribes)
+            {
+                _turnCycle.Enqueue(tribe);
+            }
+        }
+        
+        private Tribe GetNextTribe()
+        {
+            if (_turnCycle.Count == 0)
+            {
+                // Fill the queue when its empty.
+                FillTurnQueue();
+            }
+            
+            Tribe nextTribe = _turnCycle.Dequeue();
+            _turnCycle.Enqueue(nextTribe);
+            return nextTribe;
         }
 
         /// <summary>
