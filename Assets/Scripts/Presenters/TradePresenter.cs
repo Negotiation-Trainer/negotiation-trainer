@@ -38,6 +38,8 @@ namespace Presenters
             _inputPresenter = GetComponent<InputPresenter>();
             _dialoguePresenter = GetComponent<DialoguePresenter>();
             _algorithmService.AlgorithmDecision += OnAlgorithmDecision;
+
+            _dialoguePresenter.DialogueFinished += OnTTSFinished;
             
             // Create list of available tribes
             _turnCycle.Enqueue(GameManager.Instance.Player);
@@ -79,6 +81,20 @@ namespace Presenters
             var tradeTargets = availableTradeTargets.ToList();
             var target = tradeTargets.ElementAt(new Random().Next(tradeTargets.Count));
             CreateNewTrade(_currentTribe, target);
+        }
+
+        private void OnTTSFinished(object sender, EventArgs eventArgs)
+        {
+            if (GameManager.Instance.State != GameManager.GameState.Trade) return;
+            if (_currentTribe == GameManager.Instance.Player) return;
+            if (_dialoguePresenter.MessagesRemaining() == 0)
+            {
+                if (_target != GameManager.Instance.Player && _target != null)
+                {
+                    DecideOnTrade();
+                }
+            }
+            
         }
 
         /// <summary>
