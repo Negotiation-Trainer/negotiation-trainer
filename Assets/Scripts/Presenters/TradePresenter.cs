@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ModelLibrary;
 using Newtonsoft.Json;
@@ -15,8 +16,9 @@ namespace Presenters
         private readonly AlgorithmService _algorithmService = new();
         private InputPresenter _inputPresenter;
         private DialoguePresenter _dialoguePresenter;
-
-        private List<Tribe> _availableTribes = new();
+        
+        private readonly Queue<Tribe> _turnCycle = new();
+        private Tribe _currentTribe;
         private Trade _currentTrade;
         private Tribe _originator;
         private Tribe _target;
@@ -38,14 +40,11 @@ namespace Presenters
             _algorithmService.AlgorithmDecision += OnAlgorithmDecision;
             
             // Create list of available tribes
-            _availableTribes.Add(GameManager.Instance.Player);
-            _availableTribes.Add(GameManager.Instance.Cpu1);
-            _availableTribes.Add(GameManager.Instance.Cpu2);
-        }
-
-        public void TestTrade()
-        {
-            CreateNewTrade(_availableTribes[2], _availableTribes[1]);
+            _turnCycle.Enqueue(GameManager.Instance.Player);
+            _turnCycle.Enqueue(GameManager.Instance.Cpu1);
+            _turnCycle.Enqueue(GameManager.Instance.Cpu2);
+            
+            GoToNextTribe();
         }
 
         ///Show error text at bottom of trade offer.
@@ -59,6 +58,27 @@ namespace Presenters
         private void HideError()
         {
             errorText.gameObject.SetActive(false);
+        }
+        
+        // Get the next tribe in the turn cycle.
+        private void GoToNextTribe()
+        {
+            _currentTribe = _turnCycle.Dequeue();
+            _turnCycle.Enqueue(_currentTribe);
+
+
+            if (_currentTribe == GameManager.Instance.Player) return; // When the player is the current tribe, do nothing.
+            
+            StartCPUTradingProcess();
+        }
+
+        // Start the trading process for the CPU.
+        private void StartCPUTradingProcess()
+        {
+            var availableTradeTargets = _turnCycle.ToArray().Where(tribe => tribe != _currentTribe);
+            var tradeTargets = availableTradeTargets.ToList();
+            var target = tradeTargets.ElementAt(new Random().Next(tradeTargets.Count));
+            CreateNewTrade(_currentTribe, target);
         }
 
         /// <summary>
@@ -102,6 +122,7 @@ namespace Presenters
         {
             if (_originator != GameManager.Instance.Player)
             {
+                GoToNextTribe();
                 //TODO: Add dialogue for the CPU to respond to the decline of the offer.
             }
             _currentTrade = null;
@@ -122,7 +143,7 @@ namespace Presenters
             _algorithmService.Decide(_currentTrade, _originator, _target);
         }
 
-        private void CreateNewTrade(Tribe originator, Tribe target)
+        public void CreateNewTrade(Tribe originator, Tribe target)
         {
             const int maxIterations = 1000; // Prevent the while loop from executing indefinitely
             int currentIteration = 0;
@@ -197,6 +218,7 @@ namespace Presenters
                     _tradeOffers.Remove(_currentTrade); // Remove the trade from the list of trade offers because it was accepted.
                     ProcessInventoryChanges();
                     Invoke(nameof(DiscardTradeOffer), 2);
+                    GoToNextTribe();
                     return;
                 }
 
@@ -231,6 +253,7 @@ namespace Presenters
                 case true:
                     //Accept the players offer.
                     StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
+                    GoToNextTribe();
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null &&
                                 algorithmDecisionEventArgs.counterOffer == _currentTrade:
