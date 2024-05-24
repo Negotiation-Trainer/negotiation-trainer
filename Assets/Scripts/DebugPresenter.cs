@@ -194,6 +194,11 @@ public class DebugPresenter : MonoBehaviour
                         debugOfferedAmount, _gameManager.Cpu1.Name, _gameManager.Player.Name);
                     _tradePresenter.ShowTradeOffer(trade, _gameManager.Player, _gameManager.Cpu1);
                 }
+                
+                if (GUILayout.Button("Create trade"))
+                {
+                    _tradePresenter.TestTrade();
+                }
             }
 
             if (_inputPresenter)

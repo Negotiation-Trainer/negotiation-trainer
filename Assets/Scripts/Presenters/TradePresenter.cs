@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using ModelLibrary;
 using Newtonsoft.Json;
 using ServiceLibrary;
 using TMPro;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Presenters
 {
@@ -14,9 +16,11 @@ namespace Presenters
         private InputPresenter _inputPresenter;
         private DialoguePresenter _dialoguePresenter;
 
+        private List<Tribe> _availableTribes = new();
         private Trade _currentTrade;
         private Tribe _originator;
         private Tribe _target;
+        private List<Trade> _tradeOffers = new();
 
         [SerializeField] private GameObject tradeOffer;
         [SerializeField] private TMP_Text offerText;
@@ -32,6 +36,16 @@ namespace Presenters
             _inputPresenter = GetComponent<InputPresenter>();
             _dialoguePresenter = GetComponent<DialoguePresenter>();
             _algorithmService.AlgorithmDecision += OnAlgorithmDecision;
+            
+            // Create list of available tribes
+            _availableTribes.Add(GameManager.Instance.Player);
+            _availableTribes.Add(GameManager.Instance.Cpu1);
+            _availableTribes.Add(GameManager.Instance.Cpu2);
+        }
+
+        public void TestTrade()
+        {
+            CreateNewTrade(_availableTribes[2], _availableTribes[1]);
         }
 
         ///Show error text at bottom of trade offer.
@@ -86,6 +100,10 @@ namespace Presenters
         /// </summary>
         public void DiscardTradeOffer()
         {
+            if (_originator != GameManager.Instance.Player)
+            {
+                //TODO: Add dialogue for the CPU to respond to the decline of the offer.
+            }
             _currentTrade = null;
             _originator = null;
             _target = null;
@@ -97,11 +115,39 @@ namespace Presenters
             _inputPresenter.ToggleTalkButton(true);
         }
         
-        private void MakeTrade()
+        private void DecideOnTrade()
         {
             Debug.Log("Make a trade was called.");
             if (_currentTrade == null || _originator == null || _target == null) return;
             _algorithmService.Decide(_currentTrade, _originator, _target);
+        }
+
+        private void CreateNewTrade(Tribe originator, Tribe target)
+        {
+            const int maxIterations = 1000; // Prevent the while loop from executing indefinitely
+            int currentIteration = 0;
+        
+            Debug.Log("Create new trade was called.");
+            Trade proposedTrade = _algorithmService.CreateNewTrade(originator, target);
+            Debug.Log($"Trade: {proposedTrade.OfferedAmount} {proposedTrade.OfferedItem} for {proposedTrade.RequestedAmount} {proposedTrade.RequestedItem}");
+        
+            while (_tradeOffers.Contains(proposedTrade) && currentIteration < maxIterations)
+            {
+                proposedTrade = _algorithmService.CreateNewTrade(originator, target);
+                currentIteration++;
+            }
+        
+            if (currentIteration == maxIterations)
+            {
+                // Handle the case where a unique trade could not be found
+                var errorMessage = "Could not find a unique trade after " + maxIterations + " attempts.";
+                Debug.Log(errorMessage);
+                ShowError(errorMessage);
+                return;
+            }
+        
+            _tradeOffers.Add(proposedTrade);
+            ShowTradeOffer(proposedTrade, originator, target);
         }
 
         private void AcceptCallback(string response)
@@ -136,7 +182,7 @@ namespace Presenters
             {
                 if (TradePossibleForOriginator(_currentTrade, _originator))
                 {
-                    MakeTrade();
+                    DecideOnTrade();
                 }
                 else
                 {
@@ -148,6 +194,7 @@ namespace Presenters
                 if (TradePossible(_currentTrade, _originator, _target))
                 {
                     accepted.SetActive(true);
+                    _tradeOffers.Remove(_currentTrade); // Remove the trade from the list of trade offers because it was accepted.
                     ProcessInventoryChanges();
                     Invoke(nameof(DiscardTradeOffer), 2);
                     return;
