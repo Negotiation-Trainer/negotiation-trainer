@@ -197,7 +197,7 @@ public class DebugPresenter : MonoBehaviour
                 
                 if (GUILayout.Button("Create trade"))
                 {
-                    _tradePresenter.TestTrade();
+                    _tradePresenter.CreateNewTrade(_gameManager.Cpu1, _gameManager.Cpu2);
                 }
             }
 
