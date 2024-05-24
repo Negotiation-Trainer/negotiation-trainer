@@ -204,7 +204,6 @@ namespace Presenters
                 if (TradePossibleForOriginator(_currentTrade, _originator))
                 {
                     DecideOnTrade();
-                    GoToNextTribe();
                 }
                 else
                 {
@@ -254,6 +253,7 @@ namespace Presenters
                 case true:
                     //Accept the players offer.
                     StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
+                    GoToNextTribe();
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null &&
                                 algorithmDecisionEventArgs.counterOffer == _currentTrade:
