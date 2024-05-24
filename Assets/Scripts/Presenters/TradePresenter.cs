@@ -16,8 +16,8 @@ namespace Presenters
         private InputPresenter _inputPresenter;
         private DialoguePresenter _dialoguePresenter;
 
-        private List<Tribe> _availableTribes = new();
-        private Queue<Tribe> _turnCycle = new();
+        private readonly List<Tribe> _availableTribes = new();
+        private readonly Queue<Tribe> _turnCycle = new();
         private Trade _currentTrade;
         private Tribe _originator;
         private Tribe _target;
@@ -64,12 +64,14 @@ namespace Presenters
 
         private void FillTurnQueue()
         {
+            // Fill the turnCycle queue based on the tribes available.
             foreach (var tribe in _availableTribes)
             {
                 _turnCycle.Enqueue(tribe);
             }
         }
         
+        // Get the next tribe in the turn cycle.
         private Tribe GetNextTribe()
         {
             if (_turnCycle.Count == 0)
