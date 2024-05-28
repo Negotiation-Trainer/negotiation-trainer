@@ -80,6 +80,8 @@ public class GameManager : MonoBehaviour
         _cutscenePresenter = GetComponent<CutscenePresenter>();
         _DialoguePresenter = GetComponent<DialoguePresenter>();
         _buildingPresenter = GetComponent<BuildingPresenter>();
+        _tradePresenter = GetComponent<TradePresenter>();
+        
         pauseButton.onClick.AddListener(PauseGame);
         foreach (var button in settingsButton)
         {
