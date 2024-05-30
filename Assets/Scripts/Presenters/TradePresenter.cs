@@ -158,8 +158,12 @@ namespace Presenters
             tradeOffer.SetActive(false);
             accepted.SetActive(false);
             rejected.SetActive(false);
-            _inputPresenter.ToggleNewOfferButton(true);
-            _inputPresenter.ToggleTalkButton(true);
+            
+            if (_currentTribe == GameManager.Instance.Player)
+            {
+                _inputPresenter.ToggleNewOfferButton(true);
+                _inputPresenter.ToggleTalkButton(true);
+            }
         }
 
         private void DecideOnTrade()
@@ -273,8 +277,8 @@ namespace Presenters
                     _tradeOffers
                         .Remove(_currentTrade); // Remove the trade from the list of trade offers because it was accepted.
                     ProcessInventoryChanges();
-                    Invoke(nameof(DiscardTradeOffer), 2);
                     GoToNextTribe();
+                    Invoke(nameof(DiscardTradeOffer), 2);
                     return;
                 }
 
