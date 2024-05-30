@@ -136,11 +136,6 @@ namespace Presenters
         /// </summary>
         public void DiscardTradeOffer()
         {
-            if (_originator != GameManager.Instance.Player)
-            {
-                GoToNextTribe();
-                //TODO: Add dialogue for the CPU to respond to the decline of the offer.
-            }
             _currentTrade = null;
             _originator = null;
             _target = null;
@@ -184,6 +179,9 @@ namespace Presenters
             }
         
             _tradeOffers.Add(proposedTrade);
+            
+            StartCoroutine(GameManager.httpClient.ConvertToChat("lunatic", proposedTrade, ConvertTradeToChatCallback));
+            
             ShowTradeOffer(proposedTrade, originator, target);
         }
 
@@ -208,6 +206,24 @@ namespace Presenters
 
             _dialoguePresenter.DialogueFinished += EnableButtons;
             _dialoguePresenter.EnqueueAndShowDialogueString(returnMessage.Message, _target.Name);
+        }
+
+        private void CounterOfferCallback(string response)
+        {
+            ChatMessage counterOfferMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
+            
+            Invoke(nameof(DiscardTradeOffer), 2);
+            
+            _dialoguePresenter.DialogueFinished += EnableButtons;
+            _dialoguePresenter.EnqueueAndShowDialogueString(counterOfferMessage.Message, _target.Name);
+        }
+
+        private void ConvertTradeToChatCallback(string response)
+        {
+            ChatMessage TradeMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
+            
+            _dialoguePresenter.DialogueFinished += EnableButtons;
+            _dialoguePresenter.EnqueueAndShowDialogueString(TradeMessage.Message, _target.Name);
         }
 
         /// <summary>
@@ -256,12 +272,12 @@ namespace Presenters
         private void OnAlgorithmDecision(object sender,
             AlgorithmService.AlgorithmDecisionEventArgs algorithmDecisionEventArgs)
         {
-            string speakerStyle = "lunatic";
-            StringBuilder sb = new StringBuilder();
+            string speakerStyle = "lunatic"; //TODO: Move this to either inside the Tribe object or make a map available here to map tribe to speaker style.
+            StringBuilder reasonList = new StringBuilder();
 
             foreach (var offerDeclinedException in algorithmDecisionEventArgs.issuesWithTrade)
             {
-                sb.Append($"{offerDeclinedException.Message} +");
+                reasonList.Append($"{offerDeclinedException.Message} +");
             }
                 
             switch (algorithmDecisionEventArgs.tradeAccepted) 
@@ -274,16 +290,18 @@ namespace Presenters
                 case false when algorithmDecisionEventArgs.counterOffer != null &&
                                 algorithmDecisionEventArgs.counterOffer == _currentTrade:
                     //TEMPORARY decline when counter is same as original offer. 
-                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
+                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, reasonList.ToString(),
                         RejectCallback));
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null:
                     //Present counter offer to player
+                    StartCoroutine(GameManager.httpClient.CounterOffer(speakerStyle, _currentTrade,
+                        reasonList.ToString(), CounterOfferCallback));
                     ShowTradeOffer(algorithmDecisionEventArgs.counterOffer, _target, _originator);
                     break;
                 default:
                     //Offer should be declined by the AI.
-                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
+                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, reasonList.ToString(),
                         RejectCallback));
                     break;
             }
