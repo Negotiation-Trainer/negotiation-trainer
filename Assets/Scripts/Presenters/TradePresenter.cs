@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using ServiceLibrary;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = System.Random;
 
 namespace Presenters
@@ -32,6 +33,9 @@ namespace Presenters
         [SerializeField] private TMP_Text errorText;
         [SerializeField] private GameObject accepted;
         [SerializeField] private GameObject rejected;
+        
+        [SerializeField] private TMP_Text currentTribeText; 
+        [SerializeField] private GameObject currentTribeDisplay;
 
         private void Start()
         {
@@ -67,8 +71,9 @@ namespace Presenters
         {
             _currentTribe = _turnCycle.Dequeue();
             _turnCycle.Enqueue(_currentTribe);
-
-
+            
+            currentTribeText.text = _currentTribe.Name;
+            
             if (_currentTribe == GameManager.Instance.Player) return; // When the player is the current tribe, do nothing.
             
             StartCPUTradingProcess();
@@ -335,6 +340,11 @@ namespace Presenters
         {
             _inputPresenter.ToggleNewOfferButton(false);
             _inputPresenter.ToggleTalkButton(false);
+        }
+
+        public void ToggleCurrentTribe(bool state)
+        {
+            currentTribeDisplay.SetActive(state);
         }
     }
 }

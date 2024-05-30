@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     private CutscenePresenter _cutscenePresenter;
     private DialoguePresenter _DialoguePresenter;
     private BuildingPresenter _buildingPresenter;
+    private TradePresenter _tradePresenter;
     
     public enum GameState
     {
@@ -79,6 +80,8 @@ public class GameManager : MonoBehaviour
         _cutscenePresenter = GetComponent<CutscenePresenter>();
         _DialoguePresenter = GetComponent<DialoguePresenter>();
         _buildingPresenter = GetComponent<BuildingPresenter>();
+        _tradePresenter = GetComponent<TradePresenter>();
+        
         pauseButton.onClick.AddListener(PauseGame);
         foreach (var button in settingsButton)
         {
@@ -324,6 +327,8 @@ public class GameManager : MonoBehaviour
         _scorePresenter.ShowScoreCard(isActive);
         _inputPresenter.ToggleNewOfferButton(isActive);
         _inputPresenter.ToggleTalkButton(isActive);
+        _tradePresenter.ToggleCurrentTribe(isActive);
+        
     }
 
     private void HandleEndingState()
