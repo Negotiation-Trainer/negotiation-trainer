@@ -15,7 +15,6 @@ namespace Presenters
         
         //voice menu
         [SerializeField] private GameObject voiceSettings;
-        [SerializeField] private TMP_Dropdown selectedVoice;
         [SerializeField] private TMP_Dropdown narratorVoice;
         [SerializeField] private Button narratorTest;
         [SerializeField] private TMP_Dropdown tribeBVoice;
@@ -31,7 +30,6 @@ namespace Presenters
             _speechPresenter = GetComponent<SpeechPresenter>();
             
             //settings menu
-            selectedVoice.onValueChanged.AddListener(SelectedVoiceChanged);
             voiceVolume.onValueChanged.AddListener(VoiceVolumeChanged);
             speechRecognitionToggle.onValueChanged.AddListener(FallbackEnabledChanged);
             
@@ -47,8 +45,6 @@ namespace Presenters
         
         public void ShowSettingsMenu(bool isActive)
         {
-            selectedVoice.ClearOptions();
-            selectedVoice.AddOptions(_speechPresenter.PossibleVoices().ToList());
             voiceVolume.value = _speechPresenter.GetSpeechVolume();
             speechRecognitionToggle.isOn = fallbackEnabled;
             settingsMenu.SetActive(isActive);
