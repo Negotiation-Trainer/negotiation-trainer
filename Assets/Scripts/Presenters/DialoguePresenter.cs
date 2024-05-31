@@ -37,7 +37,7 @@ namespace Presenters
         
         public void ShowNextMessage()
         {
-            
+            string tribeName = "";
             if (_dialogueQueue.Count == 0)
             {
                 dialogueBox.SetActive(false);
@@ -51,6 +51,8 @@ namespace Presenters
             if (message.GetType() == typeof(DialogueMessage))
             {
                 ShowCharacter((DialogueMessage)message);
+                DialogueMessage msg = (DialogueMessage) message;
+                tribeName = msg.TribeName;
             }
             else
             {
@@ -60,7 +62,7 @@ namespace Presenters
             dialogueText.text = message.Message;
             if (_speechPresenter)
             {
-                _speechPresenter.Speak(message.Message);
+                _speechPresenter.Speak(message.Message, tribeName);
             }
         }
 

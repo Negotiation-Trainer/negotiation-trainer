@@ -49,6 +49,10 @@ public class DebugPresenter : MonoBehaviour
         if (_enabeld)
         {
             GUILayout.Label("Game Manger");
+            if (GUILayout.Button("voice state"))
+            {
+                _gameManager.ChangeGameState(GameManager.GameState.VoiceSettings);
+            }
             if (GUILayout.Button("Start state"))
             {
                 _gameManager.ChangeGameState(GameManager.GameState.Start);
@@ -148,7 +152,7 @@ public class DebugPresenter : MonoBehaviour
                 if (GUILayout.Button("Speak"))
                 {
                     _speechPresenter.Speak(
-                        "Hello this is a debug text to test the speech to text capability of connor's paradise");
+                        "Hello this is a debug text to test the speech to text capability of connor's paradise","");
                 }
 
                 if (GUILayout.Button("Stop speak"))

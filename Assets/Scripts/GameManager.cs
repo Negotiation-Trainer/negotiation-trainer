@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     public enum GameState
     {
         AIOptions,
+        VoiceSettings,
         Start,
         Introduction,
         Trade,
@@ -282,6 +283,10 @@ public class GameManager : MonoBehaviour
                 HandleAIOptionsState();
                 State = newState;
                 break;
+            case GameState.VoiceSettings:
+                HandleVoiceSettingsState();
+                State = newState;
+                break;
             case GameState.Start:
                 HandleGameStartState();
                 State = newState;
@@ -389,6 +394,15 @@ public class GameManager : MonoBehaviour
         mainMenu.SetActive(false);
     }
     
+    private void HandleVoiceSettingsState()
+    {
+        _settingsPresenter.ShowVoiceSettings(true);
+        ToggleAIOptions(false); 
+        ToggleTradeUI(false);
+        pauseButton.gameObject.SetActive(false);
+        mainMenu.SetActive(false);
+    }
+    
     /// <summary>
     /// Show menu UI
     /// </summary>
@@ -396,6 +410,7 @@ public class GameManager : MonoBehaviour
     {
         ToggleTradeUI(false);
         ToggleAIOptions(false);
+        _settingsPresenter.ShowVoiceSettings(false);
         pauseButton.gameObject.SetActive(false);
         mainMenu.SetActive(true);
     }
@@ -450,7 +465,7 @@ public class GameManager : MonoBehaviour
         httpClient.SetToken(token);
         
         Debug.Log("Token is set to: " + httpClient.Debug_GetAuth());
-        ChangeGameState(GameState.Start);
+        ChangeGameState(GameState.VoiceSettings);
     }
     
 
