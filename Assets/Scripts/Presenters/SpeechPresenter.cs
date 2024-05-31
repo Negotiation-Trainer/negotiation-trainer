@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ModelLibrary;
 using ServiceLibrary;
 using SpeechServices;
@@ -14,6 +15,7 @@ namespace Presenters
         private ITextToSpeechService _textToSpeechService;
         public bool speechToTextEnabled = false;
         public bool textToSpeechEnabled = false;
+        public int[] selectedVoices;
         public event EventHandler TTSFinished;
 
         private TradePresenter _tradePresenter;
@@ -32,9 +34,22 @@ namespace Presenters
         /// Have TTS speak a text.
         /// </summary>
         /// <param name="text">Text to speak</param>
-        public void Speak(string text)
+        /// <param name="tribeName">name of tribe</param>
+        public void Speak(string text, string tribeName)
         {
             if (!textToSpeechEnabled) return;
+            if (tribeName == GameManager.Instance.Cpu1.Name)
+            {
+                SpeechVoice(selectedVoices[1]);
+            }
+            else if (tribeName == GameManager.Instance.Cpu2.Name)
+            {
+                SpeechVoice(selectedVoices[2]);
+            }
+            else
+            {
+                SpeechVoice(selectedVoices[0]);
+            }
             _textToSpeechService?.SpeakText(text);
         }
 
@@ -203,7 +218,8 @@ namespace Presenters
                 else
                 {
                     textToSpeechEnabled = true;
-                    _textToSpeechService.FinishedSpeaking += OnTextToSpeechFinished; 
+                    _textToSpeechService.FinishedSpeaking += OnTextToSpeechFinished;
+                    selectedVoices = new[] {0, 0, 0};
                 }
             }
 
