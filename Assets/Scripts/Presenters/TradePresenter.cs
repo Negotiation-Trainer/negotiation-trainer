@@ -90,6 +90,10 @@ namespace Presenters
             var availableTradeTargets = _turnCycle.ToArray().Where(tribe => tribe != _currentTribe);
             var tradeTargets = availableTradeTargets.ToList();
             var target = tradeTargets.ElementAt(new Random().Next(tradeTargets.Count));
+            
+            Debug.Log("CPU Trading process.");
+            Debug.Log("CPU Target: " + target.Name);
+            
             CreateNewTrade(_currentTribe, target);
         }
 
@@ -121,10 +125,19 @@ namespace Presenters
         public void ShowTradeOffer(Trade trade, Tribe originator, Tribe target)
         {
             DisableButtons();
+            Debug.Log("Show trade offer was called.");
+            Debug.Log("Traded to be show: " + trade.OfferedAmount + " " + trade.OfferedItem + " for " + trade.RequestedAmount + " " +
+                      trade.RequestedItem);
+            Debug.Log("Originator: " + originator.Name);
+            Debug.Log("Target: " + target.Name);
 
             if (originator == GameManager.Instance.Player)
             {
-                if (!TradePossibleForOriginator(trade, originator)) return;
+                if (!TradePossibleForOriginator(trade, originator))
+                {
+                    Debug.Log("This trade is not possible");
+                    return;
+                };
                 offerText.text = $"We, The {originator.Name} tribe, are offering";
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to the {target.Name} tribe, in exchange for:";
@@ -132,7 +145,11 @@ namespace Presenters
             }
             else
             {
-                if (!TradePossibleForTarget(trade, target)) return;
+                if (!TradePossibleForTarget(trade, target))
+                {
+                    Debug.Log("This trade is not possible");
+                    return;
+                };
                 offerText.text = $"The {originator.Name} tribe, are offering";
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to us, the {target.Name} tribe, in exchange for:";
@@ -152,18 +169,17 @@ namespace Presenters
         public void DiscardTradeOffer()
         {
             _currentTrade = null;
+            Debug.Log("Discard trade offer was called.");
             _originator = null;
+            Debug.Log("Trade Target: " + _target.Name);
             _target = null;
             HideError();
             tradeOffer.SetActive(false);
             accepted.SetActive(false);
             rejected.SetActive(false);
-            
-            if (_currentTribe == GameManager.Instance.Player)
-            {
-                _inputPresenter.ToggleNewOfferButton(true);
-                _inputPresenter.ToggleTalkButton(true);
-            }
+
+            _inputPresenter.ToggleNewOfferButton(_currentTribe == GameManager.Instance.Player);
+            _inputPresenter.ToggleTalkButton(_currentTribe == GameManager.Instance.Player);
         }
 
         private void DecideOnTrade()
@@ -182,6 +198,8 @@ namespace Presenters
             Trade proposedTrade = _algorithmService.CreateNewTrade(originator, target);
             Debug.Log(
                 $"Trade: {proposedTrade.OfferedAmount} {proposedTrade.OfferedItem} for {proposedTrade.RequestedAmount} {proposedTrade.RequestedItem}");
+            Debug.Log($"Trade Target: {proposedTrade.targetName}, Target: {target.Name}");
+            Debug.Log($"Trade originator {proposedTrade.originName}, Origin: {originator.Name}");
 
             while (_tradeOffers.Contains(proposedTrade) && currentIteration < maxIterations)
             {
@@ -205,13 +223,19 @@ namespace Presenters
             ShowTradeOffer(proposedTrade, originator, target);
         }
 
+        private void EndTurn()
+        {
+            DiscardTradeOffer();
+            GoToNextTribe();
+        }
+
         private void AcceptCallback(string response)
         {
             ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
 
             ProcessInventoryChanges();
             accepted.SetActive(true);
-            Invoke(nameof(DiscardTradeOffer), 2);
+            Invoke(nameof(EndTurn), 2);
 
             _dialoguePresenter.DialogueFinished += EnableButtons;
             _dialoguePresenter.EnqueueAndShowDialogueString(returnMessage.Message, _target.Name);
@@ -277,8 +301,7 @@ namespace Presenters
                     _tradeOffers
                         .Remove(_currentTrade); // Remove the trade from the list of trade offers because it was accepted.
                     ProcessInventoryChanges();
-                    GoToNextTribe();
-                    Invoke(nameof(DiscardTradeOffer), 2);
+                    Invoke(nameof(EndTurn), 2);
                     return;
                 }
 
@@ -315,7 +338,6 @@ namespace Presenters
                 case true:
                     //Accept the players offer.
                     StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
-                    GoToNextTribe();
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null &&
                                 algorithmDecisionEventArgs.counterOffer == _currentTrade:
