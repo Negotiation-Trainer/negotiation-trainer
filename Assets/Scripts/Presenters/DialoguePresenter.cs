@@ -37,7 +37,10 @@ namespace Presenters
         
         public void ShowNextMessage()
         {
+            Debug.Log(_dialogueQueue.Count);
+            
             string tribeName = "";
+            
             if (_dialogueQueue.Count == 0)
             {
                 dialogueBox.SetActive(false);

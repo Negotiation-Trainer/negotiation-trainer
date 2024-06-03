@@ -17,7 +17,7 @@ namespace Presenters
         private readonly AlgorithmService _algorithmService = new();
         private InputPresenter _inputPresenter;
         private DialoguePresenter _dialoguePresenter;
-        
+
         private readonly Queue<Tribe> _turnCycle = new();
         private Tribe _currentTribe;
         private Trade _currentTrade;
@@ -33,21 +33,25 @@ namespace Presenters
         [SerializeField] private TMP_Text errorText;
         [SerializeField] private GameObject accepted;
         [SerializeField] private GameObject rejected;
-        
-        [SerializeField] private TMP_Text currentTribeText; 
+
+        [SerializeField] private TMP_Text currentTribeText;
         [SerializeField] private GameObject currentTribeDisplay;
+
+        private Trade _counterOffer;
 
         private void Start()
         {
             _inputPresenter = GetComponent<InputPresenter>();
             _dialoguePresenter = GetComponent<DialoguePresenter>();
             _algorithmService.AlgorithmDecision += OnAlgorithmDecision;
-            
+
+            _dialoguePresenter.DialogueFinished += OnTTSFinished;
+
             // Create list of available tribes
             _turnCycle.Enqueue(GameManager.Instance.Player);
             _turnCycle.Enqueue(GameManager.Instance.Cpu1);
             _turnCycle.Enqueue(GameManager.Instance.Cpu2);
-            
+
             GoToNextTribe();
         }
 
@@ -63,17 +67,20 @@ namespace Presenters
         {
             errorText.gameObject.SetActive(false);
         }
-        
+
         // Get the next tribe in the turn cycle.
         private void GoToNextTribe()
         {
             _currentTribe = _turnCycle.Dequeue();
             _turnCycle.Enqueue(_currentTribe);
-            
+
+            Debug.Log("GoToNextTribe: " + _currentTribe.Name);
+
             currentTribeText.text = _currentTribe.Name;
-            
-            if (_currentTribe == GameManager.Instance.Player) return; // When the player is the current tribe, do nothing.
-            
+
+            if (_currentTribe == GameManager.Instance.Player)
+                return; // When the player is the current tribe, do nothing.
+
             StartCPUTradingProcess();
         }
 
@@ -83,7 +90,30 @@ namespace Presenters
             var availableTradeTargets = _turnCycle.ToArray().Where(tribe => tribe != _currentTribe);
             var tradeTargets = availableTradeTargets.ToList();
             var target = tradeTargets.ElementAt(new Random().Next(tradeTargets.Count));
+            
+            Debug.Log("CPU Trading process.");
+            Debug.Log("CPU Target: " + target.Name);
+            
             CreateNewTrade(_currentTribe, target);
+        }
+
+        private void OnTTSFinished(object sender, EventArgs eventArgs)
+        {
+            if (_target == null)
+            {
+                Debug.Log("Target is null");
+                return;
+            }
+
+            Debug.Log("State: " + GameManager.Instance.State);
+            Debug.Log("CurrentTribe: " + _currentTribe.Name);
+            Debug.Log("Target: " + _target.Name);
+            if (GameManager.Instance.State != GameManager.GameState.Trade) return;
+            if (_currentTribe == GameManager.Instance.Player) return;
+            if (_target != GameManager.Instance.Player)
+            {
+                DecideOnTrade();
+            }
         }
 
         /// <summary>
@@ -95,10 +125,19 @@ namespace Presenters
         public void ShowTradeOffer(Trade trade, Tribe originator, Tribe target)
         {
             DisableButtons();
-            
+            Debug.Log("Show trade offer was called.");
+            Debug.Log("Traded to be show: " + trade.OfferedAmount + " " + trade.OfferedItem + " for " + trade.RequestedAmount + " " +
+                      trade.RequestedItem);
+            Debug.Log("Originator: " + originator.Name);
+            Debug.Log("Target: " + target.Name);
+
             if (originator == GameManager.Instance.Player)
             {
-                if (!TradePossibleForOriginator(trade,originator)) return;
+                if (!TradePossibleForOriginator(trade, originator))
+                {
+                    Debug.Log("This trade is not possible");
+                    return;
+                };
                 offerText.text = $"We, The {originator.Name} tribe, are offering";
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to the {target.Name} tribe, in exchange for:";
@@ -106,13 +145,17 @@ namespace Presenters
             }
             else
             {
-                if (!TradePossibleForTarget(trade, target)) return;
+                if (!TradePossibleForTarget(trade, target))
+                {
+                    Debug.Log("This trade is not possible");
+                    return;
+                };
                 offerText.text = $"The {originator.Name} tribe, are offering";
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to us, the {target.Name} tribe, in exchange for:";
                 requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
             }
-            
+
             _currentTrade = trade;
             _originator = originator;
             _target = target;
@@ -125,22 +168,20 @@ namespace Presenters
         /// </summary>
         public void DiscardTradeOffer()
         {
-            if (_originator != GameManager.Instance.Player)
-            {
-                GoToNextTribe();
-                //TODO: Add dialogue for the CPU to respond to the decline of the offer.
-            }
             _currentTrade = null;
+            Debug.Log("Discard trade offer was called.");
             _originator = null;
+            Debug.Log("Trade Target: " + _target.Name);
             _target = null;
             HideError();
             tradeOffer.SetActive(false);
             accepted.SetActive(false);
             rejected.SetActive(false);
-            _inputPresenter.ToggleNewOfferButton(true);
-            _inputPresenter.ToggleTalkButton(true);
+
+            _inputPresenter.ToggleNewOfferButton(_currentTribe == GameManager.Instance.Player);
+            _inputPresenter.ToggleTalkButton(_currentTribe == GameManager.Instance.Player);
         }
-        
+
         private void DecideOnTrade()
         {
             Debug.Log("Make a trade was called.");
@@ -152,17 +193,20 @@ namespace Presenters
         {
             const int maxIterations = 1000; // Prevent the while loop from executing indefinitely
             int currentIteration = 0;
-        
+
             Debug.Log("Create new trade was called.");
             Trade proposedTrade = _algorithmService.CreateNewTrade(originator, target);
-            Debug.Log($"Trade: {proposedTrade.OfferedAmount} {proposedTrade.OfferedItem} for {proposedTrade.RequestedAmount} {proposedTrade.RequestedItem}");
-        
+            Debug.Log(
+                $"Trade: {proposedTrade.OfferedAmount} {proposedTrade.OfferedItem} for {proposedTrade.RequestedAmount} {proposedTrade.RequestedItem}");
+            Debug.Log($"Trade Target: {proposedTrade.targetName}, Target: {target.Name}");
+            Debug.Log($"Trade originator {proposedTrade.originName}, Origin: {originator.Name}");
+
             while (_tradeOffers.Contains(proposedTrade) && currentIteration < maxIterations)
             {
                 proposedTrade = _algorithmService.CreateNewTrade(originator, target);
                 currentIteration++;
             }
-        
+
             if (currentIteration == maxIterations)
             {
                 // Handle the case where a unique trade could not be found
@@ -171,19 +215,28 @@ namespace Presenters
                 ShowError(errorMessage);
                 return;
             }
-        
+
             _tradeOffers.Add(proposedTrade);
+
+            StartCoroutine(GameManager.httpClient.ConvertToChat("lunatic", proposedTrade, ConvertTradeToChatCallback));
+            Debug.Log("AI tries: origin " + proposedTrade.originName + " | target " + proposedTrade.targetName + " || originator " + originator.Name + " /// target" + target.Name);
             ShowTradeOffer(proposedTrade, originator, target);
+        }
+
+        private void EndTurn()
+        {
+            DiscardTradeOffer();
+            GoToNextTribe();
         }
 
         private void AcceptCallback(string response)
         {
             ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
-            
+
             ProcessInventoryChanges();
             accepted.SetActive(true);
-            Invoke(nameof(DiscardTradeOffer), 2);
-            
+            Invoke(nameof(EndTurn), 2);
+
             _dialoguePresenter.DialogueFinished += EnableButtons;
             _dialoguePresenter.EnqueueAndShowDialogueString(returnMessage.Message, _target.Name);
         }
@@ -197,6 +250,31 @@ namespace Presenters
 
             _dialoguePresenter.DialogueFinished += EnableButtons;
             _dialoguePresenter.EnqueueAndShowDialogueString(returnMessage.Message, _target.Name);
+        }
+
+        private void CounterOfferCallback(string response)
+        {
+            ChatMessage counterOfferMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
+
+            tradeOffer.SetActive(false);
+
+            _dialoguePresenter.DialogueFinished += ShowCounterOffer;
+            _dialoguePresenter.EnqueueAndShowDialogueString(counterOfferMessage.Message, _target.Name);
+        }
+
+        private void ShowCounterOffer(object sender, EventArgs args)
+        {
+            ShowTradeOffer(_currentTrade, _target, _originator);
+
+            _dialoguePresenter.DialogueFinished -= ShowCounterOffer;
+        }
+
+        private void ConvertTradeToChatCallback(string response)
+        {
+            ChatMessage TradeMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
+
+            _dialoguePresenter.DialogueFinished += EnableButtons;
+            _dialoguePresenter.EnqueueAndShowDialogueString(TradeMessage.Message, _currentTribe.Name);
         }
 
         /// <summary>
@@ -220,10 +298,10 @@ namespace Presenters
                 if (TradePossible(_currentTrade, _originator, _target))
                 {
                     accepted.SetActive(true);
-                    _tradeOffers.Remove(_currentTrade); // Remove the trade from the list of trade offers because it was accepted.
+                    _tradeOffers
+                        .Remove(_currentTrade); // Remove the trade from the list of trade offers because it was accepted.
                     ProcessInventoryChanges();
-                    Invoke(nameof(DiscardTradeOffer), 2);
-                    GoToNextTribe();
+                    Invoke(nameof(EndTurn), 2);
                     return;
                 }
 
@@ -240,55 +318,60 @@ namespace Presenters
             _originator.Inventory.AddToInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
             _target.Inventory.RemoveFromInventory(_currentTrade.RequestedItem, _currentTrade.RequestedAmount);
         }
-            
+
         /// Handle the algorithm decision event. Either accepts the offer, shows a counter offer or declines the offer.
         private void OnAlgorithmDecision(object sender,
             AlgorithmService.AlgorithmDecisionEventArgs algorithmDecisionEventArgs)
         {
-            string speakerStyle = "lunatic";
-            StringBuilder sb = new StringBuilder();
+            string
+                speakerStyle =
+                    "lunatic"; //TODO: Move this to either inside the Tribe object or make a map available here to map tribe to speaker style.
+            StringBuilder reasonList = new StringBuilder();
 
             foreach (var offerDeclinedException in algorithmDecisionEventArgs.issuesWithTrade)
             {
-                sb.Append($"{offerDeclinedException.Message} +");
+                reasonList.Append($"{offerDeclinedException.Message} +");
             }
-                
-            switch (algorithmDecisionEventArgs.tradeAccepted) 
+
+            switch (algorithmDecisionEventArgs.tradeAccepted)
             {
                 case true:
                     //Accept the players offer.
                     StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
-                    GoToNextTribe();
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null &&
                                 algorithmDecisionEventArgs.counterOffer == _currentTrade:
                     //TEMPORARY decline when counter is same as original offer. 
-                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
+                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, reasonList.ToString(),
                         RejectCallback));
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null:
                     //Present counter offer to player
-                    ShowTradeOffer(algorithmDecisionEventArgs.counterOffer, _target, _originator);
+                    // _counterOffer = algorithmDecisionEventArgs.counterOffer;
+                    _currentTrade = algorithmDecisionEventArgs.counterOffer;
+                    StartCoroutine(GameManager.httpClient.CounterOffer(speakerStyle,
+                        _currentTrade,
+                        reasonList.ToString(), CounterOfferCallback));
                     break;
                 default:
                     //Offer should be declined by the AI.
-                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, sb.ToString(),
+                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, reasonList.ToString(),
                         RejectCallback));
                     break;
             }
         }
 
-            
+
         private bool TradePossibleForTarget(Trade trade, Tribe target)
         {
             return target.Inventory.GetInventoryAmount(trade.RequestedItem) >= trade.RequestedAmount;
         }
-            
+
         private bool TradePossibleForOriginator(Trade trade, Tribe originator)
         {
             return originator.Inventory.GetInventoryAmount(trade.OfferedItem) >= trade.OfferedAmount;
         }
-            
+
         /// Check if the participants of the deal have enough resources.
         private bool TradePossible(Trade trade, Tribe originator, Tribe target)
         {
