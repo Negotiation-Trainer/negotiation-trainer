@@ -14,6 +14,8 @@ namespace Presenters
 {
     public class TradePresenter : MonoBehaviour
     {
+
+        public Dictionary<string, string> TribeSpeakStyle;
         private readonly AlgorithmService _algorithmService = new();
         private InputPresenter _inputPresenter;
         private DialoguePresenter _dialoguePresenter;
@@ -218,7 +220,7 @@ namespace Presenters
 
             _tradeOffers.Add(proposedTrade);
 
-            StartCoroutine(GameManager.httpClient.ConvertToChat("lunatic", proposedTrade, ConvertTradeToChatCallback));
+            StartCoroutine(GameManager.httpClient.ConvertToChat(TribeSpeakStyle[originator.Name], proposedTrade, ConvertTradeToChatCallback));
             Debug.Log("AI tries: origin " + proposedTrade.originName + " | target " + proposedTrade.targetName + " || originator " + originator.Name + " /// target" + target.Name);
             ShowTradeOffer(proposedTrade, originator, target);
         }
@@ -323,9 +325,6 @@ namespace Presenters
         private void OnAlgorithmDecision(object sender,
             AlgorithmService.AlgorithmDecisionEventArgs algorithmDecisionEventArgs)
         {
-            string
-                speakerStyle =
-                    "lunatic"; //TODO: Move this to either inside the Tribe object or make a map available here to map tribe to speaker style.
             StringBuilder reasonList = new StringBuilder();
 
             foreach (var offerDeclinedException in algorithmDecisionEventArgs.issuesWithTrade)
@@ -337,25 +336,24 @@ namespace Presenters
             {
                 case true:
                     //Accept the players offer.
-                    StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
+                    StartCoroutine(GameManager.httpClient.Accept(TribeSpeakStyle[_target.Name], _currentTrade, "none", AcceptCallback));
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null &&
                                 algorithmDecisionEventArgs.counterOffer == _currentTrade:
                     //TEMPORARY decline when counter is same as original offer. 
-                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, reasonList.ToString(),
+                    StartCoroutine(GameManager.httpClient.Reject(TribeSpeakStyle[_target.Name], _currentTrade, reasonList.ToString(),
                         RejectCallback));
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null:
                     //Present counter offer to player
-                    // _counterOffer = algorithmDecisionEventArgs.counterOffer;
                     _currentTrade = algorithmDecisionEventArgs.counterOffer;
-                    StartCoroutine(GameManager.httpClient.CounterOffer(speakerStyle,
+                    StartCoroutine(GameManager.httpClient.CounterOffer(TribeSpeakStyle[_currentTrade.originName],
                         _currentTrade,
                         reasonList.ToString(), CounterOfferCallback));
                     break;
                 default:
                     //Offer should be declined by the AI.
-                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, reasonList.ToString(),
+                    StartCoroutine(GameManager.httpClient.Reject(TribeSpeakStyle[_target.Name], _currentTrade, reasonList.ToString(),
                         RejectCallback));
                     break;
             }

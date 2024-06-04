@@ -465,6 +465,17 @@ public class GameManager : MonoBehaviour
         httpClient.SetToken(token);
         
         Debug.Log("Token is set to: " + httpClient.Debug_GetAuth());
+        StartCoroutine(httpClient.GetGameConfig(OnReceiveConfig));
+    }
+    
+    private void OnReceiveConfig(string config)
+    {
+        Debug.Log("Config received: " + config);
+        var con = httpClient.ConfigToString(config);
+        Debug.Log(con);
+        _tradePresenter.TribeSpeakStyle = new Dictionary<string, string>();
+        _tradePresenter.TribeSpeakStyle.Add(Cpu1.Name, con.game_configuration.tribe_b.speakerStyle);
+        _tradePresenter.TribeSpeakStyle.Add(Cpu2.Name, con.game_configuration.tribe_c.speakerStyle);
         ChangeGameState(GameState.VoiceSettings);
     }
     
