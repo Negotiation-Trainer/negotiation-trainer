@@ -85,9 +85,13 @@ namespace Presenters
         private void OnHTTPConvertCallback(string response)
         {
             Trade trade = GameManager.httpClient.ConvertToTrade(response);
+            Tribe target;
             
             Debug.Log($"trade: {trade.OfferedItem} {trade.OfferedAmount} for {trade.RequestedItem} {trade.RequestedAmount} -ply- {trade.targetName} - {trade.originName}");
-            _tradePresenter.ShowTradeOffer(trade, GameManager.Instance.Player, GameManager.Instance.Cpu1);
+
+            target = trade.targetName == "Beluga" ? GameManager.Instance.Cpu1 : GameManager.Instance.Cpu2;
+            
+            _tradePresenter.ShowTradeOffer(trade, GameManager.Instance.Player, target);
         }
 
         private void OnTextToSpeechFinished(object sender, EventArgs eventArgs)
