@@ -1,5 +1,8 @@
 <linker>
   <assembly fullname="ModelLibrary">
     <type fullname="ModelLibrary.ChatMessage" preserve="all"/>
+    <type fullname="ModelLibrary.GameConfig" preserve="all"/>
+    <type fullname="ModelLibrary.GameConfiguration" preserve="all"/>
+    <type fullname="ModelLibrary.TribeConfig" preserve="all"/>
   </assembly>
 </linker>
