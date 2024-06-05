@@ -18,9 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private Button endGame;
     public static GameManager Instance { get; private set; }
-
-    public static AIService aiService { get; private set; } = new();
-
+    
     public static BackOfficeHttpClient httpClient { get; private set; }
     
     public Tribe Cpu1 { get; private set; }

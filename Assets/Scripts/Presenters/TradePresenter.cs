@@ -8,6 +8,7 @@ using ServiceLibrary;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = System.Random;
 
 namespace Presenters
@@ -36,6 +37,10 @@ namespace Presenters
 
         [SerializeField] private TMP_Text currentTribeText;
         [SerializeField] private GameObject currentTribeDisplay;
+
+        [SerializeField] private Button signButton;
+        [SerializeField] private Button rejectButton;
+        
 
         private Trade _counterOffer;
 
@@ -78,9 +83,11 @@ namespace Presenters
 
             currentTribeText.text = _currentTribe.Name;
 
-            if (_currentTribe == GameManager.Instance.Player)
+            if (_currentTribe == GameManager.Instance.Player){
+                EnableButtons(this,EventArgs.Empty);
                 return; // When the player is the current tribe, do nothing.
-
+            }
+            DisableButtons();
             StartCPUTradingProcess();
         }
 
@@ -142,18 +149,23 @@ namespace Presenters
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to the {target.Name} tribe, in exchange for:";
                 requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
+                TradeButtonsInteractable(true);
             }
             else
             {
-                if (!TradePossibleForTarget(trade, target))
-                {
-                    Debug.Log("This trade is not possible");
-                    return;
-                };
                 offerText.text = $"The {originator.Name} tribe, are offering";
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to us, the {target.Name} tribe, in exchange for:";
                 requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
+
+                if (originator != GameManager.Instance.Player && target != GameManager.Instance.Player)
+                {
+                    TradeButtonsInteractable(false);
+                }
+                else
+                {
+                    TradeButtonsInteractable(true);
+                }
             }
 
             _currentTrade = trade;
@@ -220,12 +232,23 @@ namespace Presenters
 
             StartCoroutine(GameManager.httpClient.ConvertToChat("lunatic", proposedTrade, ConvertTradeToChatCallback));
             Debug.Log("AI tries: origin " + proposedTrade.originName + " | target " + proposedTrade.targetName + " || originator " + originator.Name + " /// target" + target.Name);
-            ShowTradeOffer(proposedTrade, originator, target);
+            _currentTrade = proposedTrade;
+            _originator = originator;
+            _target = target;
+            _dialoguePresenter.DialogueFinished += ShowAIOffer;
         }
 
-        private void EndTurn()
+        private void ShowAIOffer(object sender, EventArgs args)
+        {
+            ShowTradeOffer(_currentTrade, _originator, _target);
+
+            _dialoguePresenter.DialogueFinished -= ShowAIOffer;
+        }
+        
+        public void EndTurn()
         {
             DiscardTradeOffer();
+            if(_currentTribe == GameManager.Instance.Player && _originator == GameManager.Instance.Player) return;
             GoToNextTribe();
         }
 
@@ -246,7 +269,7 @@ namespace Presenters
             ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
 
             rejected.SetActive(true);
-            Invoke(nameof(DiscardTradeOffer), 2);
+            Invoke(nameof(EndTurn), 2);
 
             _dialoguePresenter.DialogueFinished += EnableButtons;
             _dialoguePresenter.EnqueueAndShowDialogueString(returnMessage.Message, _target.Name);
@@ -287,6 +310,7 @@ namespace Presenters
                 if (TradePossibleForOriginator(_currentTrade, _originator))
                 {
                     DecideOnTrade();
+                    TradeButtonsInteractable(false);
                 }
                 else
                 {
@@ -302,6 +326,7 @@ namespace Presenters
                         .Remove(_currentTrade); // Remove the trade from the list of trade offers because it was accepted.
                     ProcessInventoryChanges();
                     Invoke(nameof(EndTurn), 2);
+                    TradeButtonsInteractable(false);
                     return;
                 }
 
@@ -381,6 +406,7 @@ namespace Presenters
 
         private void EnableButtons(object sender, EventArgs args)
         {
+            if (_currentTribe != GameManager.Instance.Player) return;
             _inputPresenter.ToggleNewOfferButton(true);
             _inputPresenter.ToggleTalkButton(true);
         }
@@ -389,6 +415,12 @@ namespace Presenters
         {
             _inputPresenter.ToggleNewOfferButton(false);
             _inputPresenter.ToggleTalkButton(false);
+        }
+
+        private void TradeButtonsInteractable(bool interactable)
+        {
+            signButton.interactable = interactable;
+            rejectButton.interactable = interactable;
         }
 
         public void ToggleCurrentTribe(bool state)
