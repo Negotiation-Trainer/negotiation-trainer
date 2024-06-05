@@ -371,6 +371,15 @@ namespace Presenters
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null:
                     //Present counter offer to player
+                    
+                    //Reject to prevent counter offer on a counter offer.
+                    if (_currentTribe.Name == algorithmDecisionEventArgs.counterOffer.originName)
+                    { 
+                        StartCoroutine(GameManager.httpClient.Reject(TribeSpeakStyle[_currentTrade.originName], _currentTrade, reasonList.ToString(),
+                            RejectCallback));
+                        break;
+                    }
+                    
                     _currentTrade = algorithmDecisionEventArgs.counterOffer;
                     StartCoroutine(GameManager.httpClient.CounterOffer(TribeSpeakStyle[_currentTrade.originName],
                         _currentTrade,
