@@ -8,12 +8,15 @@ using ServiceLibrary;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = System.Random;
 
 namespace Presenters
 {
     public class TradePresenter : MonoBehaviour
     {
+
+        public Dictionary<string, string> TribeSpeakStyle;
         private readonly AlgorithmService _algorithmService = new();
         private InputPresenter _inputPresenter;
         private DialoguePresenter _dialoguePresenter;
@@ -36,6 +39,10 @@ namespace Presenters
 
         [SerializeField] private TMP_Text currentTribeText;
         [SerializeField] private GameObject currentTribeDisplay;
+
+        [SerializeField] private Button signButton;
+        [SerializeField] private Button rejectButton;
+        
 
         private Trade _counterOffer;
 
@@ -78,9 +85,11 @@ namespace Presenters
 
             currentTribeText.text = _currentTribe.Name;
 
-            if (_currentTribe == GameManager.Instance.Player)
+            if (_currentTribe == GameManager.Instance.Player){
+                EnableButtons(this,EventArgs.Empty);
                 return; // When the player is the current tribe, do nothing.
-
+            }
+            DisableButtons();
             StartCPUTradingProcess();
         }
 
@@ -142,18 +151,23 @@ namespace Presenters
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to the {target.Name} tribe, in exchange for:";
                 requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
+                TradeButtonsInteractable(true);
             }
             else
             {
-                if (!TradePossibleForTarget(trade, target))
-                {
-                    Debug.Log("This trade is not possible");
-                    return;
-                };
                 offerText.text = $"The {originator.Name} tribe, are offering";
                 offerAmount.text = $"{trade.OfferedAmount} {trade.OfferedItem}";
                 requestText.text = $"to us, the {target.Name} tribe, in exchange for:";
                 requestAmount.text = $"{trade.RequestedAmount} {trade.RequestedItem}";
+
+                if (originator != GameManager.Instance.Player && target != GameManager.Instance.Player)
+                {
+                    TradeButtonsInteractable(false);
+                }
+                else
+                {
+                    TradeButtonsInteractable(true);
+                }
             }
 
             _currentTrade = trade;
@@ -218,14 +232,25 @@ namespace Presenters
 
             _tradeOffers.Add(proposedTrade);
 
-            StartCoroutine(GameManager.httpClient.ConvertToChat("lunatic", proposedTrade, ConvertTradeToChatCallback));
+            StartCoroutine(GameManager.httpClient.ConvertToChat(TribeSpeakStyle[originator.Name], proposedTrade, ConvertTradeToChatCallback));
             Debug.Log("AI tries: origin " + proposedTrade.originName + " | target " + proposedTrade.targetName + " || originator " + originator.Name + " /// target" + target.Name);
-            ShowTradeOffer(proposedTrade, originator, target);
+            _currentTrade = proposedTrade;
+            _originator = originator;
+            _target = target;
+            _dialoguePresenter.DialogueFinished += ShowAIOffer;
         }
 
-        private void EndTurn()
+        private void ShowAIOffer(object sender, EventArgs args)
+        {
+            ShowTradeOffer(_currentTrade, _originator, _target);
+
+            _dialoguePresenter.DialogueFinished -= ShowAIOffer;
+        }
+        
+        public void EndTurn()
         {
             DiscardTradeOffer();
+            if(_currentTribe == GameManager.Instance.Player && _originator == GameManager.Instance.Player) return;
             GoToNextTribe();
         }
 
@@ -246,7 +271,7 @@ namespace Presenters
             ChatMessage returnMessage = JsonConvert.DeserializeObject<ChatMessage>(response);
 
             rejected.SetActive(true);
-            Invoke(nameof(DiscardTradeOffer), 2);
+            Invoke(nameof(EndTurn), 2);
 
             _dialoguePresenter.DialogueFinished += EnableButtons;
             _dialoguePresenter.EnqueueAndShowDialogueString(returnMessage.Message, _target.Name);
@@ -287,6 +312,7 @@ namespace Presenters
                 if (TradePossibleForOriginator(_currentTrade, _originator))
                 {
                     DecideOnTrade();
+                    TradeButtonsInteractable(false);
                 }
                 else
                 {
@@ -302,6 +328,7 @@ namespace Presenters
                         .Remove(_currentTrade); // Remove the trade from the list of trade offers because it was accepted.
                     ProcessInventoryChanges();
                     Invoke(nameof(EndTurn), 2);
+                    TradeButtonsInteractable(false);
                     return;
                 }
 
@@ -323,9 +350,6 @@ namespace Presenters
         private void OnAlgorithmDecision(object sender,
             AlgorithmService.AlgorithmDecisionEventArgs algorithmDecisionEventArgs)
         {
-            string
-                speakerStyle =
-                    "lunatic"; //TODO: Move this to either inside the Tribe object or make a map available here to map tribe to speaker style.
             StringBuilder reasonList = new StringBuilder();
 
             foreach (var offerDeclinedException in algorithmDecisionEventArgs.issuesWithTrade)
@@ -337,25 +361,24 @@ namespace Presenters
             {
                 case true:
                     //Accept the players offer.
-                    StartCoroutine(GameManager.httpClient.Accept(speakerStyle, _currentTrade, "none", AcceptCallback));
+                    StartCoroutine(GameManager.httpClient.Accept(TribeSpeakStyle[_target.Name], _currentTrade, "none", AcceptCallback));
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null &&
                                 algorithmDecisionEventArgs.counterOffer == _currentTrade:
                     //TEMPORARY decline when counter is same as original offer. 
-                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, reasonList.ToString(),
+                    StartCoroutine(GameManager.httpClient.Reject(TribeSpeakStyle[_target.Name], _currentTrade, reasonList.ToString(),
                         RejectCallback));
                     break;
                 case false when algorithmDecisionEventArgs.counterOffer != null:
                     //Present counter offer to player
-                    // _counterOffer = algorithmDecisionEventArgs.counterOffer;
                     _currentTrade = algorithmDecisionEventArgs.counterOffer;
-                    StartCoroutine(GameManager.httpClient.CounterOffer(speakerStyle,
+                    StartCoroutine(GameManager.httpClient.CounterOffer(TribeSpeakStyle[_currentTrade.originName],
                         _currentTrade,
                         reasonList.ToString(), CounterOfferCallback));
                     break;
                 default:
                     //Offer should be declined by the AI.
-                    StartCoroutine(GameManager.httpClient.Reject(speakerStyle, _currentTrade, reasonList.ToString(),
+                    StartCoroutine(GameManager.httpClient.Reject(TribeSpeakStyle[_target.Name], _currentTrade, reasonList.ToString(),
                         RejectCallback));
                     break;
             }
@@ -381,6 +404,7 @@ namespace Presenters
 
         private void EnableButtons(object sender, EventArgs args)
         {
+            if (_currentTribe != GameManager.Instance.Player) return;
             _inputPresenter.ToggleNewOfferButton(true);
             _inputPresenter.ToggleTalkButton(true);
         }
@@ -389,6 +413,12 @@ namespace Presenters
         {
             _inputPresenter.ToggleNewOfferButton(false);
             _inputPresenter.ToggleTalkButton(false);
+        }
+
+        private void TradeButtonsInteractable(bool interactable)
+        {
+            signButton.interactable = interactable;
+            rejectButton.interactable = interactable;
         }
 
         public void ToggleCurrentTribe(bool state)
