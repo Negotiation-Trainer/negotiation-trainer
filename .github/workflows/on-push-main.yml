@@ -68,34 +68,34 @@ jobs:
             unityVersion: 2022.3.20f1
             githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-  DeployReleaseToDevelop:
-    needs: Build
-    runs-on: ubuntu-latest
-    name: Deploy
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # DeployReleaseToDevelop:
+  #   needs: Build
+  #   runs-on: ubuntu-latest
+  #   name: Deploy
+  #   permissions:
+  #     contents: write
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      # Download the WebGL build
-      - name: Download WebGL Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: webGL-build
-          path: build
+  #     # Download the WebGL build
+  #     - name: Download WebGL Artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: webGL-build
+  #         path: build
       
-      # Deploy the webGL build to production
-      - name: Deploy to Production
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: build/WebGL/WebGL
-          commit-message: Deploy
-          single-commit: true
-          target-folder: development
+  #     # Deploy the webGL build to production
+  #     - name: Deploy to Production
+  #       uses: JamesIves/github-pages-deploy-action@v4
+  #       with:
+  #         folder: build/WebGL/WebGL
+  #         commit-message: Deploy
+  #         single-commit: true
+  #         target-folder: development
           
-      # Cleanup to avoid storage limit
-      - name: Cleanup to avoid storage limit
-        uses: geekyeggo/delete-artifact@v2
-        with:
-          name: webGL-build
+  #     # Cleanup to avoid storage limit
+  #     - name: Cleanup to avoid storage limit
+  #       uses: geekyeggo/delete-artifact@v2
+  #       with:
+  #         name: webGL-build
