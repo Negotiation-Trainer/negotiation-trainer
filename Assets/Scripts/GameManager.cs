@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button[] unpauseButtons;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject mainMenu;
-    [SerializeField] private Button endGame;
     [SerializeField] private HourglassPresenter timer;
     public static GameManager Instance { get; private set; }
     
@@ -339,14 +338,12 @@ public class GameManager : MonoBehaviour
         ToggleTradeUI(false);
         pauseButton.gameObject.SetActive(false);
         mainMenu.SetActive(false);
-        endGame.gameObject.SetActive(false);
         timer.gameObject.SetActive(false);
         _cutscenePresenter.ToggleRainbow(true);
         _cutscenePresenter.StartEnding();
     }
     private void HandleIntermissionState()
     {
-        endGame.gameObject.SetActive(false);
         timer.gameObject.SetActive(false);
         ToggleAIOptions(false); 
         ToggleTradeUI(false);
@@ -434,7 +431,6 @@ public class GameManager : MonoBehaviour
         ToggleTradeUI(true);
         ToggleAIOptions(false);
         pauseButton.gameObject.SetActive(true);
-        endGame.gameObject.SetActive(true);
         timer.gameObject.SetActive(true);
     }
 
