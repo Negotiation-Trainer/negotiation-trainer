@@ -4,6 +4,9 @@ on:
     push:
         branches:
             - "main"
+    pull_request:
+        branches:
+            - "main"
             
 jobs:
   Build:
@@ -29,6 +32,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
+          buildMethod: AutoBuilder.BuildDevelopment
 
       # Output 
       - uses: actions/upload-artifact@v4
