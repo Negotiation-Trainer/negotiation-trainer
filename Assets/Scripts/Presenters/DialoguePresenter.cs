@@ -14,6 +14,9 @@ namespace Presenters
         [SerializeField] private GameObject dialogueBox;
         [SerializeField] private TMP_Text dialogueText;
         [SerializeField] private GameObject portraits;
+        [SerializeField] private GameObject portraitA;
+        [SerializeField] private GameObject portraitB;
+        [SerializeField] private GameObject portraitC;
         [SerializeField] private GameObject nameBox;
         [SerializeField] private TMP_Text nameText;
         [SerializeField] private Button nextDialogueButton;
@@ -72,6 +75,24 @@ namespace Presenters
             portraits.SetActive(true);
             nameBox.SetActive(true);
             nameText.text = message.TribeName;
+
+            if (message.TribeName == GameManager.Instance.Cpu1.Name)
+            {
+                portraitA.SetActive(false);
+                portraitB.SetActive(true);
+                portraitC.SetActive(false);
+            } else if (message.TribeName == GameManager.Instance.Cpu2.Name)
+            {
+                portraitA.SetActive(false);
+                portraitB.SetActive(false);
+                portraitC.SetActive(true);
+            }
+            else
+            {
+                portraitA.SetActive(true);
+                portraitB.SetActive(false);
+                portraitC.SetActive(false);
+            }
         }
 
         public void StopDialogue()
