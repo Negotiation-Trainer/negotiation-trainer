@@ -35,6 +35,7 @@ namespace Presenters
         [SerializeField] private TMP_Text requestAmount;
         [SerializeField] private TMP_Text errorText;
         [SerializeField] private GameObject accepted;
+        [SerializeField] private GameObject signature;
         [SerializeField] private GameObject rejected;
 
         [SerializeField] private TMP_Text currentTribeText;
@@ -190,6 +191,7 @@ namespace Presenters
             HideError();
             tradeOffer.SetActive(false);
             accepted.SetActive(false);
+            signature.SetActive(false);
             rejected.SetActive(false);
 
             _inputPresenter.ToggleNewOfferButton(_currentTribe == GameManager.Instance.Player);
@@ -260,6 +262,7 @@ namespace Presenters
 
             ProcessInventoryChanges();
             accepted.SetActive(true);
+            signature.SetActive(true);
             Invoke(nameof(EndTurn), 2);
 
             _dialoguePresenter.DialogueFinished += EnableButtons;
@@ -324,6 +327,7 @@ namespace Presenters
                 if (TradePossible(_currentTrade, _originator, _target))
                 {
                     accepted.SetActive(true);
+                    signature.SetActive(true);
                     _tradeOffers
                         .Remove(_currentTrade); // Remove the trade from the list of trade offers because it was accepted.
                     ProcessInventoryChanges();
