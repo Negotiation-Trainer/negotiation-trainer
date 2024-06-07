@@ -1,4 +1,4 @@
-name: Test, Pre-Release & Deploy to staging
+name: Test, Pre-Release & Deploy to Acceptance
 
 on:
   push:
@@ -125,7 +125,7 @@ jobs:
           prerelease: true
 
 
-  DeployReleaseToStaging:
+  DeployReleaseToAcceptance:
     needs: CreateNewRelease
     runs-on: ubuntu-latest
     name: Deploy
@@ -143,7 +143,7 @@ jobs:
           path: build
       
       # Deploy the webGL build to production
-      - name: Deploy to Staging
+      - name: Deploy to Acceptance
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build/WebGL/WebGL

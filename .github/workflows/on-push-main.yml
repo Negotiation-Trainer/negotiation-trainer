@@ -82,7 +82,7 @@ jobs:
           path: build
       
       # Deploy the webGL build to production
-      - name: Deploy to Production
+      - name: Deploy to Development
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build/WebGL/WebGL
