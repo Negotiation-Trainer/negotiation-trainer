@@ -929,7 +929,7 @@ GameObject:
   - component: {fileID: 5255832354280407720}
   - component: {fileID: 7155322110542794558}
   m_Layer: 5
-  m_Name: Tribe_C_Voice_Select_Dropdown (2)
+  m_Name: Tribe_C_Voice_Select_Dropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2167,7 +2167,7 @@ RectTransform:
   m_Father: {fileID: 1166121959977463382}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2675,7 +2675,7 @@ GameObject:
   - component: {fileID: 8588258154497589627}
   - component: {fileID: 7244131711353708531}
   m_Layer: 5
-  m_Name: Next_Button
+  m_Name: Skip_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3078,8 +3078,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 68.999985, y: -128.9744}
-  m_SizeDelta: {x: 410.7489, y: 105.1577}
+  m_AnchoredPosition: {x: 34.112, y: -59}
+  m_SizeDelta: {x: 176.037, y: 57.581}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3217918955914312668
 CanvasRenderer:
@@ -5788,7 +5788,7 @@ GameObject:
   - component: {fileID: 5730604674069298770}
   - component: {fileID: 4714508012157327554}
   m_Layer: 5
-  m_Name: Next_Text (TMP)
+  m_Name: Skip_Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5841,7 +5841,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Next>
+  m_text: Skip ->
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6545ef01d4e07b4f9bf6204acba004d, type: 2}
   m_sharedMaterial: {fileID: 6264891047592661407, guid: e6545ef01d4e07b4f9bf6204acba004d,
@@ -12091,7 +12091,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Speech recognition
+  m_Text: Alternative input
 --- !u!1 &3772994838948268952
 GameObject:
   m_ObjectHideFlags: 0
@@ -12609,7 +12609,7 @@ RectTransform:
   m_Father: {fileID: 6233295182177232102}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -22478,9 +22478,9 @@ RectTransform:
   - {fileID: 5344981590574312644}
   m_Father: {fileID: 6455859645294286189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 660, y: 65}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -100, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &7398677731367875980
@@ -22497,14 +22497,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onHourglassFinished:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.ParticleSystem, UnityEngine
+        m_MethodName: Stop
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GameManager, NegotiationTrainer
+        m_MethodName: EndGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onStormEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.ParticleSystem, UnityEngine
+        m_MethodName: Stop
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   sandTop: {fileID: 8902377023434268552}
   sandBottom: {fileID: 5707309836574002713}
   fallingSand: {fileID: 727079152923657687}
-  duration: 20
+  duration: 600
 --- !u!1 &6861293327630487766
 GameObject:
   m_ObjectHideFlags: 0
@@ -28090,8 +28138,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 734.68, y: -445.75}
-  m_SizeDelta: {x: 560.6316, y: 293.77}
+  m_AnchoredPosition: {x: 910, y: -510}
+  m_SizeDelta: {x: 444.8613, y: 182.0134}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4229934145572055260
 CanvasRenderer:
@@ -28365,7 +28413,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Presenters.TradePresenter, NegotiationTrainer
-        m_MethodName: DiscardTradeOffer
+        m_MethodName: EndTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -28996,7 +29044,7 @@ RectTransform:
   m_Father: {fileID: 4004817772259672913}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -30570,7 +30618,7 @@ RectTransform:
   m_Father: {fileID: 8559925952552779131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -30646,8 +30694,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 69, y: -59}
-  m_SizeDelta: {x: 439.2357, y: 51.5537}
+  m_AnchoredPosition: {x: 26, y: -26}
+  m_SizeDelta: {x: 248.9287, y: 24.5936}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &7131237687101778380
 CanvasRenderer:
@@ -30705,8 +30753,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34
-  m_fontSizeBase: 34
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
